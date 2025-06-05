@@ -28,19 +28,14 @@ const {
   return 'grid-cols-1';
 };
 
-  // ✅ Protection AVANT le return JSX
-  if (
-    !associationContent?.id &&
-    !titreAssociation &&
-    !contentAssociation &&
-    images.length === 0
-  ) {
-    return (
-      <div className="pt-24 pb-16 container-custom text-center text-gray-500">
-        Chargement des informations de l’association...
-      </div>
-    );
-  }
+if (!titreAssociation && !contentAssociation && images.length === 0) {
+  return (
+    <div className="pt-24 pb-16 container-custom text-center text-gray-500">
+      Aucune information à afficher pour l’association.
+    </div>
+  );
+}
+
 
   return (
     <div className="pt-24 pb-16">
