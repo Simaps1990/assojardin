@@ -41,10 +41,13 @@ const saveAssociationContent = async () => {
     //parcellesTotal: parcellesTotales,
   };
 
-  const refreshed = await updateAssociationContent(updated);
-if (refreshed !== undefined) {    setLocalContent(refreshed);
-    setSuccessMessage('Tous les contenus ont été enregistrés.');
-  }
+const refreshed = await updateAssociationContent(updated);
+if (refreshed !== undefined) {
+  setLocalContent(refreshed);
+  setContentAssociation(refreshed.contentAssociation || ''); // ← ajoute cette ligne
+  setSuccessMessage('Tous les contenus ont été enregistrés.');
+}
+
 };
 
 

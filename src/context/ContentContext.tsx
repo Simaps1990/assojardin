@@ -52,7 +52,7 @@ interface ContentContextType {
   updateApplication: (id: string, app: Partial<Application>) => void;
   deleteApplication: (id: string) => void;
   updateFormFields: (fields: FormField[]) => void;
-  updateAssociationContent: (content: Partial<AssociationContentType>) => void;
+updateAssociationContent: (content: Partial<AssociationContentType>) => Promise<AssociationContentType | undefined>;
 }
 
 const ContentContext = createContext<ContentContextType | undefined>(undefined);
