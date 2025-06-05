@@ -1,0 +1,449 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { Event } from '../../types';
+import { supabase } from '../../supabaseClient';
+
+const AdminEventsPage: React.FC = () => {
+const [events, setEvents] = useState<Event[]>([]);
+
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [location, setLocation] = useState('');
+  const [start, setStart] = useState('');
+  const [enddate, setEnddate] = useState('');
+  const [image, setImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+  const [error, setError] = useState('');
+  const [editingEventId, setEditingEventId] = useState<string | null>(null);
+  const [eventToDelete, setEventToDelete] = useState<Event | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
+const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (image) {
+      const objectUrl = URL.createObjectURL(image);
+      setPreviewUrl(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl);
+    }
+  }, [image]);
+
+const fetchEvents = React.useCallback(async () => {
+  const { data, error } = await supabase
+    .from('events')
+    .select('*')
+    .order('date', { ascending: false });
+
+  if (error) {
+    console.error('Erreur de chargement des événements :', error);
+  } else {
+    setEvents(data as Event[]);
+  }
+}, []);
+
+
+useEffect(() => {
+  fetchEvents();
+}, []);
+
+
+const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  setImage(file);
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', 'site_global_uploads');
+
+  try {
+    const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
+      method: 'POST',
+      body: formData,
+    });
+    const data = await res.json();
+    if (data.secure_url) {
+      setUploadedImageUrl(data.secure_url);
+    }
+  } catch (err) {
+    console.error('Erreur upload Cloudinary', err);
+  }
+};
+
+
+
+  const handleToolbarClick = (command: string, value?: string) => {
+    document.execCommand(command, false, value);
+  };
+
+  const handleFontSizeChange = (size: string) => {
+    if (!contentRef.current) return;
+    document.execCommand('fontSize', false, '7');
+    const spans = contentRef.current.querySelectorAll('span[style*="font-size"]');
+    spans.forEach((el) => {
+      const span = el as HTMLElement;
+      if (span.style.fontSize) {
+        span.style.fontSize = size;
+      }
+    });
+  };
+
+
+const handleAddEvent = async () => {
+
+    if (!title || !start || !enddate || !contentRef.current) return;
+
+    if (new Date(start) > new Date(enddate)) {
+      setError("La date de début ne peut pas être postérieure à la date de fin.");
+      return;
+    }
+
+    const imageToSave = uploadedImageUrl ?? '';
+console.log('DEBUG - Champs transmis à Supabase :', {
+  title,
+  description,
+  location,
+  start,
+  enddate,
+  content: contentRef.current?.innerHTML,
+  image: uploadedImageUrl,
+});
+
+const newEvent: Omit<Event, 'id' | 'isPast'> = {
+  title,
+  description,
+  location,
+  start,
+  enddate,
+  content: contentRef.current.innerHTML,
+  image: imageToSave,
+  date: start.split('T')[0], // 👈 adapte la date au format 'YYYY-MM-DD' exigé par Supabase
+  imagesannexes: [], // ou un vrai tableau si tu veux en ajouter
+  author: 'admin',   // ou remplace par un vrai utilisateur si tu gères l'auth
+  created_at: new Date().toISOString(),
+};
+
+
+try {
+  if (editingEventId) {
+    const { error: updateError } = await supabase
+      .from('events')
+      .update(newEvent)
+      .eq('id', editingEventId);
+
+    if (updateError) throw updateError;
+
+    setEditingEventId(null);
+  } else {
+    const { error: insertError } = await supabase
+      .from('events')
+      .insert(newEvent);
+
+    if (insertError) throw insertError;
+  }
+} catch (error) {
+  console.error('Erreur lors de l’enregistrement dans Supabase :', error);
+  setError('Erreur lors de l’enregistrement.');
+  return;
+}
+
+
+
+    setTitle('');
+    setDescription('');
+    setLocation('');
+    setStart('');
+    setEnddate('');
+    setImage(null);
+    setPreviewUrl(null);
+    setUploadedImageUrl(null);
+    if (contentRef.current) contentRef.current.innerHTML = '';
+    setError('');
+if (fileInputRef.current) {
+  fileInputRef.current.value = '';
+}
+    window.scrollTo(0, 0); // Scroll haut après ajout ou modif
+    await fetchEvents();
+
+  };
+
+  const handleCancelEdit = () => {
+    setTitle('');
+    setDescription('');
+    setLocation('');
+    setStart('');
+    setEnddate('');
+    setImage(null);
+    setPreviewUrl(null);
+    setUploadedImageUrl(null);
+    if (contentRef.current) contentRef.current.innerHTML = '';
+    setEditingEventId(null);
+    setError('');
+if (fileInputRef.current) {
+  fileInputRef.current.value = '';
+}
+
+    window.scrollTo(0, 0); // Scroll haut après annulation
+  };
+
+  const sortedEvents = [...events].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  return (
+    <div className="space-y-6 pb-16">
+      <h1 className="text-3xl font-bold text-gray-800">Gestion des événements</h1>
+
+      <h2 className="text-xl font-semibold text-gray-800">{editingEventId ? 'Modifier un événement' : 'Créer un événement'}</h2>
+
+      <div className="bg-white rounded-lg shadow p-6 space-y-4">
+        {error && <p className="text-red-600 font-medium">{error}</p>}
+
+        <input type="text" placeholder="Titre" className="w-full border px-3 py-2 rounded" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <input type="text" placeholder="Lieu" className="w-full border px-3 py-2 rounded" value={location} onChange={(e) => setLocation(e.target.value)} />
+
+        <div className="flex gap-4">
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Début</label>
+<input
+  type="datetime-local"
+  value={start}
+  onChange={(e) => setStart(e.target.value)}
+  onFocus={(e) => e.currentTarget.showPicker?.()}
+  className="w-full border px-3 py-2 rounded"
+/>
+          </div>
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Fin</label>
+<input
+  type="datetime-local"
+  value={enddate}
+  onChange={(e) => setEnddate(e.target.value)}
+  onFocus={(e) => e.currentTarget.showPicker?.()}
+  className="w-full border px-3 py-2 rounded"
+/>
+          </div>
+        </div>
+
+<div className="flex flex-wrap gap-2 items-center text-sm">
+  <button type="button" onClick={() => handleToolbarClick('bold')} className="px-2 py-1 border rounded">Gras</button>
+  <button type="button" onClick={() => handleToolbarClick('italic')} className="px-2 py-1 border rounded">Italique</button>
+  <button type="button" onClick={() => handleToolbarClick('underline')} className="px-2 py-1 border rounded">Souligné</button>
+  <input type="color" onChange={(e) => handleToolbarClick('foreColor', e.target.value)} title="Couleur" />
+  <button type="button" onClick={() => handleToolbarClick('justifyLeft')} className="px-2 py-1 border rounded">Gauche</button>
+  <button type="button" onClick={() => handleToolbarClick('justifyCenter')} className="px-2 py-1 border rounded">Centre</button>
+  <button type="button" onClick={() => handleToolbarClick('justifyRight')} className="px-2 py-1 border rounded">Droite</button>
+  <select
+    onChange={(e) => handleFontSizeChange(e.target.value)}
+    className="border rounded px-2 py-1"
+    defaultValue=""
+  >
+    <option value="" disabled>Tailles</option>
+    <option value="12px">Petit</option>
+    <option value="16px">Normal</option>
+    <option value="20px">Grand</option>
+    <option value="24px">Très grand</option>
+  </select>
+
+  <button
+    type="button"
+    onClick={() => {
+      const getSelectedLinkHref = (): string | null => {
+        const selection = window.getSelection();
+        if (!selection || selection.rangeCount === 0) return null;
+
+        const range = selection.getRangeAt(0);
+        let container: Node | null = range.commonAncestorContainer;
+        if (container.nodeType === 3) {
+          container = container.parentNode;
+        }
+        if (!container) return null;
+
+        let el: HTMLElement | null = container as HTMLElement;
+        while (el && el.tagName !== 'A') {
+          el = el.parentElement;
+        }
+        if (el && el.tagName === 'A') {
+          return el.getAttribute('href');
+        }
+        return null;
+      };
+
+      const currentHref = getSelectedLinkHref() || '';
+      const url = prompt('Entrez l’URL du lien', currentHref);
+
+      if (url !== null) {
+        const normalizeUrl = (inputUrl: string) => {
+          if (!/^https?:\/\//i.test(inputUrl)) {
+            return 'https://' + inputUrl;
+          }
+          return inputUrl;
+        };
+
+        if (url.trim() === '') {
+          document.execCommand('unlink');
+        } else {
+          const normalizedUrl = normalizeUrl(url.trim());
+          document.execCommand('createLink', false, normalizedUrl);
+
+          const selection = window.getSelection();
+          if (selection && selection.rangeCount > 0) {
+            const anchor = selection.focusNode?.parentElement;
+            if (anchor && anchor.tagName === 'A') {
+              anchor.setAttribute('target', '_blank');
+              anchor.style.color = 'blue';
+              anchor.style.textDecoration = 'underline';
+            }
+          }
+        }
+      }
+    }}
+    className="px-2 py-1 border rounded"
+  >
+    Lien
+  </button>
+</div>
+
+
+        <div ref={contentRef} className="w-full min-h-[120px] border rounded px-3 py-2 focus:outline-none" contentEditable style={{ whiteSpace: 'pre-wrap' }} />
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Image</label>
+<input
+  id="event-image"
+  type="file"
+  accept="image/*"
+  onChange={handleImageChange}
+  ref={fileInputRef}  // <-- ici
+/>
+          {previewUrl && (
+            <div className="mt-2">
+              <img src={previewUrl} alt="Aperçu" className="h-32 object-cover rounded" />
+              <button
+                type="button"
+                onClick={() => {
+                  setImage(null);
+                  setPreviewUrl(null);
+                  setUploadedImageUrl(null);
+if (fileInputRef.current) {
+  fileInputRef.current.value = '';
+}
+
+                }}
+                className="text-red-600 text-sm hover:underline mt-2"
+              >
+                Supprimer l’image
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div className="flex gap-4 pt-2">
+          <button onClick={handleAddEvent} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            {editingEventId ? 'Mettre à jour' : 'Publier'}
+          </button>
+          {editingEventId && (
+            <button onClick={handleCancelEdit} className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+              Annuler
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold text-gray-800">Événements publiés</h2>
+        {sortedEvents.length === 0 ? (
+          <p className="text-gray-500">Aucun événement publié.</p>
+        ) : (
+          sortedEvents.map((e) => (
+            <div key={e.id} className="bg-white p-4 rounded shadow space-y-2">
+              <h3 className="font-bold text-lg text-gray-800">{e.title}</h3>
+              <p className="text-sm text-gray-600">{e.location}</p>
+              <p className="text-sm text-gray-600">{e.start} – {e.enddate}</p>
+              {e.image && <img src={e.image} alt="illustration" className="h-32 object-cover rounded" />}
+              <div dangerouslySetInnerHTML={{ __html: e.content }} />
+              <div className="flex gap-4 mt-2">
+                <button
+                  onClick={() => {
+                    setEditingEventId(String(e.id));
+setTitle(e.title || '');
+setDescription(e.description || '');
+setLocation(e.location || '');
+setStart(e.start ? e.start.slice(0, 16) : '');
+setEnddate(e.enddate ? e.enddate.slice(0, 16) : '');
+
+                    if (contentRef.current) contentRef.current.innerHTML = e.content;
+                    setImage(null);
+                    setPreviewUrl(e.image || null);
+                    setUploadedImageUrl(e.image || null);
+                  if (fileInputRef.current) {
+  fileInputRef.current.value = '';
+}
+
+                    window.scrollTo(0, 0);
+                  }}
+                  className="text-blue-600 text-sm hover:underline"
+                >
+                  Modifier
+                </button>
+                <button
+                  onClick={() => {
+                    setEventToDelete(e);
+                    setShowConfirm(true);
+                  }}
+                  className="text-red-600 text-sm hover:underline"
+                >
+                  Supprimer
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+{showConfirm && eventToDelete && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white p-6 rounded shadow-md max-w-md w-full text-center">
+      <h3 className="text-lg font-semibold text-gray-800 mb-4">
+        Confirmer la suppression
+      </h3>
+      <p className="text-gray-600 mb-6">
+        Êtes-vous sûr de vouloir supprimer l’événement "<strong>{eventToDelete.title}</strong>" ? Cette action est irréversible.
+      </p>
+      <div className="flex justify-center gap-4">
+        <button
+          onClick={async () => {
+            const { error } = await supabase.from('events').delete().eq('id', eventToDelete.id);
+            if (error) {
+              console.error('Erreur suppression événement :', error);
+            } else {
+              await fetchEvents();
+              setEventToDelete(null);
+              setShowConfirm(false);
+              window.scrollTo(0, 0);
+            }
+          }}
+          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+        >
+          Supprimer
+        </button>
+        <button
+          onClick={() => {
+            setEventToDelete(null);
+            setShowConfirm(false);
+          }}
+          className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+        >
+          Annuler
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+    </div>
+
+  );
+};
+
+export default AdminEventsPage;

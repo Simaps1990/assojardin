@@ -1,0 +1,193 @@
+import { Link } from 'react-router-dom';
+import { ChevronRight } from 'lucide-react';
+import { useContent } from '../context/ContentContext';
+import BlogCard from '../components/ui/BlogCard';
+import EventCard from '../components/ui/EventCard';
+
+const HomePage: React.FC = () => {
+  const { blogPosts, events, associationContent } = useContent();
+
+const titreAccueil = associationContent?.titreAccueil;
+const texteIntro = associationContent?.texteIntro;
+const backgroundImageUrl = associationContent?.imageAccueil;
+
+
+  const latestPost = blogPosts.length > 0 ? blogPosts[0] : null;
+
+  const upcomingEvents = events
+    .filter((event) => !event.isPast)
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+  const pastEvents = events
+    .filter((event) => event.isPast)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  const nextEvent = upcomingEvents.length > 0 ? upcomingEvents[0] : null;
+  const latestPastEvent = pastEvents.length > 0 ? pastEvents[0] : null;
+
+return (
+  <div className="pt-16">
+    {/* Hero Section */}
+    {backgroundImageUrl && (
+      <section
+        className="relative bg-cover bg-center h-[70vh] flex items-center"
+        style={{ backgroundImage: `url(${backgroundImageUrl})` }}
+      >
+        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+        <div className="container-custom relative z-10 text-white">
+          <div className="max-w-2xl animate-fade-in">
+            {titreAccueil && (
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">{titreAccueil}</h1>
+            )}
+            {texteIntro && (
+              <p className="text-xl mb-8">{texteIntro}</p>
+            )}
+            <div className="flex flex-wrap gap-4">
+              <Link to="/apply" className="btn-primary">
+                Postuler pour un jardin
+              </Link>
+              <Link
+                to="/association"
+                className="btn bg-white text-primary-700 hover:bg-neutral-100"
+              >
+                Découvrir l'association
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    )}
+
+    {/* Latest Blog Post */}
+    <section className="py-16 bg-neutral-50">
+      <div className="container-custom">
+        <div className="flex justify-between items-center mb-2">
+          <Link
+            to="/blog"
+            className="text-3xl font-heading font-bold hover:underline"
+          >
+            Dernier Article
+          </Link>
+
+          <Link
+            to="/blog"
+            className="flex items-center text-primary-600 hover:text-primary-700"
+          >
+            Tous nos articles de Blog <ChevronRight size={16} />
+          </Link>
+        </div>
+        {latestPost ? (
+          <Link to={`/blog/${latestPost.id}`} className="block">
+            <BlogCard post={latestPost} isFeature={true} />
+          </Link>
+        ) : (
+          <p className="text-neutral-500">
+            Aucun article de blog n'a été publié pour le moment.
+          </p>
+        )}
+      </div>
+    </section>
+
+    <div className="flex justify-center my-1">
+      <hr className="w-1/2 border-t border-neutral-300" />
+    </div>
+
+    {/* Events Section */}
+    <section className="pt-12 pb-24 bg-neutral-50">
+      <div className="container-custom">
+        <div className="flex justify-between items-center mb-2">
+          <Link
+            to="/events"
+            className="text-3xl font-heading font-bold hover:underline"
+          >
+            Nos événements
+          </Link>
+
+          <Link
+            to="/events"
+            className="flex items-center text-primary-600 hover:text-primary-700"
+          >
+            Tous les événements <ChevronRight size={16} />
+          </Link>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-12">
+          {/* Next Event */}
+          <div>
+            <Link
+              to="/events"
+              className="text-xl font-heading font-semibold mb-3 hover:underline block"
+            >
+              Prochain événement
+            </Link>
+
+            {nextEvent ? (
+              <Link to={`/events/${nextEvent.id}`} className="block">
+                <EventCard event={nextEvent} isFeature={true} />
+              </Link>
+            ) : (
+              <div className="card p-6">
+                <p className="text-neutral-500">
+                  Aucun événement à venir n'est programmé pour le moment.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Latest Past Event */}
+          <div>
+            <Link
+              to="/events"
+              className="text-xl font-heading font-semibold mb-3 hover:underline block"
+            >
+              Événement passé
+            </Link>
+
+            {latestPastEvent ? (
+              <Link to={`/events/${latestPastEvent.id}`} className="block">
+                <EventCard event={latestPastEvent} isFeature={true} />
+              </Link>
+            ) : (
+              <div className="card p-6">
+                <p className="text-neutral-500">
+                  Aucun événement passé n'est enregistré.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Call to Action */}
+    <section className="py-16 bg-primary-700 text-white">
+      <div className="container-custom text-center">
+        <h2 className="text-3xl font-heading font-bold mb-4">
+          Rejoignez-nous dans cette aventure verte
+        </h2>
+        <p className="text-xl max-w-3xl mx-auto mb-8">
+          Que vous soyez jardinier expérimenté ou novice passionné, il y a une
+          place pour vous dans notre communauté.
+        </p>
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link
+            to="/apply"
+            className="btn bg-white text-primary-700 hover:bg-neutral-100"
+          >
+            Postuler pour un jardin
+          </Link>
+          <Link
+            to="/contact"
+            className="btn border-2 border-white text-white hover:bg-primary-600"
+          >
+            Nous contacter
+          </Link>
+        </div>
+      </div>
+    </section>
+  </div>
+);
+
+};
+
+export default HomePage;

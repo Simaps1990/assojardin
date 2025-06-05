@@ -1,0 +1,100 @@
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Search, Lock } from 'lucide-react';
+import { useContent } from '../../context/ContentContext'; // ✅ correction du chemin
+
+const Header: React.FC = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  const { associationContent } = useContent();
+  const headerIcon = associationContent.headerIcon || '/src/assets/logo.svg';
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;
+    }
+  };
+
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md py-3">
+      <div className="container-custom flex flex-wrap items-center justify-between gap-4">
+        {/* Logo + texte */}
+        <Link to="/" className="flex items-center">
+          <img
+            src={headerIcon}
+            alt="SJOV Logo"
+            className="h-12 w-12"
+          />
+          <div className="ml-3 text-primary-700 leading-tight flex items-baseline space-x-2">
+            <h1 className="text-xl font-bold m-0 p-0">SJOV</h1>
+            <p className="text-base font-sans font-normal text-primary-600 m-0 p-0">
+              Jardins Ouvriers de Villeurbanne
+            </p>
+          </div>
+        </Link>
+
+        {/* Navigation + Recherche + Connexion */}
+        <div className="flex flex-wrap items-center gap-4 flex-1 justify-end">
+          <nav className="flex flex-wrap justify-center gap-4 text-sm font-medium">
+            <Link
+              to="/"
+              className={`hover:text-primary-600 ${currentPath === '/' ? 'text-primary-300' : 'text-neutral-700'}`}
+            >
+              Accueil
+            </Link>
+            <Link
+              to="/association"
+              className={`hover:text-primary-600 ${currentPath === '/association' ? 'text-primary-300' : 'text-neutral-700'}`}
+            >
+              Notre association
+            </Link>
+            <Link
+              to="/blog"
+              className={`hover:text-primary-600 ${currentPath === '/blog' ? 'text-primary-300' : 'text-neutral-700'}`}
+            >
+              Blog
+            </Link>
+            <Link
+              to="/events"
+              className={`hover:text-primary-600 ${currentPath === '/events' ? 'text-primary-300' : 'text-neutral-700'}`}
+            >
+              Événements
+            </Link>
+            <Link
+              to="/apply"
+              className={`hover:text-primary-600 ${currentPath === '/apply' ? 'text-primary-300' : 'text-neutral-700'}`}
+            >
+              Postuler
+            </Link>
+            <Link
+              to="/contact"
+              className={`hover:text-primary-600 ${currentPath === '/contact' ? 'text-primary-300' : 'text-neutral-700'}`}
+            >
+              Contact
+            </Link>
+          </nav>
+
+          <form onSubmit={handleSearch} className="relative w-40">
+            <input
+              type="text"
+              placeholder="Rechercher..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="form-input w-full pl-10 pr-4 py-2 rounded border border-neutral-300"
+            />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={16} />
+          </form>
+
+          <Link to="/login" className="text-neutral-700 hover:text-primary-600 p-2" aria-label="Administration">
+            <Lock size={22} />
+          </Link>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
