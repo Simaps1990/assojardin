@@ -13,22 +13,16 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 //import { supabase } from '../../supabaseClient';
+import { useContent } from '../../context/ContentContext';
+const { associationContent } = useContent();
 
 const AdminLayout: React.FC = () => {
   const { user, logout } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [nonTraitees, setNonTraitees] = useState(0);
-  const [headerIcon, setHeaderIcon] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
 
-
-
-
-  useEffect(() => {
-    const storedHeaderIcon = localStorage.getItem('headerIcon');
-    setHeaderIcon(storedHeaderIcon);
-  }, []);
 
 useEffect(() => {
   const updateFromStorage = () => {
@@ -109,11 +103,12 @@ useEffect(() => {
               {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
             <div className="flex items-center">
-              <img
-                src={headerIcon || '/src/assets/logo.svg'}
-                alt="SJOV Logo"
-                className="h-8 w-8 object-contain"
-              />
+<img
+  src={associationContent?.headerIcon || '/src/assets/logo.svg'}
+  alt="SJOV Logo"
+  className="h-8 w-8 object-contain"
+/>
+
               <h1 className="text-xl font-bold ml-2 text-primary-700 leading-none mb-0">
                 Espace Administration
               </h1>
