@@ -26,7 +26,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminBlogPage from './pages/admin/AdminBlogPage';
 import AdminEventsPage from './pages/admin/AdminEventsPage';
 import AdminApplicationsPage from './pages/admin/AdminApplicationsPage';
-import AdminSettingsPage from './pages/admin/AdminSettingsPage';
+import AdminSettingsPage from './pages/admin/AdminSettingsPage.tsx';
 import ProtectedRoute from './ProtectedRoute';
 
 
