@@ -42,50 +42,64 @@ export const EVENTS: Event[] = [
     title: 'Journée portes ouvertes des jardins',
     description: 'Venez découvrir nos jardins et rencontrer nos jardiniers passionnés...',
     image: 'https://images.pexels.com/photos/169523/pexels-photo-169523.jpeg',
+    imagesannexes: [],
     date: '2025-06-12',
     location: 'Jardins SJOV, Villeurbanne',
     isPast: false,
     start: '2025-06-12T10:00',
-    end: '2025-06-12T17:00',
-    content: '<p>Visite guidée, ateliers découverte pour les enfants, dégustation...</p>'
+    enddate: '2025-06-12T17:00',
+    content: '<p>Visite guidée, ateliers découverte pour les enfants, dégustation...</p>',
+    author: 'Équipe SJOV',
+    created_at: '2025-05-01T08:00:00'
   },
   {
     id: '2',
     title: 'Atelier compostage pour débutants',
     description: 'Apprenez les bases du compostage et repartez avec toutes les connaissances nécessaires...',
     image: 'https://images.pexels.com/photos/2132171/pexels-photo-2132171.jpeg',
+    imagesannexes: [],
     date: '2025-05-28',
     location: 'Salle communale, Villeurbanne',
     isPast: false,
     start: '2025-05-28T14:00',
-    end: '2025-05-28T17:00',
-    content: '<p>Atelier gratuit sur inscription. Apprentissage des bonnes pratiques du compostage...</p>'
+    enddate: '2025-05-28T17:00',
+    content: '<p>Atelier gratuit sur inscription. Apprentissage des bonnes pratiques du compostage...</p>',
+    author: 'Jean Jardinier',
+    created_at: '2025-04-15T10:30:00'
   },
   {
     id: '3',
     title: 'Troc de plantes printanier',
     description: 'Notre traditionnel troc de plantes de printemps...',
     image: 'https://images.pexels.com/photos/4505161/pexels-photo-4505161.jpeg',
+    imagesannexes: [],
     date: '2025-04-15',
     location: 'Place des jardins, Villeurbanne',
     isPast: true,
     start: '2025-04-15T10:00',
-    end: '2025-04-15T13:00',
-    content: '<p>Échange de semis, boutures et plants entre jardiniers.</p>'
+    enddate: '2025-04-15T13:00',
+    content: '<p>Échange de semis, boutures et plants entre jardiniers.</p>',
+    author: 'Sophie Botanique',
+    created_at: '2025-03-25T09:15:00'
   },
   {
     id: '4',
     title: 'Formation taille des arbres fruitiers',
     description: 'Une journée pour apprendre à tailler correctement vos arbres fruitiers...',
     image: 'https://images.pexels.com/photos/159250/bulb-closeup-close-up-clove-159250.jpeg',
+    imagesannexes: [],
     date: '2025-03-05',
     location: 'Verger associatif, Villeurbanne',
     isPast: true,
     start: '2025-03-05T09:30',
-    end: '2025-03-05T16:30',
-    content: '<p>Théorie le matin, pratique l\'après-midi. Prévoir des gants et outils si possible.</p>'
+    enddate: '2025-03-05T16:30',
+    content: '<p>Théorie le matin, pratique l\'après-midi. Prévoir des gants et outils si possible.</p>',
+    author: 'Lucien Taille',
+    created_at: '2025-02-20T07:50:00'
   }
 ];
+
+
 
 export const APPLICATION_FORM_FIELDS: FormField[] = [
   {

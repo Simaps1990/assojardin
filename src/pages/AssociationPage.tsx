@@ -15,8 +15,6 @@ if (!associationContent || !associationContent.id) {
 const {
   titreAssociation,
   contentAssociation,
-  couleurAssociation: color = '#000000',
-  urlAssociation: url,
   imagesAssociation: images = [],
 } = associationContent;
 
@@ -40,21 +38,10 @@ if (!titreAssociation && !contentAssociation && images.length === 0) {
   return (
     <div className="pt-24 pb-16">
       <div className="container-custom">
-        <h1 className="font-heading font-bold text-4xl mb-2" style={{ color }}>
-          {titreAssociation}
-        </h1>
-        {url && (
-          <p className="text-neutral-600 text-lg mb-8">
-            <a
-              href={url}
-              className="text-blue-600 underline"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {url}
-            </a>
-          </p>
-        )}
+<h1 className="font-heading font-bold text-4xl mb-2 text-black">
+  {titreAssociation}
+</h1>
+
         <div
           className="prose prose-lg max-w-none mb-10"
           dangerouslySetInnerHTML={{ __html: contentAssociation || '' }}

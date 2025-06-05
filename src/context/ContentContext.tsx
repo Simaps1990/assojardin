@@ -24,8 +24,6 @@ export interface AssociationContentType {
   headerIcon?: string;
   titreAssociation?: string;
   contentAssociation?: string;
-  urlAssociation?: string;
-  couleurAssociation?: string;
   imagesAssociation?: (string | null)[];
   parcellesTotal?: number;
   parcellesOccupees?: number;
@@ -87,8 +85,6 @@ setAssociationContent({
   headerIcon: data?.headericon || '',
   titreAssociation: data?.titreassociation || '',
   contentAssociation: data?.contentassociation || '',
-  urlAssociation: data?.urlassociation || '',
-  couleurAssociation: data?.couleurassociation || '',
   imagesAssociation: data?.imagesassociation || [],
   parcellesTotal: data?.parcellestotal ?? 0,
   parcellesOccupees: data?.parcellesoccupees ?? 0,
@@ -152,8 +148,6 @@ const [associationContent, setAssociationContent] = useState<AssociationContentT
   headerIcon: '',
   titreAssociation: '',
   contentAssociation: '',
-  urlAssociation: '',
-  couleurAssociation: '',
   imagesAssociation: [],
   parcellesTotal: 0,
   parcellesOccupees: 0,
@@ -420,8 +414,6 @@ const updateAssociationContent = async (
     ...(updatedContent.email !== undefined && { email: updatedContent.email }),
     ...(updatedContent.horaires !== undefined && { horaires: updatedContent.horaires }),
     ...(updatedContent.imagesAssociation !== undefined && { imagesassociation: updatedContent.imagesAssociation }),
-    ...(updatedContent.urlAssociation !== undefined && { urlassociation: updatedContent.urlAssociation }),
-    ...(updatedContent.couleurAssociation !== undefined && { couleurassociation: updatedContent.couleurAssociation }),
   };
 
   console.log('🟡 mappedContent envoyé à Supabase :', JSON.stringify(mappedContent, null, 2));
@@ -460,8 +452,6 @@ const updateAssociationContent = async (
     headerIcon: refreshed.headericon,
     titreAssociation: refreshed.titreassociation,
     contentAssociation: refreshed.contentassociation,
-    urlAssociation: refreshed.urlassociation,
-    couleurAssociation: refreshed.couleurassociation,
     imagesAssociation: refreshed.imagesassociation || [],
     parcellesTotal: refreshed.parcellestotal ?? 0,
     parcellesOccupees: refreshed.parcellesoccupees ?? 0,

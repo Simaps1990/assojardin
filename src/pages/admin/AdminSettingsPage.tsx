@@ -189,8 +189,6 @@ imageAccueil: associationContent.imageAccueil ?? undefined,
 headerIcon: associationContent.headerIcon ?? undefined,
 
   contentAssociation: associationContent.contentAssociation || '',
-  urlAssociation: associationContent.urlAssociation || '',
-  couleurAssociation: associationContent.couleurAssociation || '',
 });
 
 

@@ -25,8 +25,8 @@ export interface Event {
   description?: string;
 
   // ✅ Ajout nécessaire :
-  start: string;
-  enddate: string;
+  start?: string;
+  enddate?: string;
 }
 
 
