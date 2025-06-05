@@ -14,10 +14,11 @@ import {
 import { useAuth } from '../../context/AuthContext';
 //import { supabase } from '../../supabaseClient';
 import { useContent } from '../../context/ContentContext';
-const { associationContent } = useContent();
+
 
 const AdminLayout: React.FC = () => {
   const { user, logout } = useAuth();
+  const { associationContent } = useContent();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [nonTraitees, setNonTraitees] = useState(0);
   const location = useLocation();
