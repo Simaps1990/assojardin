@@ -4,13 +4,22 @@ import { useContent } from '../context/ContentContext';
 const AssociationPage: React.FC = () => {
   const { associationContent } = useContent();
 
-  const {
-    titreAssociation,
-    contentAssociation,
-    couleurAssociation: color = '#000000',
-    urlAssociation: url,
-    imagesAssociation: images = [],
-  } = associationContent;
+if (!associationContent || !associationContent.id) {
+  return (
+    <div className="pt-24 pb-16 container-custom text-center text-gray-500">
+      Chargement des informations de l’association...
+    </div>
+  );
+}
+
+const {
+  titreAssociation,
+  contentAssociation,
+  couleurAssociation: color = '#000000',
+  urlAssociation: url,
+  imagesAssociation: images = [],
+} = associationContent;
+
 
   const getImageGridClass = () => {
   if (images.length === 1) return 'grid-cols-1';
