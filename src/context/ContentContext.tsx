@@ -186,6 +186,23 @@ useEffect(() => {
   fetchApplications();
 }, []);
 
+useEffect(() => {
+  const fetchBlogPosts = async () => {
+    const { data, error } = await supabase
+      .from('blogPosts')
+      .select('*')
+      .order('date', { ascending: false });
+
+    if (error) {
+      console.error('Erreur de chargement des articles Supabase:', error.message);
+      return;
+    }
+
+    setBlogPosts(data || []);
+  };
+
+  fetchBlogPosts();
+}, []);
 
 
 const addBlogPost = async (post: Omit<BlogPost, 'id' | 'date'>) => {
