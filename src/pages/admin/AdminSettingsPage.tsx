@@ -191,6 +191,11 @@ headerIcon: associationContent.headerIcon ?? undefined,
   contentAssociation: associationContent.contentAssociation || '',
 });
 
+useEffect(() => {
+  if (editorRef.current) {
+    editorRef.current.innerHTML = contentAssociation || '';
+  }
+}, [contentAssociation]);
 
   //setParcellesOccupees(associationContent.parcellesOccupees || 0);
   //setParcellesTotales(associationContent.parcellesTotal || 0);
@@ -474,13 +479,13 @@ onChange={(e) =>
 <div
   ref={editorRef}
   contentEditable
-  dangerouslySetInnerHTML={{ __html: contentAssociation }}
   onInput={(e) => setContentAssociation(e.currentTarget.innerHTML)}
   className="min-h-[150px] border rounded px-3 py-2 focus:outline-none"
   dir="ltr"
   style={{ textAlign: 'left' }}
   suppressContentEditableWarning
 />
+
 
 
 </div>
