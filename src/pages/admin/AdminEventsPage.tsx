@@ -315,47 +315,86 @@ if (fileInputRef.current) {
 
         <div ref={contentRef} className="w-full min-h-[120px] border rounded px-3 py-2 focus:outline-none" contentEditable style={{ whiteSpace: 'pre-wrap' }} />
 
-        <div>
-<label className="block text-sm font-medium text-gray-700 mb-1">Images</label>
-<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-  {[0, 1, 2].map((index) => (
-    <div key={index} className="flex flex-col items-center">
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => handleImagesannexesChange(e, index)}
-        className="mb-2"
-      />
-      {imagesannexesUrls[index] && (
-        <div className="w-full flex justify-center">
-          <img
-            src={imagesannexesUrls[index]!}
-            alt={`Image ${index + 1}`}
-            className="max-h-[200px] w-auto object-contain rounded"
-          />
-        </div>
-      )}
-      {imagesannexesUrls[index] && (
-        <button
-          type="button"
-          onClick={() => {
-            const newFiles = [...imagesannexesFiles];
-            const newUrls = [...imagesannexesUrls];
-            newFiles[index] = null;
-            newUrls[index] = null;
-            setImagesannexesFiles(newFiles);
-            setImagesannexesUrls(newUrls);
-          }}
-          className="text-red-600 text-sm hover:underline mt-1"
-        >
-          Supprimer
-        </button>
-      )}
+ {/* Image de couverture */}
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">Image de couverture</label>
+  <input
+    id="event-cover"
+    type="file"
+    accept="image/*"
+    onChange={(e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const objectUrl = URL.createObjectURL(file);
+      const newFiles = [...imagesannexesFiles];
+      const newUrls = [...imagesannexesUrls];
+      newFiles[0] = file;
+      newUrls[0] = objectUrl;
+      setImagesannexesFiles(newFiles);
+      setImagesannexesUrls(newUrls);
+    }}
+  />
+  {imagesannexesUrls[0] && (
+    <div className="mt-2">
+      <img src={imagesannexesUrls[0]!} alt="Aperçu" className="h-32 object-cover rounded" />
+      <button
+        type="button"
+        onClick={() => {
+          const newFiles = [...imagesannexesFiles];
+          const newUrls = [...imagesannexesUrls];
+          newFiles[0] = null;
+          newUrls[0] = null;
+          setImagesannexesFiles(newFiles);
+          setImagesannexesUrls(newUrls);
+        }}
+        className="text-red-600 text-sm hover:underline mt-2"
+      >
+        Supprimer l’image
+      </button>
     </div>
-  ))}
+  )}
 </div>
 
-        </div>
+{/* Images de contenu */}
+<div className="space-y-2 mt-4">
+  <label className="block font-medium">Photos de contenu (jusqu’à 2)</label>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {[1, 2].map((index) => (
+      <div key={index}>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => handleImagesannexesChange(e, index)}
+        />
+        {imagesannexesUrls[index] && (
+          <div className="mt-2 relative">
+            <img
+              src={imagesannexesUrls[index]!}
+              alt={`Aperçu image ${index + 1}`}
+              className="w-full h-32 object-cover rounded"
+            />
+            <button
+              onClick={() => {
+                const newFiles = [...imagesannexesFiles];
+                const newUrls = [...imagesannexesUrls];
+                newFiles[index] = null;
+                newUrls[index] = null;
+                setImagesannexesFiles(newFiles);
+                setImagesannexesUrls(newUrls);
+              }}
+              className="absolute top-1 right-1 bg-red-600 text-white px-2 py-1 rounded text-xs"
+              type="button"
+            >
+              Supprimer
+            </button>
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+</div>
+
 
         <div className="flex gap-4 pt-2">
           <button onClick={handleAddEvent} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
