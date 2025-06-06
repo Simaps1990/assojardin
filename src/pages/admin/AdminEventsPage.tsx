@@ -36,6 +36,15 @@ useEffect(() => {
   }
 }, [imagesannexesFiles]);
 
+useEffect(() => {
+  if (uploadedCoverUrl) {
+    const newUrls = [...imagesannexesUrls];
+    if (newUrls[0] !== uploadedCoverUrl) {
+      newUrls[0] = uploadedCoverUrl;
+      setImagesannexesUrls(newUrls);
+    }
+  }
+}, [uploadedCoverUrl]);
 
 const fetchEvents = React.useCallback(async () => {
   const { data, error } = await supabase
@@ -510,6 +519,7 @@ setImagesannexesUrls([
 ]);
 setImagesannexesFiles([null, null, null]);
 setUploadedCoverUrl(cover);
+
 
 
                   if (fileInputRef.current) {
