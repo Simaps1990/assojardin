@@ -146,9 +146,6 @@ return (
     <h2 className="text-xl font-bold leading-tight mb-0">Météo actuelle</h2>
   </div>
 
-<div className="hidden md:flex items-center justify-center">
-  <WeatherWidget renderTips={() => null} />
-</div>
 
 </div>
 
