@@ -146,22 +146,13 @@ return (
     <h2 className="text-xl font-bold leading-tight mb-0">Météo actuelle</h2>
   </div>
 
-  <div className="hidden md:block">
-    <WeatherWidget
-renderTips={() => null} />
+  <div className="hidden md:flex items-center">
+    <WeatherWidget renderTips={() => null} />
   </div>
 </div>
 
-{/* Widget affiché en dessous en mobile */}
-<div className="md:hidden mb-2">
-  <WeatherWidget
-renderTips={() => null} />
-</div>
 
-
-
-<WeatherWidget
-  renderTips={({ weatherCode, temperature }) => {
+<WeatherWidget  renderTips={({ weatherCode, temperature }) => {
     let conseilMeteo = '';
     let conseilTemp = '';
 
