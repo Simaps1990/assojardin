@@ -140,12 +140,19 @@ return (
       {/* Bloc droit : Météo actuelle */}
       <div className="card bg-white p-6 rounded-2xl shadow-md">
 
-<div className="flex items-start justify-between mb-4">
+<div className="flex items-center justify-between mb-4">
+  {/* Titre avec icône */}
   <div className="flex items-center gap-2">
     <Leaf className="text-sky-500 h-5 w-5" />
     <h2 className="text-xl font-bold leading-tight mb-0">Météo actuelle</h2>
   </div>
+
+  {/* Température & Ville, alignés à droite */}
+  <div className="flex items-center gap-2">
+    <WeatherWidget renderTips={() => null} />
+  </div>
 </div>
+
 
 <WeatherWidget
   renderTips={({ weatherCode, temperature }) => {
