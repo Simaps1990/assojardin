@@ -129,6 +129,8 @@ console.log('DEBUG - Champs transmis à Supabase :', {
   content: contentRef.current?.innerHTML,
 image: imageToSave,
 });
+const finalImage = uploadedCoverUrl || imagesannexesUrls[0] || '';
+setUploadedCoverUrl(finalImage); // sécurise la cover au cas où non modifiée
 
 const newEvent: Omit<Event, 'id' | 'isPast'> = {
   title,
@@ -137,7 +139,7 @@ const newEvent: Omit<Event, 'id' | 'isPast'> = {
   start,
   enddate,
   content: contentRef.current.innerHTML,
-  image: imageToSave,
+image: finalImage,
   date: start.split('T')[0], // 👈 adapte la date au format 'YYYY-MM-DD' exigé par Supabase
 imagesannexes: imagesannexesUrls,
   author: 'admin',   // ou remplace par un vrai utilisateur si tu gères l'auth
