@@ -149,12 +149,12 @@ return (
             let conseilMeteo = '';
             let conseilTemp = '';
 
-            if ([0].includes(weatherCode)) conseilMeteo = 'Temps clair : pensez à arroser en soirée.';
-            else if ([1, 2, 3].includes(weatherCode)) conseilMeteo = 'Nuageux : conditions idéales pour semer.';
-            else if ([45, 48].includes(weatherCode)) conseilMeteo = 'Brouillard : évitez les traitements.';
-            else if ([51, 53, 55, 61, 63, 65].includes(weatherCode)) conseilMeteo = 'Pluie : ne semez pas aujourd’hui.';
-            else if ([71, 73, 75].includes(weatherCode)) conseilMeteo = 'Neige : protégez vos plantes.';
-            else if ([95, 96, 99].includes(weatherCode)) conseilMeteo = 'Orage : rentrez vos outils.';
+            if ([0].includes(weatherCode)) conseilMeteo = 'un temps clair : pensez à arroser en soirée.';
+            else if ([1, 2, 3].includes(weatherCode)) conseilMeteo = 'un temps nuageux : conditions idéales pour semer.';
+            else if ([45, 48].includes(weatherCode)) conseilMeteo = 'du brouillard : évitez les traitements.';
+            else if ([51, 53, 55, 61, 63, 65].includes(weatherCode)) conseilMeteo = 'de la pluie : ne semez pas aujourd’hui.';
+            else if ([71, 73, 75].includes(weatherCode)) conseilMeteo = 'de la neige : protégez vos plantes.';
+            else if ([95, 96, 99].includes(weatherCode)) conseilMeteo = 'de un orage : rentrez vos outils.';
             else conseilMeteo = 'Conditions normales : observez votre sol.';
 
             if (temperature >= 28) conseilTemp = 'pensez à pailler et arroser tôt.';
@@ -164,7 +164,7 @@ return (
 
             return (
               <>
-                <p>Il fait : <strong>{conseilMeteo}</strong></p>
+                <p>Il y a {conseilMeteo}</p>
                 <p>Avec une température de <strong>{temperature}°C</strong>, {conseilTemp}</p>
               </>
             );
