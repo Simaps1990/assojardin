@@ -424,9 +424,9 @@ onChange={async (e) => {
 
 {/* Images de contenu */}
 <div className="space-y-2 mt-4">
-  <label className="block font-medium">Photos de contenu (jusqu’à 2)</label>
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-    {[1, 2].map((index) => (
+  <label className="block font-medium">Photos de contenu (jusqu’à 3)</label>
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    {[1, 2, 3].map((index) => (
       <div key={index}>
         <input
           type="file"
@@ -460,6 +460,7 @@ onChange={async (e) => {
     ))}
   </div>
 </div>
+
 
 
         <div className="flex gap-4 pt-2">
