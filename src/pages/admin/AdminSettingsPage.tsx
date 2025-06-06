@@ -199,40 +199,42 @@ const totales = parseInt((localContent.parcellesTotal ?? 0).toString(), 10);
 
   const editorRef = React.useRef<HTMLDivElement>(null);
 useEffect(() => {
-setLocalContent({
-  id: associationContent.id, // ← obligatoire pour satisfaire le type
-  titreAccueil: associationContent.titreAccueil || '',
-  texteIntro: associationContent.texteIntro || '',
-  texteFooter: associationContent.texteFooter || '',
-  titreAssociation: associationContent.titreAssociation || '',
-  parcellesOccupees: associationContent.parcellesOccupees || 0,
-  parcellesTotal: associationContent.parcellesTotal || 0,
-  imagesAssociation: associationContent.imagesAssociation || [null, null, null],
-  adresse: associationContent.adresse || '',
-  telephone: associationContent.telephone || '',
-  email: associationContent.email || '',
-  horaires: associationContent.horaires || '',
-imageAccueil: associationContent.imageAccueil ?? undefined,
-headerIcon: associationContent.headerIcon ?? undefined,
+  setLocalContent({
+    id: associationContent.id,
+    titreAccueil: associationContent.titreAccueil || '',
+    texteIntro: associationContent.texteIntro || '',
+    texteFooter: associationContent.texteFooter || '',
+    titreAssociation: associationContent.titreAssociation || '',
+    parcellesOccupees: associationContent.parcellesOccupees || 0,
+    parcellesTotal: associationContent.parcellesTotal || 0,
+    imagesAssociation: associationContent.imagesAssociation || [null, null, null],
+    adresse: associationContent.adresse || '',
+    telephone: associationContent.telephone || '',
+    email: associationContent.email || '',
+    horaires: associationContent.horaires || '',
+    imageAccueil: associationContent.imageAccueil ?? undefined,
+    headerIcon: associationContent.headerIcon ?? undefined,
+    contentAssociation: associationContent.contentAssociation || '',
+  });
 
-  contentAssociation: associationContent.contentAssociation || '',
-});
-setAssociationImagePreview(associationContent.imagesAssociation?.[0] || null);
-setContentAssociation(associationContent.contentAssociation || '');
-
-
-
-  //setParcellesOccupees(associationContent.parcellesOccupees || 0);
-  //setParcellesTotales(associationContent.parcellesTotal || 0);
+  setAssociationImagePreview(associationContent.imagesAssociation?.[0] || null);
   setPreviewAccueil(associationContent.imageAccueil || null);
-setPreviewHeaderIcon(associationContent.headerIcon ?? null);
+  setPreviewHeaderIcon(associationContent.headerIcon ?? null);
   setAdresse(associationContent.adresse || '');
   setTelephone(associationContent.telephone || '');
   setEmail(associationContent.email || '');
   setHoraires(associationContent.horaires || '');
+
+  // 🟡 Fix du curseur qui saute
+  if (!hasInitializedContent.current && editorRef.current) {
+    editorRef.current.innerHTML = associationContent.contentAssociation || '';
+    hasInitializedContent.current = true;
+  }
 }, [associationContent]);
 
 
+
+const hasInitializedContent = React.useRef(false);
 
 
 
@@ -505,12 +507,12 @@ onChange={(e) =>
   ref={editorRef}
   contentEditable
   onInput={(e) => setContentAssociation(e.currentTarget.innerHTML)}
-  dangerouslySetInnerHTML={{ __html: contentAssociation }}
   className="min-h-[150px] border rounded px-3 py-2 focus:outline-none"
   dir="ltr"
   style={{ textAlign: 'left' }}
   suppressContentEditableWarning
 />
+
 
 
 <div>
