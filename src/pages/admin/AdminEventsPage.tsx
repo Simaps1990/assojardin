@@ -317,7 +317,7 @@ if (fileInputRef.current) {
 
  {/* Image de couverture */}
 <div>
-  <label className="block text-sm font-medium text-gray-700 mb-1">Image de couverture</label>
+  <label className="block font-medium">Image de couverture</label>
   <input
     id="event-cover"
     type="file"

@@ -317,7 +317,7 @@ console.log("Posts en state :", posts);
         />
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Photo de couverture</label>
+          <label className="block font-medium">Photo de couverture</label>
           <input id="blog-image" type="file" accept="image/*" onChange={handleImageChange} />
           {previewUrl && (
             <div className="mt-2">
