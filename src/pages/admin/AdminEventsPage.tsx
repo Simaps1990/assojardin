@@ -10,9 +10,8 @@ const [events, setEvents] = useState<Event[]>([]);
   const [location, setLocation] = useState('');
   const [start, setStart] = useState('');
   const [enddate, setEnddate] = useState('');
-  const [image, setImage] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+const [imagesannexesFiles, setImagesannexesFiles] = useState<(File | null)[]>([null, null, null]);
+const [imagesannexesUrls, setImagesannexesUrls] = useState<(string | null)[]>([null, null, null]);
   const [error, setError] = useState('');
   const [editingEventId, setEditingEventId] = useState<string | null>(null);
   const [eventToDelete, setEventToDelete] = useState<Event | null>(null);
@@ -21,13 +20,18 @@ const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const contentRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (image) {
-      const objectUrl = URL.createObjectURL(image);
-      setPreviewUrl(objectUrl);
-      return () => URL.revokeObjectURL(objectUrl);
-    }
-  }, [image]);
+useEffect(() => {
+  const file = imagesannexesFiles[0];
+  if (file) {
+    const objectUrl = URL.createObjectURL(file);
+    const newUrls = [...imagesannexesUrls];
+    newUrls[0] = objectUrl;
+    setImagesannexesUrls(newUrls);
+
+    return () => URL.revokeObjectURL(objectUrl);
+  }
+}, [imagesannexesFiles]);
+
 
 const fetchEvents = React.useCallback(async () => {
   const { data, error } = await supabase
@@ -48,11 +52,13 @@ useEffect(() => {
 }, []);
 
 
-const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+const handleImagesannexesChange = async (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
   const file = e.target.files?.[0];
   if (!file) return;
 
-  setImage(file);
+  const newFiles = [...imagesannexesFiles];
+  newFiles[index] = file;
+  setImagesannexesFiles(newFiles);
 
   const formData = new FormData();
   formData.append('file', file);
@@ -65,12 +71,15 @@ const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     });
     const data = await res.json();
     if (data.secure_url) {
-      setUploadedImageUrl(data.secure_url);
+      const newUrls = [...imagesannexesUrls];
+      newUrls[index] = data.secure_url;
+      setImagesannexesUrls(newUrls);
     }
   } catch (err) {
-    console.error('Erreur upload Cloudinary', err);
+    console.error('Erreur upload image Cloudinary', err);
   }
 };
+
 
 
 
@@ -100,7 +109,7 @@ const handleAddEvent = async () => {
       return;
     }
 
-    const imageToSave = uploadedImageUrl ?? '';
+const imageToSave = imagesannexesUrls[0] ?? '';
 console.log('DEBUG - Champs transmis à Supabase :', {
   title,
   description,
@@ -108,7 +117,7 @@ console.log('DEBUG - Champs transmis à Supabase :', {
   start,
   enddate,
   content: contentRef.current?.innerHTML,
-  image: uploadedImageUrl,
+image: imageToSave,
 });
 
 const newEvent: Omit<Event, 'id' | 'isPast'> = {
@@ -120,7 +129,7 @@ const newEvent: Omit<Event, 'id' | 'isPast'> = {
   content: contentRef.current.innerHTML,
   image: imageToSave,
   date: start.split('T')[0], // 👈 adapte la date au format 'YYYY-MM-DD' exigé par Supabase
-  imagesannexes: [], // ou un vrai tableau si tu veux en ajouter
+imagesannexes: imagesannexesUrls,
   author: 'admin',   // ou remplace par un vrai utilisateur si tu gères l'auth
   created_at: new Date().toISOString(),
 };
@@ -156,9 +165,9 @@ try {
     setLocation('');
     setStart('');
     setEnddate('');
-    setImage(null);
-    setPreviewUrl(null);
-    setUploadedImageUrl(null);
+setImagesannexesFiles([null, null, null]);
+setImagesannexesUrls([null, null, null]);
+
     if (contentRef.current) contentRef.current.innerHTML = '';
     setError('');
 if (fileInputRef.current) {
@@ -175,9 +184,8 @@ if (fileInputRef.current) {
     setLocation('');
     setStart('');
     setEnddate('');
-    setImage(null);
-    setPreviewUrl(null);
-    setUploadedImageUrl(null);
+setImagesannexesFiles([null, null, null]);
+
     if (contentRef.current) contentRef.current.innerHTML = '';
     setEditingEventId(null);
     setError('');
@@ -308,34 +316,45 @@ if (fileInputRef.current) {
         <div ref={contentRef} className="w-full min-h-[120px] border rounded px-3 py-2 focus:outline-none" contentEditable style={{ whiteSpace: 'pre-wrap' }} />
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Image</label>
-<input
-  id="event-image"
-  type="file"
-  accept="image/*"
-  onChange={handleImageChange}
-  ref={fileInputRef}  // <-- ici
-/>
-          {previewUrl && (
-            <div className="mt-2">
-              <img src={previewUrl} alt="Aperçu" className="h-32 object-cover rounded" />
-              <button
-                type="button"
-                onClick={() => {
-                  setImage(null);
-                  setPreviewUrl(null);
-                  setUploadedImageUrl(null);
-if (fileInputRef.current) {
-  fileInputRef.current.value = '';
-}
+<label className="block text-sm font-medium text-gray-700 mb-1">Images</label>
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+  {[0, 1, 2].map((index) => (
+    <div key={index} className="flex flex-col items-center">
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => handleImagesannexesChange(e, index)}
+        className="mb-2"
+      />
+      {imagesannexesUrls[index] && (
+        <div className="w-full flex justify-center">
+          <img
+            src={imagesannexesUrls[index]!}
+            alt={`Image ${index + 1}`}
+            className="max-h-[200px] w-auto object-contain rounded"
+          />
+        </div>
+      )}
+      {imagesannexesUrls[index] && (
+        <button
+          type="button"
+          onClick={() => {
+            const newFiles = [...imagesannexesFiles];
+            const newUrls = [...imagesannexesUrls];
+            newFiles[index] = null;
+            newUrls[index] = null;
+            setImagesannexesFiles(newFiles);
+            setImagesannexesUrls(newUrls);
+          }}
+          className="text-red-600 text-sm hover:underline mt-1"
+        >
+          Supprimer
+        </button>
+      )}
+    </div>
+  ))}
+</div>
 
-                }}
-                className="text-red-600 text-sm hover:underline mt-2"
-              >
-                Supprimer l’image
-              </button>
-            </div>
-          )}
         </div>
 
         <div className="flex gap-4 pt-2">
@@ -373,9 +392,9 @@ setStart(e.start ? e.start.slice(0, 16) : '');
 setEnddate(e.enddate ? e.enddate.slice(0, 16) : '');
 
                     if (contentRef.current) contentRef.current.innerHTML = e.content;
-                    setImage(null);
-                    setPreviewUrl(e.image || null);
-                    setUploadedImageUrl(e.image || null);
+                setImagesannexesUrls(e.imagesannexes ?? [null, null, null]);
+setImagesannexesFiles([null, null, null]);
+
                   if (fileInputRef.current) {
   fileInputRef.current.value = '';
 }
