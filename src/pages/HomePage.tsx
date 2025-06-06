@@ -143,7 +143,7 @@ return (
   <h2 className="text-xl font-bold leading-tight mb-0">Météo actuelle</h2>
 </div>
 <WeatherWidget
-  renderTips={({ weatherCode, temperature }) => {
+  renderTips={({ weatherCode, temperature, city, icon }) => {
     let conseilMeteo = '';
     let conseilTemp = '';
 
@@ -161,13 +161,25 @@ return (
     else conseilTemp = 'continuez l’entretien habituel.';
 
     return (
-      <ul className="list-disc list-inside space-y-1">
-        <li>Actuellement il {conseilMeteo}</li>
-        <li>Avec une température extérieure de <strong>{temperature}°C</strong>, {conseilTemp}</li>
-      </ul>
+      <>
+        {/* Ligne icône + °C + ville */}
+        <div className="flex items-center gap-2 mb-2 text-sm text-neutral-700">
+          <span>{icon}</span>
+          <span className="font-medium">{temperature}°C</span>
+          <span className="mx-1 text-neutral-400">|</span>
+          <span className="text-green-500">{city}</span>
+        </div>
+
+        {/* Conseils météo */}
+        <ul className="list-disc list-inside space-y-1">
+          <li>Actuellement il {conseilMeteo}</li>
+          <li>Avec une température extérieure de <strong>{temperature}°C</strong>, {conseilTemp}</li>
+        </ul>
+      </>
     );
   }}
 />
+
 
 
 </div>
