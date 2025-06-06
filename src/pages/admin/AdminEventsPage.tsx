@@ -502,9 +502,15 @@ setStart(e.start ? e.start.slice(0, 16) : '');
 setEnddate(e.enddate ? e.enddate.slice(0, 16) : '');
 
                     if (contentRef.current) contentRef.current.innerHTML = e.content;
-                setImagesannexesUrls(e.imagesannexes ?? [null, null, null]);
+const cover = e.image ?? e.imagesannexes?.[0] ?? null;
+setImagesannexesUrls([
+  cover,
+  e.imagesannexes?.[1] ?? null,
+  e.imagesannexes?.[2] ?? null,
+]);
 setImagesannexesFiles([null, null, null]);
-setUploadedCoverUrl(e.image ?? (e.imagesannexes?.[0] ?? ''));
+setUploadedCoverUrl(cover);
+
 
                   if (fileInputRef.current) {
   fileInputRef.current.value = '';
