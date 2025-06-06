@@ -22,15 +22,16 @@ const EventDetailPage: React.FC = () => {
     }
   }, [id, events, navigate]);
 
-  if (!event) {
-    return (
-      <div className="pt-24 pb-16">
-        <div className="container-custom">
-          <p>Chargement de l'événement...</p>
-        </div>
-      </div>
-    );
-  }
+if (!event) return (
+  <div className="pt-24 pb-16">
+    <div className="container-custom">
+      <p>Chargement de l'événement...</p>
+    </div>
+  </div>
+);
+
+const annexesSansCover = event.imagesannexes?.filter(img => img && img !== event.image);
+
 
   return (
     <div className="pt-24 pb-16">
@@ -80,29 +81,28 @@ const EventDetailPage: React.FC = () => {
             
 <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: event.content }} />
 
-{event.imagesannexes && event.imagesannexes.length > 0 && (
+{annexesSansCover && annexesSansCover.length > 0 && (
   <div
     className={`mt-6 grid gap-4 ${
-      event.imagesannexes.length === 1
+      annexesSansCover.length === 1
         ? 'grid-cols-1'
-        : event.imagesannexes.length === 2
+        : annexesSansCover.length === 2
         ? 'grid-cols-2'
         : 'grid-cols-3'
     }`}
   >
-    {event.imagesannexes.map((img, i) =>
-      img ? (
-        <div key={i} className="w-full flex justify-center">
-          <img
-            src={img}
-            alt={`Image annexe ${i + 1}`}
-            className="max-h-[500px] w-auto object-contain rounded"
-          />
-        </div>
-      ) : null
-    )}
+    {annexesSansCover.map((img, i) => (
+      <div key={i} className="w-full flex justify-center">
+<img
+  src={img || undefined}
+  alt={`Image annexe ${i + 1}`}
+  className="max-h-[500px] w-auto object-contain rounded"
+/>
+      </div>
+    ))}
   </div>
 )}
+
 
             {!event.isPast && (
               <div className="mt-8 p-6 bg-primary-50 rounded-lg border border-primary-100">
