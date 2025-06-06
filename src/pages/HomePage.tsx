@@ -139,12 +139,25 @@ return (
 
       {/* Bloc droit : Météo actuelle */}
       <div className="card bg-white p-6 rounded-2xl shadow-md">
-<div className="flex items-center gap-2 mb-4">
-  <div className="flex items-center h-full pt-[2px]">
+
+<div className="flex items-center justify-between mb-4">
+  <div className="flex items-center gap-2">
     <Leaf className="text-sky-500 h-5 w-5" />
+    <h2 className="text-xl font-bold leading-tight mb-0">Météo actuelle</h2>
   </div>
-  <h2 className="text-xl font-bold leading-tight mb-0">Météo actuelle</h2>
+
+  <div className="hidden md:block">
+    <WeatherWidget
+renderTips={() => null} />
+  </div>
 </div>
+
+{/* Widget affiché en dessous en mobile */}
+<div className="md:hidden mb-2">
+  <WeatherWidget
+renderTips={() => null} />
+</div>
+
 
 
 <WeatherWidget

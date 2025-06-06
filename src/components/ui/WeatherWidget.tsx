@@ -38,7 +38,7 @@ const url = '/.netlify/functions/meteo';
         const data = await response.json();
         if (!data.current_weather) throw new Error("Données météo actuelles manquantes");
         setWeather({
-          location: "Villeurbanne, FR",
+          location: "Villeurbanne",
           temperature: Math.round(data.current_weather.temperature),
           weatherCode: data.current_weather.weathercode,
         });
