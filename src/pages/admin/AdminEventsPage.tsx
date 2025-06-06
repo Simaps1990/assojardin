@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Event } from '../../types';
 import { supabase } from '../../supabaseClient';
+import { useContent } from '../../context/ContentContext';
 
 const AdminEventsPage: React.FC = () => {
 const [events, setEvents] = useState<Event[]>([]);
+const { fetchEvents: refreshGlobalEvents } = useContent();
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -179,6 +181,7 @@ if (fileInputRef.current) {
 }
     window.scrollTo(0, 0); // Scroll haut après ajout ou modif
     await fetchEvents();
+await refreshGlobalEvents(); // ← pour mettre à jour le front
 
   };
 

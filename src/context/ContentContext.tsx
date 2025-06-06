@@ -50,6 +50,9 @@ interface ContentContextType {
   updateApplication: (id: string, app: Partial<Application>) => void;
   deleteApplication: (id: string) => void;
   updateFormFields: (fields: FormField[]) => void;
+    setEvents: React.Dispatch<React.SetStateAction<Event[]>>;
+  fetchEvents: () => Promise<void>;
+
 updateAssociationContent: (content: Partial<AssociationContentType>) => Promise<AssociationContentType | undefined>;
 }
 
@@ -101,14 +104,7 @@ setAssociationContent({
   const [events, setEvents] = useState<Event[]>([]);
 
 useEffect(() => {
-  const fetchEvents = async () => {
-    const { data, error } = await supabase.from('events').select('*').order('date', { ascending: false });
-    if (error) {
-      console.error('Erreur de chargement des événements Supabase:', error.message);
-      return;
-    }
-    setEvents(data || []);
-  };
+
 
   fetchEvents();
 }, []);
@@ -463,7 +459,14 @@ const updateAssociationContent = async (
 };
 
 
-
+  const fetchEvents = async () => {
+    const { data, error } = await supabase.from('events').select('*').order('date', { ascending: false });
+    if (error) {
+      console.error('Erreur de chargement des événements Supabase:', error.message);
+      return;
+    }
+    setEvents(data || []);
+  };
 
 
   return (
@@ -472,6 +475,9 @@ const updateAssociationContent = async (
         blogPosts,
         setBlogPosts,
         events,
+        setEvents,
+fetchEvents,
+
         applicationFormFields,
         associationContent,
         applications,
