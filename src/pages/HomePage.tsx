@@ -143,40 +143,48 @@ return (
     <div className="flex items-center gap-2">
       <Leaf className="text-sky-500 h-5 w-5" />
       <h2 className="text-xl font-bold leading-tight mb-0">Météo actuelle</h2>
-        <div className="mt-2 text-sm text-neutral-800">
-    <WeatherWidget
-      renderTips={({ weatherCode, temperature }) => {
-        let conseilMeteo = '';
-        let conseilTemp = '';
-
-        if ([0].includes(weatherCode)) conseilMeteo = 'fait un temps clair : pensez à arroser en soirée.';
-        else if ([1, 2, 3].includes(weatherCode)) conseilMeteo = 'fait un temps nuageux : conditions idéales pour semer.';
-        else if ([45, 48].includes(weatherCode)) conseilMeteo = 'y a du brouillard : évitez les traitements.';
-        else if ([51, 53, 55, 61, 63, 65].includes(weatherCode)) conseilMeteo = 'pleut : ne semez pas aujourd’hui.';
-        else if ([71, 73, 75].includes(weatherCode)) conseilMeteo = 'neige : protégez vos plantes.';
-        else if ([95, 96, 99].includes(weatherCode)) conseilMeteo = 'y a un orage : rentrez vos outils.';
-        else conseilMeteo = 'y a des conditions normales : observez votre sol.';
-
-        if (temperature >= 28) conseilTemp = 'pensez à pailler et arroser tôt le matin.';
-        else if (temperature >= 20) conseilTemp = 'arrosez de préférence le matin.';
-        else if (temperature <= 10) conseilTemp = 'attention au froid, couvrez les semis.';
-        else conseilTemp = 'continuez l’entretien habituel.';
-
-        return (
-          <ul className="list-disc list-inside space-y-1">
-            <li>Actuellement il {conseilMeteo}</li>
-            <li>Avec une température extérieure de <strong>{temperature}°C</strong>, {conseilTemp}</li>
-          </ul>
-        );
-      }}
-    />
-  </div>
     </div>
 
 
   </div>
 
   {/* Conseils météo */}
+{/* Conseils météo */}
+<div className="mt-2 text-sm text-neutral-800">
+  <WeatherWidget
+    renderTips={({ weatherCode, temperature }) => {
+      let conseilMeteo = '';
+      let conseilTemp = '';
+
+      // Ne surtout pas afficher d’icône ici
+      // Analyse uniquement le code météo + température
+
+      if ([0].includes(weatherCode)) conseilMeteo = 'fait un temps clair : pensez à arroser en soirée.';
+      else if ([1, 2, 3].includes(weatherCode)) conseilMeteo = 'fait un temps nuageux : conditions idéales pour semer.';
+      else if ([45, 48].includes(weatherCode)) conseilMeteo = 'y a du brouillard : évitez les traitements.';
+      else if ([51, 53, 55, 61, 63, 65].includes(weatherCode)) conseilMeteo = 'pleut : ne semez pas aujourd’hui.';
+      else if ([71, 73, 75].includes(weatherCode)) conseilMeteo = 'neige : protégez vos plantes.';
+      else if ([95, 96, 99].includes(weatherCode)) conseilMeteo = 'y a un orage : rentrez vos outils.';
+      else conseilMeteo = 'y a des conditions normales : observez votre sol.';
+
+      if (temperature >= 28) conseilTemp = 'pensez à pailler et arroser tôt le matin.';
+      else if (temperature >= 20) conseilTemp = 'arrosez de préférence le matin.';
+      else if (temperature <= 10) conseilTemp = 'attention au froid, couvrez les semis.';
+      else conseilTemp = 'continuez l’entretien habituel.';
+
+      // Ce bloc ne retourne QUE du texte
+      return (
+        <ul className="list-disc list-inside space-y-1">
+          <li>Actuellement il {conseilMeteo}</li>
+          <li>Avec une température extérieure de <strong>{temperature}°C</strong>, {conseilTemp}</li>
+        </ul>
+      );
+    }}
+  />
+</div>
+
+
+
 
 </div>
 
