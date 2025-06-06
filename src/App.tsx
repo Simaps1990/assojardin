@@ -33,7 +33,7 @@ import ProtectedRoute from './ProtectedRoute';
 const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
     <Header />
-    <main className="pt-0">{children}</main> {/* ✅ Ajout de pt-20 pour compenser le header fixe */}
+<main className="pt-16 md:pt-0">{children}</main>
     <Footer />
   </>
 );
