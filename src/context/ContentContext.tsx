@@ -36,6 +36,9 @@ interface ContentContextType {
   blogPosts: BlogPost[];
   setBlogPosts: React.Dispatch<React.SetStateAction<BlogPost[]>>;
   events: Event[];
+    setEvents: React.Dispatch<React.SetStateAction<Event[]>>;
+  fetchEvents: () => Promise<void>;
+
   applicationFormFields: FormField[];
   associationContent: AssociationContentType;
   applications: Application[];
@@ -50,8 +53,7 @@ interface ContentContextType {
   updateApplication: (id: string, app: Partial<Application>) => void;
   deleteApplication: (id: string) => void;
   updateFormFields: (fields: FormField[]) => void;
-    setEvents: React.Dispatch<React.SetStateAction<Event[]>>;
-  fetchEvents: () => Promise<void>;
+
 
 updateAssociationContent: (content: Partial<AssociationContentType>) => Promise<AssociationContentType | undefined>;
 }
@@ -104,8 +106,6 @@ setAssociationContent({
   const [events, setEvents] = useState<Event[]>([]);
 
 useEffect(() => {
-
-
   fetchEvents();
 }, []);
 

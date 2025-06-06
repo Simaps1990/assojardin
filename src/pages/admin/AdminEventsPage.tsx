@@ -46,7 +46,11 @@ const fetchEvents = React.useCallback(async () => {
   if (error) {
     console.error('Erreur de chargement des événements :', error);
   } else {
-    setEvents(data as Event[]);
+const formatted = (data || []).map((e) => ({
+  ...e,
+  isPast: new Date(e.date) < new Date(),
+}));
+setEvents(formatted);
   }
 }, []);
 
@@ -143,18 +147,45 @@ imagesannexes: imagesannexesUrls,
 
 try {
   if (editingEventId) {
-    const { error: updateError } = await supabase
-      .from('events')
-      .update(newEvent)
-      .eq('id', editingEventId);
+const { data: updated, error: updateError } = await supabase
+  .from('events')
+  .update(newEvent)
+  .eq('id', editingEventId)
+  .select()
+  .single();
 
-    if (updateError) throw updateError;
+if (updateError) throw updateError;
 
-    setEditingEventId(null);
+const updatedEvent: Event = {
+  ...updated,
+  isPast: new Date(updated.date) < new Date(),
+};
+
+setEvents((prev) =>
+  prev.map((e) => (e.id === editingEventId ? updatedEvent : e))
+);
+
+setEditingEventId(null);
+
   } else {
-    const { error: insertError } = await supabase
-      .from('events')
-      .insert(newEvent);
+const { data: inserted, error: insertError } = await supabase
+  .from('events')
+  .insert(newEvent)
+  .select()
+  .single(); // pour ne récupérer qu’un seul
+
+if (insertError) throw insertError;
+
+const saved = inserted;
+
+if (saved) {
+  const newEventWithComputed: Event = {
+    ...saved,
+    isPast: new Date(saved.date) < new Date(),
+  };
+  setEvents((prev) => [newEventWithComputed, ...prev]);
+}
+
 
     if (insertError) throw insertError;
   }
