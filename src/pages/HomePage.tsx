@@ -124,7 +124,7 @@ return (
 <div className="card bg-white p-6 rounded-2xl shadow-md">
   <div className="flex items-center mb-4">
     <Carrot className="text-green-600 mr-2 h-5 w-5" />
-    <h2 className="text-xl font-bold leading-tight">Ce mois-ci on plante</h2>
+    <h2 className="text-xl font-bold leading-tight mb-0">Ce mois-ci on plante</h2>
   </div>
   <p className="mb-4 text-sm text-neutral-600">
     {plantingDescription}
@@ -143,7 +143,7 @@ return (
   <div className="flex items-center h-full pt-[2px]">
     <Leaf className="text-sky-500 h-5 w-5" />
   </div>
-  <h2 className="text-xl font-bold leading-tight">Météo actuelle</h2>
+  <h2 className="text-xl font-bold leading-tight mb-0">Météo actuelle</h2>
 </div>
 
 
