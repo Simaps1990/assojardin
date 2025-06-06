@@ -143,13 +143,7 @@ return (
     <div className="flex items-center gap-2">
       <Leaf className="text-sky-500 h-5 w-5" />
       <h2 className="text-xl font-bold leading-tight mb-0">Météo actuelle</h2>
-    </div>
-
-
-  </div>
-
-  {/* Conseils météo */}
-  <div className="mt-2 text-sm text-neutral-800">
+        <div className="mt-2 text-sm text-neutral-800">
     <WeatherWidget
       renderTips={({ weatherCode, temperature }) => {
         let conseilMeteo = '';
@@ -177,6 +171,13 @@ return (
       }}
     />
   </div>
+    </div>
+
+
+  </div>
+
+  {/* Conseils météo */}
+
 </div>
 
 
