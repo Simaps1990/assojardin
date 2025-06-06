@@ -53,10 +53,12 @@ if (!titreAssociation && !contentAssociation && images.length === 0) {
               .map((img, idx) => (
                 <div key={idx} className="overflow-hidden rounded-lg shadow">
 <img
+  key={idx}
   src={img}
   alt={`illustration-${idx}`}
-  className="h-[500px] w-auto mx-auto object-contain hover:scale-105 transition-transform duration-300"
+  className="h-[500px] w-auto mx-auto object-contain"
 />
+
 
 
                 </div>
