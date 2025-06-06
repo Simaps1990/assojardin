@@ -129,11 +129,12 @@ return (
   <p className="mb-4 text-sm text-neutral-600">
     {plantingDescription}
   </p>
-  <ul className="list-disc list-inside text-sm text-neutral-700 space-y-1">
-    {plantingList.map((item, index) => (
-      <li key={index}>{item}</li>
-    ))}
-  </ul>
+<ul className="grid grid-cols-2 gap-y-1 list-disc list-inside text-sm text-neutral-700">
+  {plantingList.map((item, index) => (
+    <li key={index}>{item}</li>
+  ))}
+</ul>
+
 </div>
 
 {/* Bloc droit : Météo actuelle */}
