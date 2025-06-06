@@ -18,7 +18,7 @@ const Header: React.FC = () => {
 
   return (
 <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md py-3">
-  <div className="container-custom flex flex-col md:flex-row items-center justify-between gap-4">
+  <div className="container-custom flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0">
         {/* Logo + texte */}
         <Link to="/" className="flex items-center">
           <img
@@ -35,13 +35,18 @@ const Header: React.FC = () => {
         </Link>
 
         {/* Navigation + Recherche + Connexion */}
-<div className="flex flex-col md:flex-row md:items-center gap-4 w-full md:w-auto">
-  <nav className="flex flex-wrap justify-center gap-4 text-sm font-medium">
-    {/* Tes <Link> ici, inchangés */}
+<div className="flex flex-col md:flex-row md:items-center md:gap-6 w-full md:w-auto">
+  <nav className="flex flex-col md:flex-row justify-center items-center gap-2 md:gap-4 text-sm font-medium w-full md:w-auto">
+    <Link to="/" className="hover:text-primary-600 text-neutral-700">Accueil</Link>
+    <Link to="/association" className="hover:text-primary-600 text-neutral-700">Notre association</Link>
+    <Link to="/blog" className="hover:text-primary-600 text-neutral-700">Blog</Link>
+    <Link to="/events" className="hover:text-primary-600 text-neutral-700">Événements</Link>
+    <Link to="/apply" className="hover:text-primary-600 text-neutral-700">Postuler</Link>
+    <Link to="/contact" className="hover:text-primary-600 text-neutral-700">Contact</Link>
   </nav>
 
-  <div className="flex items-center gap-2 justify-between md:justify-end w-full md:w-auto">
-    <form onSubmit={handleSearch} className="relative flex-grow">
+  <div className="flex items-center gap-2 mt-2 md:mt-0 w-full md:w-auto">
+    <form onSubmit={handleSearch} className="relative w-full md:w-48">
       <input
         type="text"
         placeholder="Rechercher..."
@@ -57,6 +62,7 @@ const Header: React.FC = () => {
     </Link>
   </div>
 </div>
+
 
       </div>
     </header>

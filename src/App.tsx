@@ -35,7 +35,7 @@ import ProtectedRoute from './ProtectedRoute';
 const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
     <Header />
-<main className="pt-24 pb-0">{children}</main>
+<main className="pt-[88px] pb-0">{children}</main>
 
     <Footer />
   </>
