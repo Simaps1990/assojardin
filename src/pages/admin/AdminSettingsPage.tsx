@@ -199,38 +199,41 @@ const totales = parseInt((localContent.parcellesTotal ?? 0).toString(), 10);
 
   const editorRef = React.useRef<HTMLDivElement>(null);
 useEffect(() => {
-  setLocalContent({
-    id: associationContent.id,
-    titreAccueil: associationContent.titreAccueil || '',
-    texteIntro: associationContent.texteIntro || '',
-    texteFooter: associationContent.texteFooter || '',
-    titreAssociation: associationContent.titreAssociation || '',
-    parcellesOccupees: associationContent.parcellesOccupees || 0,
-    parcellesTotal: associationContent.parcellesTotal || 0,
-    imagesAssociation: associationContent.imagesAssociation || [null, null, null],
-    adresse: associationContent.adresse || '',
-    telephone: associationContent.telephone || '',
-    email: associationContent.email || '',
-    horaires: associationContent.horaires || '',
-    imageAccueil: associationContent.imageAccueil ?? undefined,
-    headerIcon: associationContent.headerIcon ?? undefined,
-    contentAssociation: associationContent.contentAssociation || '',
-  });
+  if (
+    associationContent &&
+    !hasInitializedContent.current &&
+    editorRef.current
+  ) {
+    setLocalContent({
+      id: associationContent.id,
+      titreAccueil: associationContent.titreAccueil || '',
+      texteIntro: associationContent.texteIntro || '',
+      texteFooter: associationContent.texteFooter || '',
+      titreAssociation: associationContent.titreAssociation || '',
+      parcellesOccupees: associationContent.parcellesOccupees || 0,
+      parcellesTotal: associationContent.parcellesTotal || 0,
+      imagesAssociation: associationContent.imagesAssociation || [null, null, null],
+      adresse: associationContent.adresse || '',
+      telephone: associationContent.telephone || '',
+      email: associationContent.email || '',
+      horaires: associationContent.horaires || '',
+      imageAccueil: associationContent.imageAccueil ?? undefined,
+      headerIcon: associationContent.headerIcon ?? undefined,
+      contentAssociation: associationContent.contentAssociation || '',
+    });
 
-  setAssociationImagePreview(associationContent.imagesAssociation?.[0] || null);
-  setPreviewAccueil(associationContent.imageAccueil || null);
-  setPreviewHeaderIcon(associationContent.headerIcon ?? null);
-  setAdresse(associationContent.adresse || '');
-  setTelephone(associationContent.telephone || '');
-  setEmail(associationContent.email || '');
-  setHoraires(associationContent.horaires || '');
+    setAssociationImagePreview(associationContent.imagesAssociation?.[0] || null);
+    setPreviewAccueil(associationContent.imageAccueil || null);
+    setPreviewHeaderIcon(associationContent.headerIcon ?? null);
+    setAdresse(associationContent.adresse || '');
+    setTelephone(associationContent.telephone || '');
+    setEmail(associationContent.email || '');
+    setHoraires(associationContent.horaires || '');
 
-  // 🟡 Fix du curseur qui saute
-  if (!hasInitializedContent.current && editorRef.current) {
     editorRef.current.innerHTML = associationContent.contentAssociation || '';
     hasInitializedContent.current = true;
   }
-}, [associationContent]);
+}, [associationContent, editorRef.current]);
 
 
 
