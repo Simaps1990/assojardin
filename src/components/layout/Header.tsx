@@ -17,8 +17,8 @@ const Header: React.FC = () => {
   };
 
   return (
-<header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md py-3 h-20">
-<div className="container-custom flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+<header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md py-3">
+  <div className="container-custom flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Logo + texte */}
         <Link to="/" className="flex items-center">
           <img
