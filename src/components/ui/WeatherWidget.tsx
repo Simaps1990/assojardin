@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Cloud, CloudRain, CloudSnow, Sun, CloudLightning, CloudFog } from 'lucide-react';
 type WeatherWidgetProps = {
-  renderTips?: (params: { weatherCode: number; temperature: number }) => React.ReactNode;
+  renderTips?: (params: {
+    weatherCode: number;
+    temperature: number;
+    city: string;
+    icon: React.ReactNode;
+  }) => React.ReactNode;
 };
+
 
 const WeatherWidget: React.FC<WeatherWidgetProps> = ({ renderTips }) => {
   const [weather, setWeather] = useState<{
@@ -76,26 +82,16 @@ const url = '/.netlify/functions/meteo';
   if (!weather) return null;
 
 return (
-  <div>
-    <div className="flex items-center bg-transparent rounded-full px-3 py-1">
-      <div className="mr-2">{getWeatherIcon(weather.weatherCode)}</div>
-      <div className="text-sm">
-        <span className="font-medium">{weather.temperature}°C</span>
-        <span className="mx-1 text-neutral-400">|</span>
-        <span className="text-primary-300">{weather.location}</span>
-      </div>
-    </div>
-
-    {renderTips && (
-      <div className="mt-4 text-sm text-neutral-800">
-        {renderTips({
-          weatherCode: weather.weatherCode,
-          temperature: weather.temperature,
-        })}
-      </div>
-    )}
-  </div>
+  <>
+    {renderTips && renderTips({
+      weatherCode: weather.weatherCode,
+      temperature: weather.temperature,
+      city: weather.location,
+      icon: getWeatherIcon(weather.weatherCode),
+    })}
+  </>
 );
+
 };
 
 export default WeatherWidget;
