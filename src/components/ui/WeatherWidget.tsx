@@ -10,8 +10,8 @@ const WeatherWidget: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const latitude = 45.766;
-  const longitude = 4.8795;
+ // const latitude = 45.766;
+  // const longitude = 4.8795;
 
   const getWeatherIcon = (code: number) => {
     // Mapping Open-Meteo weather codes to icons

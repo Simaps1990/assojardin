@@ -3,6 +3,7 @@ import { ChevronRight } from 'lucide-react';
 import { useContent } from '../context/ContentContext';
 import BlogCard from '../components/ui/BlogCard';
 import EventCard from '../components/ui/EventCard';
+import MeteoConseilsSection from '../components/ui/MeteoConseilsSection';
 
 const HomePage: React.FC = () => {
   const { blogPosts, events, associationContent } = useContent();
@@ -57,6 +58,10 @@ return (
         </div>
       </section>
     )}
+
+{/* Section Météo + Plantation */}
+<MeteoConseilsSection />
+
 
     {/* Latest Blog Post */}
     <section className="py-16 bg-neutral-50">
