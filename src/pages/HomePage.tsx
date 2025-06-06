@@ -126,7 +126,7 @@ return (
     <Carrot className="text-green-600 mr-2 h-5 w-5" />
     <h2 className="text-xl font-bold leading-tight mb-0">Ce mois-ci on plante</h2>
   </div>
-  <p className="mb-4 text-sm text-neutral-600">
+<p className="mb-4 text-sm text-neutral-800">
     {plantingDescription}
   </p>
 <ul className="grid grid-cols-2 gap-y-1 list-disc list-inside text-sm text-neutral-700">
