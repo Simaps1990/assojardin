@@ -68,27 +68,27 @@ const BlogDetailPage: React.FC = () => {
             <div className="prose prose-lg max-w-none">
               <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }} />
             </div>
-            {post.imagesannexes && post.imagesannexes.length > 0 && (
+{post.imagesannexes && post.imagesannexes.length > 0 && (
   <div
     className={`mt-6 grid gap-4 ${
       post.imagesannexes.length === 1 ? 'grid-cols-1' :
       post.imagesannexes.length === 2 ? 'grid-cols-2' : 'grid-cols-3'
     }`}
-    style={{ gridAutoColumns: '1fr' }}
   >
     {post.imagesannexes.map((img, i) =>
       img ? (
-        <img
-          key={i}
-          src={img}
-          alt={`Image annexe ${i + 1}`}
-          className="h-48 object-cover rounded w-full"
-          style={{ width: '100%' }}
-        />
+        <div key={i} className="w-full flex justify-center">
+          <img
+            src={img}
+            alt={`Image annexe ${i + 1}`}
+            className="max-h-[500px] w-auto object-contain rounded"
+          />
+        </div>
       ) : null
     )}
   </div>
 )}
+
 
           </div>
         </article>
