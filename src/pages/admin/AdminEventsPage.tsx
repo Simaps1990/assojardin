@@ -113,7 +113,7 @@ setUploadedCoverUrl(null);
       return;
     }
 
-const imageToSave = uploadedCoverUrl ?? '';
+const imageToSave = uploadedCoverUrl ?? imagesannexesUrls[0] ?? '';
 console.log('DEBUG - Champs transmis à Supabase :', {
   title,
   description,
@@ -423,7 +423,13 @@ if (fileInputRef.current) {
               <h3 className="font-bold text-lg text-gray-800">{e.title}</h3>
               <p className="text-sm text-gray-600">{e.location}</p>
               <p className="text-sm text-gray-600">{e.start} – {e.enddate}</p>
-              {e.image && <img src={e.image} alt="illustration" className="h-32 object-cover rounded" />}
+{(e.image || (e.imagesannexes?.[0] ?? null)) && (
+  <img
+src={(e.image ?? e.imagesannexes?.[0]) ?? ''}
+    alt="illustration"
+    className="h-32 object-cover rounded"
+  />
+)}
               <div dangerouslySetInnerHTML={{ __html: e.content }} />
               <div className="flex gap-4 mt-2">
                 <button
@@ -438,7 +444,7 @@ setEnddate(e.enddate ? e.enddate.slice(0, 16) : '');
                     if (contentRef.current) contentRef.current.innerHTML = e.content;
                 setImagesannexesUrls(e.imagesannexes ?? [null, null, null]);
 setImagesannexesFiles([null, null, null]);
-  setUploadedCoverUrl(e.image ?? '');
+setUploadedCoverUrl(e.image ?? (e.imagesannexes?.[0] ?? ''));
 
                   if (fileInputRef.current) {
   fileInputRef.current.value = '';
