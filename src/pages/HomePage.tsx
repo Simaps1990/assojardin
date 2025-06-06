@@ -151,7 +151,6 @@ return (
   </div>
 </div>
 
-
 <WeatherWidget  renderTips={({ weatherCode, temperature }) => {
     let conseilMeteo = '';
     let conseilTemp = '';
@@ -177,8 +176,6 @@ return (
     );
   }}
 />
-
-
 
       </div>
 
