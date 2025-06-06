@@ -16,6 +16,9 @@ const [imagesannexesUrls, setImagesannexesUrls] = useState<(string | null)[]>([n
   const [editingEventId, setEditingEventId] = useState<string | null>(null);
   const [eventToDelete, setEventToDelete] = useState<Event | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
+const [previewCover, setPreviewCover] = useState<string | null>(null);
+const [uploadedCoverUrl, setUploadedCoverUrl] = useState<string | null>(null);
+
 const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const contentRef = useRef<HTMLDivElement>(null);
@@ -80,6 +83,31 @@ const handleImagesannexesChange = async (e: React.ChangeEvent<HTMLInputElement>,
   }
 };
 
+const handleCoverImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const objectUrl = URL.createObjectURL(file);
+  setPreviewCover(objectUrl);
+
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'site_global_uploads');
+
+    const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await res.json();
+    if (data.secure_url) {
+      setUploadedCoverUrl(data.secure_url);
+    }
+  } catch (err) {
+    console.error('Erreur upload image Cloudinary (couverture)', err);
+  }
+};
 
 
 
@@ -101,6 +129,8 @@ const handleImagesannexesChange = async (e: React.ChangeEvent<HTMLInputElement>,
 
 
 const handleAddEvent = async () => {
+setPreviewCover(null);
+setUploadedCoverUrl(null);
 
     if (!title || !start || !enddate || !contentRef.current) return;
 
@@ -109,7 +139,7 @@ const handleAddEvent = async () => {
       return;
     }
 
-const imageToSave = imagesannexesUrls[0] ?? '';
+const imageToSave = uploadedCoverUrl ?? '';
 console.log('DEBUG - Champs transmis à Supabase :', {
   title,
   description,
@@ -209,6 +239,19 @@ if (fileInputRef.current) {
 
         <input type="text" placeholder="Titre" className="w-full border px-3 py-2 rounded" value={title} onChange={(e) => setTitle(e.target.value)} />
         <input type="text" placeholder="Lieu" className="w-full border px-3 py-2 rounded" value={location} onChange={(e) => setLocation(e.target.value)} />
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">Photo de couverture</label>
+  <input type="file" accept="image/*" onChange={handleCoverImageChange} className="mb-2" />
+  {previewCover && (
+    <div className="w-full flex justify-center">
+      <img
+        src={previewCover}
+        alt="Aperçu"
+        className="max-h-[200px] w-auto object-contain rounded"
+      />
+    </div>
+  )}
+</div>
 
         <div className="flex gap-4">
           <div className="flex-1">
@@ -433,6 +476,8 @@ setEnddate(e.enddate ? e.enddate.slice(0, 16) : '');
                     if (contentRef.current) contentRef.current.innerHTML = e.content;
                 setImagesannexesUrls(e.imagesannexes ?? [null, null, null]);
 setImagesannexesFiles([null, null, null]);
+  setUploadedCoverUrl(e.image ?? '');
+  setPreviewCover(e.image ?? null);
 
                   if (fileInputRef.current) {
   fileInputRef.current.value = '';
