@@ -30,16 +30,14 @@ import AdminSettingsPage from './pages/admin/AdminSettingsPage.tsx';
 import ProtectedRoute from './ProtectedRoute';
 
 
-
-// Layout wrapper for public pages
 const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
     <Header />
-<main className="pt-[88px] pb-0">{children}</main>
-
+    <main className="pt-20">{children}</main> {/* ✅ Ajout de pt-20 pour compenser le header fixe */}
     <Footer />
   </>
 );
+
 
 function App() {
   return (

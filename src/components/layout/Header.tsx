@@ -35,8 +35,8 @@ const Header: React.FC = () => {
         </Link>
 
         {/* Navigation + Recherche + Connexion */}
-<div className="flex flex-col md:flex-row md:items-center md:gap-6 w-full md:w-auto">
-  <nav className="flex flex-col md:flex-row justify-center items-center gap-2 md:gap-4 text-sm font-medium w-full md:w-auto">
+<div className="flex flex-wrap items-center justify-end gap-4 w-full md:w-auto">
+  <nav className="flex flex-wrap justify-center md:justify-start gap-2 text-sm font-medium whitespace-nowrap overflow-x-auto md:overflow-visible">
     <Link to="/" className="hover:text-primary-600 text-neutral-700">Accueil</Link>
     <Link to="/association" className="hover:text-primary-600 text-neutral-700">Notre association</Link>
     <Link to="/blog" className="hover:text-primary-600 text-neutral-700">Blog</Link>
@@ -45,23 +45,22 @@ const Header: React.FC = () => {
     <Link to="/contact" className="hover:text-primary-600 text-neutral-700">Contact</Link>
   </nav>
 
-  <div className="flex items-center gap-2 mt-2 md:mt-0 w-full md:w-auto">
-    <form onSubmit={handleSearch} className="relative w-full md:w-48">
-      <input
-        type="text"
-        placeholder="Rechercher..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="form-input w-full pl-10 pr-4 py-2 rounded border border-neutral-300"
-      />
-      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={16} />
-    </form>
+  <form onSubmit={handleSearch} className="relative w-full max-w-[180px] md:w-40">
+    <input
+      type="text"
+      placeholder="Rechercher..."
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      className="form-input w-full pl-10 pr-4 py-2 rounded border border-neutral-300"
+    />
+    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={16} />
+  </form>
 
-    <Link to="/login" className="text-neutral-700 hover:text-primary-600 p-2" aria-label="Administration">
-      <Lock size={22} />
-    </Link>
-  </div>
+  <Link to="/login" className="text-neutral-700 hover:text-primary-600 p-2" aria-label="Administration">
+    <Lock size={22} />
+  </Link>
 </div>
+
 
 
       </div>
