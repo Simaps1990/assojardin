@@ -204,6 +204,13 @@ setPreviewHeaderIcon(associationContent.headerIcon ?? null);
   setHoraires(associationContent.horaires || '');
 }, [associationContent]);
 
+useEffect(() => {
+  if (editorRef.current && contentAssociation) {
+    editorRef.current.innerHTML = contentAssociation;
+  }
+  // mais ne met PAS contentAssociation en dépendance
+}, []);
+
 
 
 
