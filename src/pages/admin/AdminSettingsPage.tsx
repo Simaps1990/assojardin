@@ -217,6 +217,8 @@ headerIcon: associationContent.headerIcon ?? undefined,
 
   contentAssociation: associationContent.contentAssociation || '',
 });
+setAssociationImagePreview(associationContent.imagesAssociation?.[0] || null);
+setContentAssociation(associationContent.contentAssociation || '');
 
 
 
