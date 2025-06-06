@@ -521,7 +521,6 @@ onChange={(e) =>
 />
 
 
-
 <div>
   <label className="block font-medium mb-1">Images de l’association (max 3)</label>
   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -531,29 +530,32 @@ onChange={(e) =>
           type="file"
           accept="image/*"
           onChange={(e) => handleAssociationImageChange(e, index)}
+          className="mb-2"
         />
         {associationImagePreviews[index] && (
-          <div className="mt-2">
+          <div className="w-full flex justify-center">
             <img
               src={associationImagePreviews[index]!}
-              alt={`Aperçu ${index + 1}`}
-              className="max-h-[500px] w-auto object-contain mx-auto rounded"
+              alt={`Image ${index + 1}`}
+              className="max-h-[500px] w-auto object-contain rounded"
             />
-            <button
-              type="button"
-              onClick={() => {
-                const newPreviews = [...associationImagePreviews];
-                const newUploads = [...associationImageUploadedUrls];
-                newPreviews[index] = null;
-                newUploads[index] = null;
-                setAssociationImagePreviews(newPreviews);
-                setAssociationImageUploadedUrls(newUploads);
-              }}
-              className="text-red-600 text-sm hover:underline mt-2"
-            >
-              Supprimer
-            </button>
           </div>
+        )}
+        {associationImagePreviews[index] && (
+          <button
+            type="button"
+            onClick={() => {
+              const newPreviews = [...associationImagePreviews];
+              const newUploads = [...associationImageUploadedUrls];
+              newPreviews[index] = null;
+              newUploads[index] = null;
+              setAssociationImagePreviews(newPreviews);
+              setAssociationImageUploadedUrls(newUploads);
+            }}
+            className="text-red-600 text-sm hover:underline mt-2"
+          >
+            Supprimer
+          </button>
         )}
       </div>
     ))}
