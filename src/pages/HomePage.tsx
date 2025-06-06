@@ -137,7 +137,7 @@ return (
 </div>
 
 
- {/* Bloc droit : Météo actuelle */}
+{/* Bloc droit : Météo actuelle */}
 <div className="card bg-white p-6 rounded-2xl shadow-md">
 <WeatherWidget
   renderTips={({ weatherCode, temperature }) => {
@@ -157,27 +157,43 @@ return (
     else if (temperature <= 10) conseilTemp = 'attention au froid, couvrez les semis.';
     else conseilTemp = 'continuez l’entretien habituel.';
 
+    // Crée l’icône en fonction du code
+    const iconMap: { [key: number]: string } = {
+      0: '☀️',
+      1: '🌤️',
+      2: '⛅',
+      3: '☁️',
+      45: '🌫️',
+      48: '🌫️',
+      51: '🌧️',
+      53: '🌧️',
+      55: '🌧️',
+      61: '🌧️',
+      63: '🌧️',
+      65: '🌧️',
+      71: '❄️',
+      73: '❄️',
+      75: '❄️',
+      95: '⛈️',
+      96: '⛈️',
+      99: '⛈️',
+    };
+
+    const icon = iconMap[weatherCode] || '❓';
+
     return (
-      <>
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <Leaf className="text-sky-500 h-5 w-5" />
-            <h2 className="text-xl font-bold leading-tight mb-0">Météo actuelle</h2>
-          </div>
-          <div className="text-sm text-right">
-            <span className="font-medium">{temperature}°C</span>
-            <span className="mx-1 text-neutral-400">|</span>
-            <span className="text-primary-300">Villeurbanne</span>
-          </div>
+      <div className="flex items-center bg-transparent rounded-full px-3 py-1 justify-end">
+        <div className="mr-2">{icon}</div>
+        <div className="text-sm">
+          <span className="font-medium">{temperature}°C</span>
+          <span className="mx-1 text-neutral-400">|</span>
+          <span className="text-primary-300">Villeurbanne</span>
         </div>
-        <ul className="list-disc list-inside text-sm text-neutral-800 space-y-0 mt-2">
-          <li>Actuellement il {conseilMeteo}</li>
-          <li>Avec une température extérieure de <strong>{temperature}°C</strong>, {conseilTemp}</li>
-        </ul>
-      </>
+      </div>
     );
   }}
 />
+
 
 </div>
 
