@@ -52,11 +52,12 @@ if (!titreAssociation && !contentAssociation && images.length === 0) {
               .filter((img): img is string => typeof img === 'string' && img !== null)
               .map((img, idx) => (
                 <div key={idx} className="overflow-hidden rounded-lg shadow">
-                  <img
-                    src={img}
-                    alt={`illustration-${idx}`}
-                    className="w-full h-64 object-cover hover:scale-105 transition-transform duration-300"
-                  />
+<img
+  src={img}
+  alt={`illustration-${idx}`}
+  className="w-full object-contain hover:scale-105 transition-transform duration-300"
+/>
+
                 </div>
               ))}
           </div>

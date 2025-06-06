@@ -15,7 +15,7 @@ const [previewHeaderIcon, setPreviewHeaderIcon] = useState<string | null>(null);
 //const [parcellesTotales, setParcellesTotales] = useState<number>(associationContent.parcellesTotal || 0);
 
 
-const [contentAssociation, setContentAssociation] = useState<string>(associationContent.contentAssociation || '');
+const [contentAssociation, setContentAssociation] = useState<string>(''); // ← vide au départ
 const [adresse, setAdresse] = useState(associationContent.adresse || '');
 const [telephone, setTelephone] = useState(associationContent.telephone || '');
 const [email, setEmail] = useState(associationContent.email || '');
