@@ -459,14 +459,27 @@ const updateAssociationContent = async (
 };
 
 
-  const fetchEvents = async () => {
-    const { data, error } = await supabase.from('events').select('*').order('date', { ascending: false });
-    if (error) {
-      console.error('Erreur de chargement des événements Supabase:', error.message);
-      return;
-    }
-    setEvents(data || []);
-  };
+ const fetchEvents = async () => {
+  const { data, error } = await supabase
+    .from('events')
+    .select('*')
+    .order('date', { ascending: false });
+
+  if (error) {
+    console.error('Erreur de chargement des événements Supabase:', error.message);
+    return;
+  }
+
+  const now = new Date();
+
+  const dataWithFlags = (data || []).map((event) => ({
+    ...event,
+    isPast: new Date(event.date) < now,
+  }));
+
+  setEvents(dataWithFlags);
+};
+
 
 
   return (
