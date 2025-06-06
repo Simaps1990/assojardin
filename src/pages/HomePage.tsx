@@ -147,32 +147,35 @@ return (
 </div>
 
 
-        <WeatherWidget
-          renderTips={({ weatherCode, temperature }) => {
-            let conseilMeteo = '';
-            let conseilTemp = '';
+<WeatherWidget
+  renderTips={({ weatherCode, temperature }) => {
+    let conseilMeteo = '';
+    let conseilTemp = '';
 
-            if ([0].includes(weatherCode)) conseilMeteo = 'un temps clair : pensez à arroser en soirée.';
-            else if ([1, 2, 3].includes(weatherCode)) conseilMeteo = 'un temps nuageux : conditions idéales pour semer.';
-            else if ([45, 48].includes(weatherCode)) conseilMeteo = 'du brouillard : évitez les traitements.';
-            else if ([51, 53, 55, 61, 63, 65].includes(weatherCode)) conseilMeteo = 'de la pluie : ne semez pas aujourd’hui.';
-            else if ([71, 73, 75].includes(weatherCode)) conseilMeteo = 'de la neige : protégez vos plantes.';
-            else if ([95, 96, 99].includes(weatherCode)) conseilMeteo = 'de un orage : rentrez vos outils.';
-            else conseilMeteo = 'Conditions normales : observez votre sol.';
+    if ([0].includes(weatherCode)) conseilMeteo = 'un temps clair : pensez à arroser en soirée.';
+    else if ([1, 2, 3].includes(weatherCode)) conseilMeteo = 'un temps nuageux : conditions idéales pour semer.';
+    else if ([45, 48].includes(weatherCode)) conseilMeteo = 'du brouillard : évitez les traitements.';
+    else if ([51, 53, 55, 61, 63, 65].includes(weatherCode)) conseilMeteo = 'de la pluie : ne semez pas aujourd’hui.';
+    else if ([71, 73, 75].includes(weatherCode)) conseilMeteo = 'de la neige : protégez vos plantes.';
+    else if ([95, 96, 99].includes(weatherCode)) conseilMeteo = 'un orage : rentrez vos outils.';
+    else conseilMeteo = 'des conditions normales : observez votre sol.';
 
-            if (temperature >= 28) conseilTemp = 'pensez à pailler et arroser tôt.';
-            else if (temperature >= 20) conseilTemp = 'arrosez de préférence le matin.';
-            else if (temperature <= 10) conseilTemp = 'attention au froid, couvrez les semis.';
-            else conseilTemp = 'continuez l’entretien habituel.';
+    if (temperature >= 28) conseilTemp = 'pensez à pailler et arroser tôt.';
+    else if (temperature >= 20) conseilTemp = 'arrosez de préférence le matin.';
+    else if (temperature <= 10) conseilTemp = 'attention au froid, couvrez les semis.';
+    else conseilTemp = 'continuez l’entretien habituel.';
 
-            return (
-              <>
-                <p>Il y a {conseilMeteo}</p>
-                <p>Avec une température de <strong>{temperature}°C</strong>, {conseilTemp}</p>
-              </>
-            );
-          }}
-        />
+    return (
+      <ul className="list-disc list-inside text-sm text-neutral-800 space-y-0 mt-2">
+        <li>Il y a {conseilMeteo}</li>
+        <li>Avec une température de <strong>{temperature}°C</strong>, {conseilTemp}</li>
+      </ul>
+    );
+  }}
+/>
+
+
+
       </div>
 
     </div>
