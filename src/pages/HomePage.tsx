@@ -147,30 +147,7 @@ return (
     </div>
 
     {/* Widget à droite */}
-    <WeatherWidget
-      renderTips={({ weatherCode, temperature }) => {
-        const iconMap: { [key: number]: string } = {
-          0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
-          45: '🌫️', 48: '🌫️',
-          51: '🌧️', 53: '🌧️', 55: '🌧️',
-          61: '🌧️', 63: '🌧️', 65: '🌧️',
-          71: '❄️', 73: '❄️', 75: '❄️',
-          95: '⛈️', 96: '⛈️', 99: '⛈️',
-        };
-        const icon = iconMap[weatherCode] || '❓';
 
-        return (
-          <div className="flex items-center bg-transparent rounded-full px-3 py-1">
-            <div className="mr-2">{icon}</div>
-            <div className="text-sm">
-              <span className="font-medium">{temperature}°C</span>
-              <span className="mx-1 text-neutral-400">|</span>
-              <span className="text-primary-300">Villeurbanne</span>
-            </div>
-          </div>
-        );
-      }}
-    />
   </div>
 
   {/* Conseils météo */}
