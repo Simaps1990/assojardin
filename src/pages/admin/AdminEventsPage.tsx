@@ -4,9 +4,8 @@ import { supabase } from '../../supabaseClient';
 import { useContent } from '../../context/ContentContext';
 
 const AdminEventsPage: React.FC = () => {
-const [events, setEvents] = useState<Event[]>([]);
-const { fetchEvents: refreshGlobalEvents } = useContent();
 
+const { events, setEvents, fetchEvents: refreshGlobalEvents } = useContent();
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -49,15 +48,11 @@ useEffect(() => {
 
 
 
-const fetchEvents = React.useCallback(async () => {
-  const { data, error } = await supabase.from('events').select('*');
-  if (error) console.error(error);
-  else setEvents(data || []);
-}, []);
 
 useEffect(() => {
-  fetchEvents();
-}, [fetchEvents]);
+  refreshGlobalEvents();
+}, []);
+
 
 
 
@@ -219,8 +214,8 @@ if (fileInputRef.current) {
   fileInputRef.current.value = '';
 }
     window.scrollTo(0, 0); // Scroll haut après ajout ou modif
-    await fetchEvents();
-await refreshGlobalEvents(); // ← pour mettre à jour le front
+    
+    await refreshGlobalEvents();
 
   };
 
@@ -247,6 +242,7 @@ const sortedEvents = [...events].sort((a, b) => {
   const dateB = b.start ? new Date(b.start).getTime() : 0;
   return dateB - dateA;
 });
+
 
   return (
     <div className="space-y-6 pb-16">
@@ -559,7 +555,7 @@ setUploadedCoverUrl(cover);
             if (error) {
               console.error('Erreur suppression événement :', error);
             } else {
-              await fetchEvents();
+              await refreshGlobalEvents();
               setEventToDelete(null);
               setShowConfirm(false);
               window.scrollTo(0, 0);

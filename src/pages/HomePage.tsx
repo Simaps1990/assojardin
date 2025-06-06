@@ -16,13 +16,22 @@ const backgroundImageUrl = associationContent?.imageAccueil;
 
   const latestPost = blogPosts.length > 0 ? blogPosts[0] : null;
 
-  const upcomingEvents = events
-    .filter((event) => !event.isPast)
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+const upcomingEvents = events
+  .filter((event) => !event.isPast)
+  .sort(
+    (a, b) =>
+      new Date(a.enddate || a.date || a.start || '').getTime() -
+      new Date(b.enddate || b.date || b.start || '').getTime()
+  );
 
-  const pastEvents = events
-    .filter((event) => event.isPast)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+const pastEvents = events
+  .filter((event) => event.isPast)
+  .sort(
+    (a, b) =>
+      new Date(b.enddate || b.date || b.start || '').getTime() -
+      new Date(a.enddate || a.date || a.start || '').getTime()
+  );
+
 
   const nextEvent = upcomingEvents.length > 0 ? upcomingEvents[0] : null;
   const latestPastEvent = pastEvents.length > 0 ? pastEvents[0] : null;
