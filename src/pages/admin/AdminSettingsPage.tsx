@@ -503,13 +503,13 @@ onChange={(e) =>
   ref={editorRef}
   contentEditable
   onInput={(e) => setContentAssociation(e.currentTarget.innerHTML)}
+  dangerouslySetInnerHTML={{ __html: contentAssociation }}
   className="min-h-[150px] border rounded px-3 py-2 focus:outline-none"
   dir="ltr"
   style={{ textAlign: 'left' }}
   suppressContentEditableWarning
->
-  {contentAssociation}
-</div>
+/>
+
 
 <div>
   <label className="block font-medium mb-1">Image de l’association</label>
