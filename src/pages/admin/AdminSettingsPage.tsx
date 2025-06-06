@@ -191,11 +191,7 @@ headerIcon: associationContent.headerIcon ?? undefined,
   contentAssociation: associationContent.contentAssociation || '',
 });
 
-useEffect(() => {
-  if (editorRef.current) {
-    editorRef.current.innerHTML = contentAssociation || '';
-  }
-}, [contentAssociation]);
+
 
   //setParcellesOccupees(associationContent.parcellesOccupees || 0);
   //setParcellesTotales(associationContent.parcellesTotal || 0);
@@ -208,7 +204,11 @@ setPreviewHeaderIcon(associationContent.headerIcon ?? null);
   setHoraires(associationContent.horaires || '');
 }, [associationContent]);
 
-
+useEffect(() => {
+  if (editorRef.current) {
+    editorRef.current.innerHTML = contentAssociation || '';
+  }
+}, [contentAssociation]);
 
 
 
