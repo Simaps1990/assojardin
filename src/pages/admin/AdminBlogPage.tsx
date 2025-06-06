@@ -316,7 +316,7 @@ console.log("Posts en state :", posts);
           style={{ whiteSpace: 'pre-wrap' }}
         />
 
-        <div>
+        <div className="space-y-2 mt-4">
           <label className="block font-medium">Photo de couverture</label>
           <input id="blog-image" type="file" accept="image/*" onChange={handleImageChange} />
           {previewUrl && (
