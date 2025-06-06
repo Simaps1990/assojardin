@@ -7,6 +7,7 @@ const AdminEventsPage: React.FC = () => {
 const [events, setEvents] = useState<Event[]>([]);
 const { fetchEvents: refreshGlobalEvents } = useContent();
 
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
@@ -46,27 +47,18 @@ useEffect(() => {
   }
 }, [uploadedCoverUrl]);
 
+
+
 const fetchEvents = React.useCallback(async () => {
-  const { data, error } = await supabase
-    .from('events')
-    .select('*')
-    .order('date', { ascending: false });
-
-  if (error) {
-    console.error('Erreur de chargement des événements :', error);
-  } else {
-const formatted = (data || []).map((e) => ({
-  ...e,
-  isPast: new Date(e.date) < new Date(),
-}));
-setEvents(formatted);
-  }
+  const { data, error } = await supabase.from('events').select('*');
+  if (error) console.error(error);
+  else setEvents(data || []);
 }, []);
-
 
 useEffect(() => {
   fetchEvents();
-}, []);
+}, [fetchEvents]);
+
 
 
 const handleImagesannexesChange = async (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -250,7 +242,11 @@ if (fileInputRef.current) {
     window.scrollTo(0, 0); // Scroll haut après annulation
   };
 
-  const sortedEvents = [...events].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+const sortedEvents = [...events].sort((a, b) => {
+  const dateA = a.start ? new Date(a.start).getTime() : 0;
+  const dateB = b.start ? new Date(b.start).getTime() : 0;
+  return dateB - dateA;
+});
 
   return (
     <div className="space-y-6 pb-16">
