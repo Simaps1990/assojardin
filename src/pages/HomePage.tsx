@@ -140,15 +140,39 @@ return (
 {/* Bloc droit : Météo actuelle */}
 <div className="card bg-white p-6 rounded-2xl shadow-md">
   <div className="flex items-center justify-between mb-4">
-    {/* Titre à gauche */}
-    <div className="flex items-center gap-2">
-      <Leaf className="text-sky-500 h-5 w-5" />
-      <h2 className="text-xl font-bold leading-tight mb-0">Météo actuelle</h2>
-    </div>
-
-    {/* Widget à droite */}
-
+  {/* Titre à gauche */}
+  <div className="flex items-center gap-2">
+    <Leaf className="text-sky-500 h-5 w-5" />
+    <h2 className="text-xl font-bold leading-tight mb-0">Météo actuelle</h2>
   </div>
+
+  {/* Météo icône + température + ville à droite */}
+  <WeatherWidget
+    renderTips={({ weatherCode, temperature }) => {
+      const iconMap: { [key: number]: string } = {
+        0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
+        45: '🌫️', 48: '🌫️',
+        51: '🌧️', 53: '🌧️', 55: '🌧️',
+        61: '🌧️', 63: '🌧️', 65: '🌧️',
+        71: '❄️', 73: '❄️', 75: '❄️',
+        95: '⛈️', 96: '⛈️', 99: '⛈️',
+      };
+      const icon = iconMap[weatherCode] || '❓';
+
+      return (
+        <div className="flex items-center bg-transparent rounded-full px-3 py-1">
+          <div className="mr-2">{icon}</div>
+          <div className="text-sm">
+            <span className="font-medium">{temperature}°C</span>
+            <span className="mx-1 text-neutral-400">|</span>
+            <span className="text-primary-300">Villeurbanne</span>
+          </div>
+        </div>
+      );
+    }}
+  />
+</div>
+
 
   {/* Conseils météo */}
   <div className="mt-2 text-sm text-neutral-800">
