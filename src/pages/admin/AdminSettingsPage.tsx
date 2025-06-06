@@ -13,7 +13,7 @@ const [previewHeaderIcon, setPreviewHeaderIcon] = useState<string | null>(null);
 //const [parcellesTotales, setParcellesTotales] = useState<number>(associationContent.parcellesTotal || 0);
 
 
-const [contentAssociation, setContentAssociation] = useState<string>('');
+const [contentAssociation, setContentAssociation] = useState<string>(associationContent.contentAssociation || '');
 const [adresse, setAdresse] = useState(associationContent.adresse || '');
 const [telephone, setTelephone] = useState(associationContent.telephone || '');
 const [email, setEmail] = useState(associationContent.email || '');
@@ -197,19 +197,13 @@ headerIcon: associationContent.headerIcon ?? undefined,
   //setParcellesTotales(associationContent.parcellesTotal || 0);
   setPreviewAccueil(associationContent.imageAccueil || null);
 setPreviewHeaderIcon(associationContent.headerIcon ?? null);
-  setContentAssociation(associationContent.contentAssociation || '');
   setAdresse(associationContent.adresse || '');
   setTelephone(associationContent.telephone || '');
   setEmail(associationContent.email || '');
   setHoraires(associationContent.horaires || '');
 }, [associationContent]);
 
-useEffect(() => {
-  if (editorRef.current && contentAssociation) {
-    editorRef.current.innerHTML = contentAssociation;
-  }
-  // mais ne met PAS contentAssociation en dépendance
-}, []);
+
 
 
 
@@ -486,7 +480,10 @@ onChange={(e) =>
   dir="ltr"
   style={{ textAlign: 'left' }}
   suppressContentEditableWarning
-/>
+>
+  {contentAssociation}
+</div>
+
 
 
 
