@@ -204,11 +204,6 @@ setPreviewHeaderIcon(associationContent.headerIcon ?? null);
   setHoraires(associationContent.horaires || '');
 }, [associationContent]);
 
-useEffect(() => {
-  if (editorRef.current) {
-    editorRef.current.innerHTML = contentAssociation || '';
-  }
-}, [contentAssociation]);
 
 
 
