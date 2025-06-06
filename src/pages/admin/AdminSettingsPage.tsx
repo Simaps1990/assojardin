@@ -5,6 +5,8 @@ import SuccessModal from '../../components/SuccessModal.tsx';
 const AdminSettingsPage: React.FC = () => {
 const { associationContent, updateAssociationContent } = useContent();
 const [localContent, setLocalContent] = useState(associationContent);
+const [associationImagePreview, setAssociationImagePreview] = useState<string | null>(null);
+const [associationImageUploadedUrl, setAssociationImageUploadedUrl] = useState<string | null>(null);
 
 const [successMessage, setSuccessMessage] = useState<string | null>(null);
 const [previewAccueil, setPreviewAccueil] = useState<string | null>(null);
@@ -24,22 +26,22 @@ const [horaires, setHoraires] = useState(associationContent.horaires || '');
 
 
 const saveAssociationContent = async () => {
-  const updated = {
-    id: associationContent.id,
-    titreAccueil: localContent.titreAccueil || '',
-    texteIntro: localContent.texteIntro || '',
-    texteFooter: localContent.texteFooter || '',
-    titreAssociation: localContent.titreAssociation || '',
-    contentAssociation,
-    imageAccueil: previewAccueil ?? localContent.imageAccueil,
-    headerIcon: previewHeaderIcon ?? localContent.headerIcon,
-    adresse,
-    telephone,
-    email,
-    horaires,
-    //parcellesOccupees,
-    //parcellesTotal: parcellesTotales,
-  };
+const updated = {
+  id: associationContent.id,
+  titreAccueil: localContent.titreAccueil || '',
+  texteIntro: localContent.texteIntro || '',
+  texteFooter: localContent.texteFooter || '',
+  titreAssociation: localContent.titreAssociation || '',
+  contentAssociation,
+  imageAccueil: previewAccueil ?? localContent.imageAccueil,
+  headerIcon: previewHeaderIcon ?? localContent.headerIcon,
+  adresse,
+  telephone,
+  email,
+  horaires,
+  imagesAssociation: [associationImageUploadedUrl], // 👈 nouvelle ligne
+};
+
 
 const refreshed = await updateAssociationContent(updated);
 if (refreshed !== undefined) {
@@ -75,6 +77,31 @@ if (refreshed !== undefined) {
       console.error(error);
     }
   };
+const handleAssociationImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+
+  const objectUrl = URL.createObjectURL(file);
+  setAssociationImagePreview(objectUrl);
+
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'site_global_uploads');
+
+    const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
+      method: 'POST',
+      body: formData,
+    });
+    const data = await res.json();
+    if (data.secure_url) {
+      setAssociationImageUploadedUrl(data.secure_url);
+    }
+  } catch (err) {
+    console.error('Erreur upload image', err);
+  }
+};
 
 const saveImage = async () => {
   if (!previewAccueil) {
@@ -484,6 +511,33 @@ onChange={(e) =>
   {contentAssociation}
 </div>
 
+<div>
+  <label className="block font-medium mb-1">Image de l’association</label>
+  <input
+    type="file"
+    accept="image/*"
+    onChange={handleAssociationImageChange}
+  />
+  {associationImagePreview && (
+    <div className="mt-2">
+      <img
+        src={associationImagePreview}
+        alt="Aperçu image association"
+        className="h-32 object-cover rounded"
+      />
+      <button
+        type="button"
+        onClick={() => {
+          setAssociationImagePreview(null);
+          setAssociationImageUploadedUrl(null);
+        }}
+        className="text-red-600 text-sm hover:underline mt-2"
+      >
+        Supprimer l’image
+      </button>
+    </div>
+  )}
+</div>
 
 
 
