@@ -139,10 +139,13 @@ return (
 
       {/* Bloc droit : Météo actuelle */}
       <div className="card bg-white p-6 rounded-2xl shadow-md">
-        <div className="flex items-center mb-4">
-          <Leaf className="text-sky-500 mr-2 h-5 w-5" />
-          <h2 className="text-xl font-bold leading-tight">Météo actuelle</h2>
-        </div>
+<div className="flex items-center gap-2 mb-4">
+  <div className="flex items-center h-full pt-[2px]">
+    <Leaf className="text-sky-500 h-5 w-5" />
+  </div>
+  <h2 className="text-xl font-bold leading-tight">Météo actuelle</h2>
+</div>
+
 
         <WeatherWidget
           renderTips={({ weatherCode, temperature }) => {
@@ -175,6 +178,10 @@ return (
     </div>
   </div>
 </section>
+
+ <div className="flex justify-center my-1">
+      <hr className="w-1/2 border-t border-neutral-300" />
+    </div>
 
     {/* Latest Blog Post */}
     <section className="py-16 bg-neutral-50">
