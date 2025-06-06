@@ -27,6 +27,61 @@ const backgroundImageUrl = associationContent?.imageAccueil;
   const nextEvent = upcomingEvents.length > 0 ? upcomingEvents[0] : null;
   const latestPastEvent = pastEvents.length > 0 ? pastEvents[0] : null;
 
+  const plantingCalendar: { [key: number]: { items: string[]; description: string } } = {
+    0: { // Janvier
+      items: ['Oignons', 'Ail', 'Échalotes'],
+      description: 'Janvier est propice aux semis précoces sous abri.',
+    },
+    1: {
+      items: ['Poireaux', 'Carottes', 'Radis'],
+      description: 'Février permet les premiers semis de légumes racines.',
+    },
+    2: {
+      items: ['Pommes de terre', 'Choux', 'Épinards'],
+      description: 'Mars est idéal pour les plantations en pleine terre.',
+    },
+    3: {
+      items: ['Laitues', 'Betteraves', 'Navets'],
+      description: 'Avril offre des conditions douces pour les jeunes pousses.',
+    },
+    4: {
+      items: ['Tomates', 'Courgettes', 'Haricots'],
+      description: 'Mai est le mois parfait pour les légumes d’été.',
+    },
+    5: {
+      items: ['Concombres', 'Aubergines', 'Poivrons'],
+      description: 'Juin favorise les cultures gourmandes en soleil.',
+    },
+    6: {
+      items: ['Basilic', 'Choux-fleurs', 'Fenouil'],
+      description: 'Juillet permet encore quelques semis estivaux.',
+    },
+    7: {
+      items: ['Épinards', 'Navets', 'Radis noirs'],
+      description: 'Août marque le retour des semis d’automne.',
+    },
+    8: {
+      items: ['Mâche', 'Choux', 'Carottes tardives'],
+      description: 'Septembre lance les cultures d’arrière-saison.',
+    },
+    9: {
+      items: ['Ail', 'Oignons blancs', 'Épinards'],
+      description: 'Octobre est idéal pour préparer l’hiver.',
+    },
+    10: {
+      items: ['Fèves', 'Pois', 'Échalotes'],
+      description: 'Novembre autorise les plantations résistantes.',
+    },
+    11: {
+      items: ['Rien', 'Repos du jardin', 'Préparer le sol'],
+      description: 'Décembre est le moment de pailler et de planifier.',
+    },
+  };
+
+  const currentMonth = new Date().getMonth();
+  const { items: plantingList, description: plantingDescription } = plantingCalendar[currentMonth];
+
+
 return (
   <div className="pt-16">
     {/* Hero Section */}
@@ -61,71 +116,65 @@ return (
     )}
 
 {/* Section Météo + Plantation */}
-<section className="py-12 bg-neutral-50">
+<section className="py-16 bg-neutral-50">
   <div className="container-custom">
-    <div className="grid md:grid-cols-2 gap-8">
+    <div className="grid md:grid-cols-2 gap-12">
 
-      {/* Bloc gauche : Ce mois-ci on plante */}
-      <div className="bg-white p-6 shadow-md rounded-2xl">
-        <div className="flex items-center mb-4">
-          <Carrot className="text-green-600 mr-2 h-5 w-5" />
-          <h2 className="text-xl font-bold leading-tight">Ce mois-ci on plante</h2>
-        </div>
-        <p className="mb-4 text-sm text-neutral-600">
-          Juin est idéal pour les semis d’été. Voici ce que vous pouvez planter :
-        </p>
-        <ul className="list-disc list-inside text-sm text-neutral-700 space-y-1">
-          <li>Tomates</li>
-          <li>Courgettes</li>
-          <li>Haricots verts</li>
-          <li>Salades d’été</li>
-        </ul>
-      </div>
+{/* Bloc gauche : Ce mois-ci on plante */}
+<div className="card bg-white p-6 rounded-2xl shadow-md">
+  <div className="flex items-center mb-4">
+    <Carrot className="text-green-600 mr-2 h-5 w-5" />
+    <h2 className="text-xl font-bold leading-tight">Ce mois-ci on plante</h2>
+  </div>
+  <p className="mb-4 text-sm text-neutral-600">
+    {plantingDescription}
+  </p>
+  <ul className="list-disc list-inside text-sm text-neutral-700 space-y-1">
+    {plantingList.map((item, index) => (
+      <li key={index}>{item}</li>
+    ))}
+  </ul>
+</div>
+
 
       {/* Bloc droit : Météo actuelle */}
-      <div className="bg-white p-6 shadow-md rounded-2xl">
+      <div className="card bg-white p-6 rounded-2xl shadow-md">
         <div className="flex items-center mb-4">
           <Leaf className="text-sky-500 mr-2 h-5 w-5" />
           <h2 className="text-xl font-bold leading-tight">Météo actuelle</h2>
         </div>
 
+        <WeatherWidget
+          renderTips={({ weatherCode, temperature }) => {
+            let conseilMeteo = '';
+            let conseilTemp = '';
 
+            if ([0].includes(weatherCode)) conseilMeteo = 'Temps clair : pensez à arroser en soirée.';
+            else if ([1, 2, 3].includes(weatherCode)) conseilMeteo = 'Nuageux : conditions idéales pour semer.';
+            else if ([45, 48].includes(weatherCode)) conseilMeteo = 'Brouillard : évitez les traitements.';
+            else if ([51, 53, 55, 61, 63, 65].includes(weatherCode)) conseilMeteo = 'Pluie : ne semez pas aujourd’hui.';
+            else if ([71, 73, 75].includes(weatherCode)) conseilMeteo = 'Neige : protégez vos plantes.';
+            else if ([95, 96, 99].includes(weatherCode)) conseilMeteo = 'Orage : rentrez vos outils.';
+            else conseilMeteo = 'Conditions normales : observez votre sol.';
 
-        {/* Conseils météo statiques pour l'instant */}
-<WeatherWidget
-  renderTips={({ weatherCode, temperature }) => {
-    let conseilMeteo = '';
-    let conseilTemp = '';
+            if (temperature >= 28) conseilTemp = 'pensez à pailler et arroser tôt.';
+            else if (temperature >= 20) conseilTemp = 'arrosez de préférence le matin.';
+            else if (temperature <= 10) conseilTemp = 'attention au froid, couvrez les semis.';
+            else conseilTemp = 'continuez l’entretien habituel.';
 
-    if ([0].includes(weatherCode)) conseilMeteo = 'Temps clair : pensez à arroser en soirée.';
-    else if ([1, 2, 3].includes(weatherCode)) conseilMeteo = 'Nuageux : conditions idéales pour semer.';
-    else if ([45, 48].includes(weatherCode)) conseilMeteo = 'Brouillard : évitez les traitements.';
-    else if ([51, 53, 55, 61, 63, 65].includes(weatherCode)) conseilMeteo = 'Pluie : ne semez pas aujourd’hui.';
-    else if ([71, 73, 75].includes(weatherCode)) conseilMeteo = 'Neige : protégez vos plantes.';
-    else if ([95, 96, 99].includes(weatherCode)) conseilMeteo = 'Orage : rentrez vos outils.';
-    else conseilMeteo = 'Conditions normales : observez votre sol.';
-
-    if (temperature >= 28) conseilTemp = 'pensez à pailler et arroser tôt.';
-    else if (temperature >= 20) conseilTemp = 'arrosez de préférence le matin.';
-    else if (temperature <= 10) conseilTemp = 'attention au froid, couvrez les semis.';
-    else conseilTemp = 'continuez l’entretien habituel.';
-
-    return (
-      <>
-        <p>Il fait : <strong>{conseilMeteo}</strong></p>
-        <p>Avec une température de <strong>{temperature}°C</strong>, {conseilTemp}</p>
-      </>
-    );
-  }}
-/>
-
+            return (
+              <>
+                <p>Il fait : <strong>{conseilMeteo}</strong></p>
+                <p>Avec une température de <strong>{temperature}°C</strong>, {conseilTemp}</p>
+              </>
+            );
+          }}
+        />
       </div>
 
     </div>
   </div>
 </section>
-
-
 
     {/* Latest Blog Post */}
     <section className="py-16 bg-neutral-50">
