@@ -198,7 +198,7 @@ return (
     </div>
 
     {/* Latest Blog Post */}
-<section className="pt-12 pb-16 bg-neutral-50">
+<section className="pt-11 pb-16 bg-neutral-50">
       <div className="container-custom">
         <div className="flex justify-between items-center mb-2">
           <Link
@@ -232,7 +232,7 @@ return (
     </div>
 
     {/* Events Section */}
-<section className="pt-12 pb-24 bg-neutral-50">
+<section className="pt-11 pb-24 bg-neutral-50">
       <div className="container-custom">
         <div className="flex justify-between items-center mb-2">
           <Link
