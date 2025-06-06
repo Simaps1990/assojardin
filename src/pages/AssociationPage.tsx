@@ -51,7 +51,6 @@ if (!titreAssociation && !contentAssociation && images.length === 0) {
             {images
               .filter((img): img is string => typeof img === 'string' && img !== null)
               .map((img, idx) => (
-                <div key={idx} className="overflow-hidden rounded-lg shadow">
 <img
   key={idx}
   src={img}
@@ -59,9 +58,6 @@ if (!titreAssociation && !contentAssociation && images.length === 0) {
   className="h-[500px] w-auto mx-auto object-contain"
 />
 
-
-
-                </div>
               ))}
           </div>
         )}
