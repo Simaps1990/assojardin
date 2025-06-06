@@ -140,16 +140,15 @@ return (
       {/* Bloc droit : Météo actuelle */}
       <div className="card bg-white p-6 rounded-2xl shadow-md">
 
-<div className="flex items-center justify-between mb-4">
+<div className="flex items-start justify-between mb-4">
   <div className="flex items-center gap-2">
     <Leaf className="text-sky-500 h-5 w-5" />
     <h2 className="text-xl font-bold leading-tight mb-0">Météo actuelle</h2>
   </div>
-
-
 </div>
 
-<WeatherWidget  renderTips={({ weatherCode, temperature }) => {
+<WeatherWidget
+  renderTips={({ weatherCode, temperature }) => {
     let conseilMeteo = '';
     let conseilTemp = '';
 
@@ -169,11 +168,12 @@ return (
     return (
       <ul className="list-disc list-inside text-sm text-neutral-800 space-y-0 mt-2">
         <li>Actuellement il {conseilMeteo}</li>
-        <li>Avec une température exterieure de <strong>{temperature}°C</strong>, {conseilTemp}</li>
+        <li>Avec une température extérieure de <strong>{temperature}°C</strong>, {conseilTemp}</li>
       </ul>
     );
   }}
 />
+
 
       </div>
 
