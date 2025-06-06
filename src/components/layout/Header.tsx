@@ -7,7 +7,7 @@ const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const { associationContent } = useContent();
-  const headerIcon = associationContent.headerIcon || '/src/assets/logo.svg';
+const headerIcon: string | undefined = associationContent.headerIcon;
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,11 +21,14 @@ const Header: React.FC = () => {
   <div className="container-custom flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0">
         {/* Logo + texte */}
         <Link to="/" className="flex items-center">
-          <img
-            src={headerIcon}
-            alt="SJOV Logo"
-            className="h-12 w-12"
-          />
+   {headerIcon && (
+  <img
+    src={headerIcon}
+    alt="SJOV Logo"
+    className="h-12 w-12"
+  />
+)}
+
           <div className="ml-3 text-primary-700 leading-tight flex items-baseline space-x-2">
             <h1 className="text-xl font-bold m-0 p-0">SJOV</h1>
             <p className="text-base font-sans font-normal text-primary-600 m-0 p-0">
