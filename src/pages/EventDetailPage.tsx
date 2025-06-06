@@ -78,7 +78,31 @@ const EventDetailPage: React.FC = () => {
               </div>
             </div>
             
-            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: event.content }} />
+<div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: event.content }} />
+
+{event.imagesannexes && event.imagesannexes.length > 0 && (
+  <div
+    className={`mt-6 grid gap-4 ${
+      event.imagesannexes.length === 1
+        ? 'grid-cols-1'
+        : event.imagesannexes.length === 2
+        ? 'grid-cols-2'
+        : 'grid-cols-3'
+    }`}
+  >
+    {event.imagesannexes.map((img, i) =>
+      img ? (
+        <div key={i} className="w-full flex justify-center">
+          <img
+            src={img}
+            alt={`Image annexe ${i + 1}`}
+            className="max-h-[500px] w-auto object-contain rounded"
+          />
+        </div>
+      ) : null
+    )}
+  </div>
+)}
 
             {!event.isPast && (
               <div className="mt-8 p-6 bg-primary-50 rounded-lg border border-primary-100">
