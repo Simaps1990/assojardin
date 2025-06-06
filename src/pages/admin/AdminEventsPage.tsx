@@ -316,7 +316,7 @@ if (fileInputRef.current) {
         <div ref={contentRef} className="w-full min-h-[120px] border rounded px-3 py-2 focus:outline-none" contentEditable style={{ whiteSpace: 'pre-wrap' }} />
 
  {/* Image de couverture */}
-<div>
+<div className="space-y-2 mt-4">
   <label className="block font-medium">Image de couverture</label>
   <input
     id="event-cover"
