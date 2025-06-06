@@ -55,8 +55,9 @@ if (!titreAssociation && !contentAssociation && images.length === 0) {
 <img
   src={img}
   alt={`illustration-${idx}`}
-  className="w-full object-contain hover:scale-105 transition-transform duration-300"
+  className="h-[500px] w-auto mx-auto object-contain hover:scale-105 transition-transform duration-300"
 />
+
 
                 </div>
               ))}
