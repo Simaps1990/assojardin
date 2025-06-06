@@ -119,7 +119,9 @@ setUploadedCoverUrl(null);
       return;
     }
 
-const imageToSave = uploadedCoverUrl ?? imagesannexesUrls[0] ?? '';
+const imageToSave = imagesannexesUrls[0]?.startsWith('blob:')
+  ? uploadedCoverUrl ?? ''
+  : imagesannexesUrls[0] ?? uploadedCoverUrl ?? '';
 console.log('DEBUG - Champs transmis à Supabase :', {
   title,
   description,
@@ -131,6 +133,9 @@ image: imageToSave,
 });
 const finalImage = uploadedCoverUrl || imagesannexesUrls[0] || '';
 setUploadedCoverUrl(finalImage); // sécurise la cover au cas où non modifiée
+const sanitizedAnnexes = imagesannexesUrls.map((url) =>
+  url && !url.startsWith('blob:') ? url : null
+);
 
 const newEvent: Omit<Event, 'id' | 'isPast'> = {
   title,
@@ -141,7 +146,7 @@ const newEvent: Omit<Event, 'id' | 'isPast'> = {
   content: contentRef.current.innerHTML,
 image: finalImage,
   date: start.split('T')[0], // 👈 adapte la date au format 'YYYY-MM-DD' exigé par Supabase
-imagesannexes: imagesannexesUrls,
+imagesannexes: sanitizedAnnexes,
   author: 'admin',   // ou remplace par un vrai utilisateur si tu gères l'auth
   created_at: new Date().toISOString(),
 };
@@ -363,18 +368,37 @@ if (fileInputRef.current) {
     id="event-cover"
     type="file"
     accept="image/*"
-    onChange={(e) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
+onChange={async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
 
-      const objectUrl = URL.createObjectURL(file);
-      const newFiles = [...imagesannexesFiles];
-      const newUrls = [...imagesannexesUrls];
-      newFiles[0] = file;
-      newUrls[0] = objectUrl;
-      setImagesannexesFiles(newFiles);
-      setImagesannexesUrls(newUrls);
-    }}
+  const objectUrl = URL.createObjectURL(file);
+  const newFiles = [...imagesannexesFiles];
+  const newUrls = [...imagesannexesUrls];
+  newFiles[0] = file;
+  newUrls[0] = objectUrl;
+  setImagesannexesFiles(newFiles);
+  setImagesannexesUrls(newUrls);
+
+  // Upload Cloudinary (couverture)
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', 'site_global_uploads');
+
+  try {
+    const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
+      method: 'POST',
+      body: formData,
+    });
+    const data = await res.json();
+    if (data.secure_url) {
+      setUploadedCoverUrl(data.secure_url);
+    }
+  } catch (err) {
+    console.error('Erreur upload image Cloudinary (couverture)', err);
+  }
+}}
+
   />
   {imagesannexesUrls[0] && (
     <div className="mt-2">
