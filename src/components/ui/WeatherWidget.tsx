@@ -29,7 +29,7 @@ const WeatherWidget: React.FC = () => {
     const fetchWeather = async () => {
       setLoading(true);
       try {
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`;
+const url = '/.netlify/functions/meteo';
         const response = await fetch(url);
         if (!response.ok) throw new Error(`Erreur API météo: ${response.status}`);
         const data = await response.json();
