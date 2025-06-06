@@ -5,8 +5,8 @@ import SuccessModal from '../../components/SuccessModal.tsx';
 const AdminSettingsPage: React.FC = () => {
 const { associationContent, updateAssociationContent } = useContent();
 const [localContent, setLocalContent] = useState(associationContent);
-const [associationImagePreview, setAssociationImagePreview] = useState<string | null>(null);
-const [associationImageUploadedUrl, setAssociationImageUploadedUrl] = useState<string | null>(null);
+const [associationImageUploadedUrls, setAssociationImageUploadedUrls] = useState<(string | null)[]>([null, null, null]);
+const [associationImagePreviews, setAssociationImagePreviews] = useState<(string | null)[]>([null, null, null]);
 
 const [successMessage, setSuccessMessage] = useState<string | null>(null);
 const [previewAccueil, setPreviewAccueil] = useState<string | null>(null);
@@ -39,7 +39,7 @@ const updated = {
   telephone,
   email,
   horaires,
-  imagesAssociation: [associationImageUploadedUrl], // 👈 nouvelle ligne
+imagesAssociation: associationImageUploadedUrls,
 };
 
 
@@ -77,13 +77,14 @@ if (refreshed !== undefined) {
       console.error(error);
     }
   };
-const handleAssociationImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+const handleAssociationImageChange = async (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
   const file = e.target.files?.[0];
   if (!file) return;
 
-
   const objectUrl = URL.createObjectURL(file);
-  setAssociationImagePreview(objectUrl);
+  const previews = [...associationImagePreviews];
+  previews[index] = objectUrl;
+  setAssociationImagePreviews(previews);
 
   try {
     const formData = new FormData();
@@ -96,12 +97,15 @@ const handleAssociationImageChange = async (e: React.ChangeEvent<HTMLInputElemen
     });
     const data = await res.json();
     if (data.secure_url) {
-      setAssociationImageUploadedUrl(data.secure_url);
+      const uploads = [...associationImageUploadedUrls];
+      uploads[index] = data.secure_url;
+      setAssociationImageUploadedUrls(uploads);
     }
   } catch (err) {
     console.error('Erreur upload image', err);
   }
 };
+
 
 const saveImage = async () => {
   if (!previewAccueil) {
@@ -222,7 +226,7 @@ useEffect(() => {
       contentAssociation: associationContent.contentAssociation || '',
     });
 
-    setAssociationImagePreview(associationContent.imagesAssociation?.[0] || null);
+setAssociationImagePreviews(associationContent.imagesAssociation || [null, null, null]);
     setPreviewAccueil(associationContent.imageAccueil || null);
     setPreviewHeaderIcon(associationContent.headerIcon ?? null);
     setAdresse(associationContent.adresse || '');
@@ -519,32 +523,43 @@ onChange={(e) =>
 
 
 <div>
-  <label className="block font-medium mb-1">Image de l’association</label>
-  <input
-    type="file"
-    accept="image/*"
-    onChange={handleAssociationImageChange}
-  />
-  {associationImagePreview && (
-    <div className="mt-2">
-      <img
-        src={associationImagePreview}
-        alt="Aperçu image association"
-        className="h-32 object-cover rounded"
-      />
-      <button
-        type="button"
-        onClick={() => {
-          setAssociationImagePreview(null);
-          setAssociationImageUploadedUrl(null);
-        }}
-        className="text-red-600 text-sm hover:underline mt-2"
-      >
-        Supprimer l’image
-      </button>
-    </div>
-  )}
+  <label className="block font-medium mb-1">Images de l’association (max 3)</label>
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    {[0, 1, 2].map((index) => (
+      <div key={index} className="flex flex-col items-center">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => handleAssociationImageChange(e, index)}
+        />
+        {associationImagePreviews[index] && (
+          <div className="mt-2">
+            <img
+              src={associationImagePreviews[index]!}
+              alt={`Aperçu ${index + 1}`}
+              className="max-h-[500px] w-auto object-contain mx-auto rounded"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                const newPreviews = [...associationImagePreviews];
+                const newUploads = [...associationImageUploadedUrls];
+                newPreviews[index] = null;
+                newUploads[index] = null;
+                setAssociationImagePreviews(newPreviews);
+                setAssociationImageUploadedUrls(newUploads);
+              }}
+              className="text-red-600 text-sm hover:underline mt-2"
+            >
+              Supprimer
+            </button>
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
 </div>
+
 
 
 
