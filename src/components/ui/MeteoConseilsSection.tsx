@@ -1,30 +1,7 @@
 import React from 'react';
 import WeatherWidget from './WeatherWidget';
 import { Carrot, Leaf } from 'lucide-react';
-const getTempColor = (t: number) => {
-  if (t <= 10) return 'text-blue-600';
-  if (t <= 20) return 'text-green-600';
-  if (t <= 27) return 'text-yellow-600';
-  return 'text-red-600';
-};
 
-const getAirQualityColor = (qual: string) => {
-  if (qual.includes('Bonne')) return 'text-green-600';
-  if (qual.includes('Modérée')) return 'text-yellow-600';
-  if (qual.includes('Acceptable')) return 'text-orange-500';
-  if (qual.includes('Mauvaise pour les personnes sensibles')) return 'text-orange-600';
-  if (qual.includes('Mauvaise')) return 'text-red-500';
-  if (qual.includes('Très mauvaise')) return 'text-red-700';
-  return 'text-neutral-500';
-};
-
-const getAllergyColor = (entry: string) => {
-  const match = entry.match(/\((\d+)/);
-  const value = match ? parseInt(match[1]) : 0;
-  if (value <= 80) return 'text-yellow-600';
-  if (value <= 200) return 'text-orange-600';
-  return 'text-red-600';
-};
 
 const MONTHLY_PLANTING: Record<string, { name: string; link?: string }[]> = {
   Janvier: [
@@ -191,51 +168,33 @@ const MeteoConseilsSection: React.FC = () => {
           </div>
           <div className="flex items-center gap-2 text-sm text-neutral-700">
             <span>{icon}</span>
-            <span className="font-medium">{temperature}°C</span>
+            <span>{temperature}°C</span>
             <span className="mx-1 text-neutral-400">|</span>
             <span className="text-green-500">{city}</span>
           </div>
         </div>
         <ul className="list-disc list-inside space-y-1 text-sm text-neutral-800">
           <li>Actuellement il {conseilMeteo}</li>
-<li>
-  La température extérieure est de {' '}
-  <span className={getTempColor(temperature)}>{temperature}°C</span>, {conseilTemp}
-</li>
-
-<li>
-  Qualité de l’air :{' '}
-  <span className={getAirQualityColor(airQuality)}>
-    {airQuality}
-  </span>
-</li>
-
-<li>
-  Risques allergènes :
-  <ul className="list-none ml-2 mt-1">
-    {allergyRisks.map((a, i) => (
-      <li
-        key={i}
-        className={
-          a === 'Aucun allergène préoccupant actuellement'
-            ? 'text-green-600'
-            : getAllergyColor(a)
-        }
-      >
-        {a}
-      </li>
-    ))}
-  </ul>
-</li>
-
-
-
-
+          <li>Avec une température extérieure de {temperature}°C, {conseilTemp}</li>
+          <li>Qualité de l’air : <span className="text-green-600">{airQuality}</span></li>
+          <li className="text-sm text-neutral-800">
+            <span className="font-medium">Risques allergènes :</span>{' '}
+            {allergyRisks.length === 1 && allergyRisks[0].includes('préoccupant') ? (
+              <span className="text-green-600">{allergyRisks[0]}</span>
+            ) : (
+              <ul className="list-disc list-inside pl-4 mt-1 space-y-1">
+                {allergyRisks.map((risk, idx) => (
+                  <li key={idx}>{risk}</li>
+                ))}
+              </ul>
+            )}
+          </li>
         </ul>
       </>
     );
   }}
 />
+
 
 
           </div>

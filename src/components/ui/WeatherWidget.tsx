@@ -49,17 +49,26 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ renderTips }) => {
         const meteoRes = await fetch('/.netlify/functions/meteo');
         const meteoData = await meteoRes.json();
 
-        // Qualité de l'air
-        const airRes = await fetch(`https://api.airvisual.com/v2/nearest_city?key=17c1f31a-4a2e-4104-bf9e-3ad4349c3f39`);
-        const airData = await airRes.json();
-        const aqi = airData?.data?.current?.pollution?.aqius;
-        let airQuality = 'Indisponible';
-        if (aqi <= 50) airQuality = 'Bonne';
-        else if (aqi <= 100) airQuality = 'Modérée';
-        else if (aqi <= 150) airQuality = 'Mauvaise pour les personnes sensibles';
-        else if (aqi <= 200) airQuality = 'Mauvaise';
-        else if (aqi <= 300) airQuality = 'Très mauvaise';
-        else airQuality = 'Dangereuse';
+let airQuality = 'Indisponible';
+try {
+  const airRes = await fetch(`https://api.airvisual.com/v2/nearest_city?key=17c1f31a-4a2e-4104-bf9e-3ad4349c3f39`);
+  if (!airRes.ok) throw new Error('API AirVisual rate limited');
+
+  const airData = await airRes.json();
+  const aqi = airData?.data?.current?.pollution?.aqius;
+
+  if (typeof aqi === 'number') {
+    if (aqi <= 50) airQuality = 'Bonne';
+    else if (aqi <= 100) airQuality = 'Modérée';
+    else if (aqi <= 150) airQuality = 'Acceptable';
+    else if (aqi <= 200) airQuality = 'Mauvaise pour les personnes sensibles';
+    else if (aqi <= 300) airQuality = 'Mauvaise';
+    else airQuality = 'Très mauvaise';
+  }
+} catch (error) {
+  console.warn('Qualité de l’air indisponible :', error);
+}
+
 
         // Pollens
         const pollenRes = await fetch('https://air-quality-api.open-meteo.com/v1/air-quality?latitude=45.766&longitude=4.8795&hourly=birch_pollen,grass_pollen,mugwort_pollen,ragweed_pollen');
