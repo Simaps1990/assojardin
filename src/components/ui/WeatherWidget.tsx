@@ -73,7 +73,7 @@ const nowIndex = hours.findIndex((h: string) => {
 
         const allergens: { [key: string]: string } = {
           grass_pollen: 'de graminées',
-          birch_pollen: 'de pollen de bouleau',
+          birch_pollen: 'de bouleau',
           mugwort_pollen: 'd\'armoise',
           ragweed_pollen: 'd\'ambroisie',
         };
@@ -94,14 +94,10 @@ const allergyRisks = allergyRisksRaw
   });
 
 if (allergyRisks.length === 0) {
-  allergyRisks.push('Aucun allergène préoccupant actuellement');
+  allergyRisks.push('Rien de préoccupant actuellement');
 }
 
 
-// 🔁 S’il n’y a aucun allergène élevé, on le signale quand même
-if (allergyRisks.length === 0) {
-  allergyRisks.push('Aucun allergène préoccupant actuellement');
-}
 
 
         setWeather({

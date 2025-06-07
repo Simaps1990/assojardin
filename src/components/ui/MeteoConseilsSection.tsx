@@ -11,10 +11,10 @@ const getTempColor = (t: number) => {
 const getAirQualityColor = (qual: string) => {
   if (qual.includes('Bonne')) return 'text-green-600';
   if (qual.includes('Modérée')) return 'text-yellow-600';
-  if (qual.includes('Mauvaise pour les personnes sensibles')) return 'text-orange-500';
-  if (qual.includes('Mauvaise')) return 'text-orange-600';
-  if (qual.includes('Très mauvaise')) return 'text-red-500';
-  if (qual.includes('Dangereuse')) return 'text-red-700';
+  if (qual.includes('Acceptable')) return 'text-orange-500';
+  if (qual.includes('Mauvaise pour les personnes sensibles')) return 'text-orange-600';
+  if (qual.includes('Mauvaise')) return 'text-red-500';
+  if (qual.includes('Très mauvaise')) return 'text-red-700';
   return 'text-neutral-500';
 };
 
