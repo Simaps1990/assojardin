@@ -97,7 +97,7 @@ const handleSubmit = async (e: React.FormEvent) => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mt-24 mb-10">
+    <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mb-10">
 
       <h1 className="text-2xl font-semibold text-green-800 mb-6">Postuler pour un jardin</h1>
       <form onSubmit={handleSubmit} className="space-y-5">
