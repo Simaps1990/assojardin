@@ -100,7 +100,7 @@ return (
     {/* Hero Section */}
     {backgroundImageUrl && (
 <section
-  className="relative bg-cover bg-center h-[70vh] flex items-center -mt-8 md:-mt-24"
+  className="relative bg-cover bg-center h-[70vh] flex items-center -mt-6 md:-mt-24"
         style={{ backgroundImage: `url(${backgroundImageUrl})` }}
       >
         <div className="absolute inset-0 bg-black bg-opacity-40"></div>
