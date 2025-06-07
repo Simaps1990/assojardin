@@ -78,13 +78,22 @@ const nowIndex = hours.findIndex((h: string) => {
           ragweed_pollen: 'Ambroisie',
         };
 
-        const allergyRisks = Object.entries(allergens)
-          .map(([key, label]) => {
-            const value = pollenData.hourly?.[key]?.[nowIndex];
-            if (value > 80) return `${label} (${value} g/m³)`;
-            return null;
-          })
-          .filter(Boolean) as string[];
+const allergyRisksRaw = Object.entries(allergens)
+  .map(([key, label]) => {
+    const value = pollenData.hourly?.[key]?.[nowIndex];
+    return { label, value };
+  })
+  .filter(a => typeof a.value === 'number');
+
+const allergyRisks = allergyRisksRaw
+  .filter(({ value }) => value > 80)
+  .map(({ label, value }) => `${label} (${value} g/m³)`);
+
+// 🔁 S’il n’y a aucun allergène élevé, on le signale quand même
+if (allergyRisks.length === 0) {
+  allergyRisks.push('Aucun allergène préoccupant actuellement');
+}
+
 
         setWeather({
           location: 'Villeurbanne',
