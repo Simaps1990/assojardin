@@ -1,11 +1,10 @@
 import React, { useState, forwardRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Search, Lock } from 'lucide-react';
-import { useContent } from '../../context/ContentContext'; // ✅ correction du chemin
+import { useContent } from '../../context/ContentContext';
 
 const Header = forwardRef<HTMLElement>((_, ref) => {
   const [searchQuery, setSearchQuery] = useState('');
-
   const { associationContent } = useContent();
   const headerIcon: string | undefined = associationContent.headerIcon;
 
@@ -18,7 +17,7 @@ const Header = forwardRef<HTMLElement>((_, ref) => {
 
   return (
     <header ref={ref} className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md py-3">
-      <div className="container-custom flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0">
+      <div className="container-custom flex flex-col md:flex-row items-start md:items-center justify-between gap-2 md:gap-0">
         {/* Logo + texte */}
         <Link to="/" className="flex items-center">
           {headerIcon && (
@@ -36,14 +35,32 @@ const Header = forwardRef<HTMLElement>((_, ref) => {
           </div>
         </Link>
 
-        {/* Navigation + Recherche + Connexion */}
-        <div className="flex flex-wrap items-center justify-end gap-4 w-full md:w-auto">
-          <nav className="flex flex-wrap justify-center md:justify-start gap-4 text-sm font-medium whitespace-nowrap overflow-x-auto md:overflow-visible">
+        {/* Navigation ligne 1 */}
+        <nav className="flex flex-wrap justify-start md:justify-start gap-4 text-sm font-medium whitespace-nowrap overflow-x-auto md:overflow-visible w-full md:w-auto">
+          {[
+            { to: '/', label: 'Accueil' },
+            { to: '/association', label: 'Notre association' },
+            { to: '/blog', label: 'Blog' },
+            { to: '/events', label: 'Événements' },
+          ].map(({ to, label }) => (
+            <NavLink
+              key={to}
+              to={to}
+              className={({ isActive }) =>
+                isActive
+                  ? 'text-primary-600'
+                  : 'text-neutral-700 hover:text-primary-600'
+              }
+            >
+              {label}
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* Ligne 2 mobile uniquement */}
+        <div className="flex flex-wrap justify-between items-center gap-4 w-full md:hidden mt-2">
+          <div className="flex gap-4">
             {[
-              { to: '/', label: 'Accueil' },
-              { to: '/association', label: 'Notre association' },
-              { to: '/blog', label: 'Blog' },
-              { to: '/events', label: 'Événements' },
               { to: '/apply', label: 'Postuler' },
               { to: '/contact', label: 'Contact' },
             ].map(({ to, label }) => (
@@ -59,8 +76,46 @@ const Header = forwardRef<HTMLElement>((_, ref) => {
                 {label}
               </NavLink>
             ))}
-          </nav>
+          </div>
+          <div className="flex items-center gap-2 flex-1 justify-end">
+            <form onSubmit={handleSearch} className="relative w-full max-w-[160px]">
+              <input
+                type="text"
+                placeholder="Rechercher..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="form-input w-full pl-10 pr-4 py-2 rounded border border-neutral-300"
+              />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={16} />
+            </form>
+            <Link to="/login" className="text-neutral-700 hover:text-primary-600 p-2" aria-label="Administration">
+              <Lock size={22} />
+            </Link>
+          </div>
+        </div>
 
+        {/* Desktop : tout en ligne */}
+        <div className="hidden md:flex items-center gap-4">
+          <NavLink
+            to="/apply"
+            className={({ isActive }) =>
+              isActive
+                ? 'text-primary-600'
+                : 'text-neutral-700 hover:text-primary-600'
+            }
+          >
+            Postuler
+          </NavLink>
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              isActive
+                ? 'text-primary-600'
+                : 'text-neutral-700 hover:text-primary-600'
+            }
+          >
+            Contact
+          </NavLink>
           <form onSubmit={handleSearch} className="relative w-full max-w-[180px] md:w-40">
             <input
               type="text"
@@ -71,7 +126,6 @@ const Header = forwardRef<HTMLElement>((_, ref) => {
             />
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={16} />
           </form>
-
           <Link to="/login" className="text-neutral-700 hover:text-primary-600 p-2" aria-label="Administration">
             <Lock size={22} />
           </Link>
