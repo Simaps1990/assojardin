@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Cloud, CloudRain, CloudSnow, Sun, CloudLightning, CloudFog } from 'lucide-react';
+import {
+  Cloud,
+  CloudRain,
+  CloudSnow,
+  Sun,
+  CloudLightning,
+  CloudFog,
+} from 'lucide-react';
+
 type WeatherWidgetProps = {
   renderTips?: (params: {
     weatherCode: number;
@@ -8,7 +16,6 @@ type WeatherWidgetProps = {
     icon: React.ReactNode;
   }) => React.ReactNode;
 };
-
 
 const WeatherWidget: React.FC<WeatherWidgetProps> = ({ renderTips }) => {
   const [weather, setWeather] = useState<{
@@ -19,18 +26,14 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ renderTips }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
- // const latitude = 45.766;
-  // const longitude = 4.8795;
-
-  const getWeatherIcon = (code: number) => {
-    // Mapping Open-Meteo weather codes to icons
+  const getWeatherIcon = (code: number): React.ReactNode => {
     if (code === 0) return <Sun className="text-accent-500" />;
     if ([1, 2, 3].includes(code)) return <Cloud className="text-neutral-400" />;
     if ([45, 48].includes(code)) return <CloudFog className="text-neutral-400" />;
-    if ([51, 53, 55, 56, 57, 61, 63, 65].includes(code)) return <CloudRain className="text-secondary-500" />;
+    if ([51, 53, 55, 56, 57, 61, 63, 65].includes(code))
+      return <CloudRain className="text-secondary-500" />;
     if ([71, 73, 75].includes(code)) return <CloudSnow className="text-secondary-300" />;
     if ([95, 96, 99].includes(code)) return <CloudLightning className="text-warning-500" />;
-    // Default icon
     return <Sun className="text-accent-500" />;
   };
 
@@ -38,20 +41,20 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ renderTips }) => {
     const fetchWeather = async () => {
       setLoading(true);
       try {
-const url = '/.netlify/functions/meteo';
+        const url = '/.netlify/functions/meteo';
         const response = await fetch(url);
         if (!response.ok) throw new Error(`Erreur API météo: ${response.status}`);
         const data = await response.json();
-        if (!data.current_weather) throw new Error("Données météo actuelles manquantes");
+        if (!data.current_weather) throw new Error('Données météo actuelles manquantes');
         setWeather({
-          location: "Villeurbanne",
+          location: 'Villeurbanne',
           temperature: Math.round(data.current_weather.temperature),
           weatherCode: data.current_weather.weathercode,
         });
         setError(null);
       } catch (err) {
-        console.error("Erreur récupération météo:", err);
-        setError("Impossible de charger la météo");
+        console.error('Erreur récupération météo:', err);
+        setError('Impossible de charger la météo');
         setWeather(null);
       } finally {
         setLoading(false);
@@ -59,7 +62,7 @@ const url = '/.netlify/functions/meteo';
     };
 
     fetchWeather();
-    const interval = setInterval(fetchWeather, 30 * 60 * 1000); // refresh 30 min
+    const interval = setInterval(fetchWeather, 30 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -81,17 +84,17 @@ const url = '/.netlify/functions/meteo';
 
   if (!weather) return null;
 
-return (
-  <>
-    {renderTips && renderTips({
-      weatherCode: weather.weatherCode,
-      temperature: weather.temperature,
-      city: weather.location,
-      icon: getWeatherIcon(weather.weatherCode),
-    })}
-  </>
-);
-
+  return (
+    <>
+      {renderTips &&
+        renderTips({
+          weatherCode: weather.weatherCode,
+          temperature: weather.temperature,
+          city: weather.location,
+          icon: getWeatherIcon(weather.weatherCode),
+        })}
+    </>
+  );
 };
 
 export default WeatherWidget;
