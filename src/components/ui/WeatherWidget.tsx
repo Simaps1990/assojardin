@@ -15,6 +15,7 @@ type WeatherWidgetProps = {
     city: string;
     icon: React.ReactNode;
     airQuality: string;
+    allergyRisks: string[]; // << nouveau champ
   }) => React.ReactNode;
 };
 
@@ -24,6 +25,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ renderTips }) => {
     temperature: number;
     weatherCode: number;
     airQuality: string;
+    allergyRisks: string[];
   } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -43,31 +45,53 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ renderTips }) => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        // Météo
         const meteoRes = await fetch('/.netlify/functions/meteo');
         const meteoData = await meteoRes.json();
 
+        // Qualité de l'air
         const airRes = await fetch(`https://api.airvisual.com/v2/nearest_city?key=17c1f31a-4a2e-4104-bf9e-3ad4349c3f39`);
         const airData = await airRes.json();
-
         const aqi = airData?.data?.current?.pollution?.aqius;
         let airQuality = 'Indisponible';
         if (aqi <= 50) airQuality = 'Bonne';
         else if (aqi <= 100) airQuality = 'Modérée';
-        else if (aqi <= 150) airQuality = 'Mauvaise pour les sensibles';
+        else if (aqi <= 150) airQuality = 'Mauvaise pour les personnes sensibles';
         else if (aqi <= 200) airQuality = 'Mauvaise';
         else if (aqi <= 300) airQuality = 'Très mauvaise';
         else airQuality = 'Dangereuse';
+
+        // Pollens
+        const pollenRes = await fetch('https://air-quality-api.open-meteo.com/v1/air-quality?latitude=45.766&longitude=4.8795&hourly=birch_pollen,grass_pollen,mugwort_pollen,ragweed_pollen');
+        const pollenData = await pollenRes.json();
+        const nowIndex = 0; // index 0 = heure actuelle
+
+        const allergens: { [key: string]: string } = {
+          grass_pollen: 'Graminées',
+          birch_pollen: 'Bouleau',
+          mugwort_pollen: 'Armoise',
+          ragweed_pollen: 'Ambroisie',
+        };
+
+        const allergyRisks = Object.entries(allergens)
+          .map(([key, label]) => {
+            const value = pollenData.hourly?.[key]?.[nowIndex];
+            if (value > 80) return `${label} (${value} g/m³)`;
+            return null;
+          })
+          .filter(Boolean) as string[];
 
         setWeather({
           location: 'Villeurbanne',
           temperature: Math.round(meteoData.current_weather.temperature),
           weatherCode: meteoData.current_weather.weathercode,
           airQuality: airQuality,
+          allergyRisks: allergyRisks,
         });
 
         setError(null);
       } catch (err) {
-        console.error('Erreur récupération données météo / qualité air:', err);
+        console.error('Erreur récupération données météo / qualité air / pollens:', err);
         setError('Impossible de charger les données météo');
         setWeather(null);
       } finally {
@@ -106,6 +130,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ renderTips }) => {
           city: weather.location,
           icon: getWeatherIcon(weather.weatherCode),
           airQuality: weather.airQuality,
+          allergyRisks: weather.allergyRisks,
         })}
     </>
   );

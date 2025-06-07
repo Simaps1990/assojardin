@@ -141,7 +141,7 @@ const MeteoConseilsSection: React.FC = () => {
           {/* Météo */}
           <div className="bg-white p-6 shadow-md rounded-2xl">
 <WeatherWidget
-  renderTips={({ weatherCode, temperature, city, icon, airQuality }) => {
+  renderTips={({ weatherCode, temperature, city, icon, airQuality, allergyRisks }) => {
     let conseilMeteo = '';
     let conseilTemp = '';
 
@@ -176,11 +176,17 @@ const MeteoConseilsSection: React.FC = () => {
           <li>Actuellement il {conseilMeteo}</li>
           <li>Avec une température extérieure de <strong>{temperature}°C</strong>, {conseilTemp}</li>
           <li>Qualité de l’air : <span className="font-medium text-green-600">{airQuality}</span></li>
+          {allergyRisks.length > 0 && (
+            <li className="text-warning-600">
+              Risques allergiques : <span className="font-medium">{allergyRisks.join(', ')}</span>
+            </li>
+          )}
         </ul>
       </>
     );
   }}
 />
+
 
           </div>
 
