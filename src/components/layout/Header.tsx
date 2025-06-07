@@ -58,25 +58,23 @@ const Header = forwardRef<HTMLElement>((_, ref) => {
         </nav>
 
         {/* Ligne 2 mobile uniquement */}
-        <div className="flex flex-wrap justify-between items-center gap-4 w-full md:hidden mt-2">
-          <div className="flex gap-4">
-            {[
-              { to: '/apply', label: 'Postuler' },
-              { to: '/contact', label: 'Contact' },
-            ].map(({ to, label }) => (
-              <NavLink
-                key={to}
-                to={to}
-                className={({ isActive }) =>
-                  isActive
-                    ? 'text-primary-600'
-                    : 'text-neutral-700 hover:text-primary-600'
-                }
-              >
-                {label}
-              </NavLink>
-            ))}
-          </div>
+<div className="flex flex-wrap justify-between items-center gap-2 w-full md:hidden mt-1 px-1">
+
+<div className="flex gap-4 text-sm font-medium text-neutral-700">
+  {[{ to: '/apply', label: 'Postuler' }, { to: '/contact', label: 'Contact' }].map(({ to, label }) => (
+    <NavLink
+      key={to}
+      to={to}
+      className={({ isActive }) =>
+        `${isActive ? 'text-primary-600' : 'hover:text-primary-600'}`
+      }
+    >
+      {label}
+    </NavLink>
+  ))}
+</div>
+
+
           <div className="flex items-center gap-2 flex-1 justify-end">
             <form onSubmit={handleSearch} className="relative w-full max-w-[160px]">
               <input
