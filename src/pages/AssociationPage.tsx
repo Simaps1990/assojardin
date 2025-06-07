@@ -28,7 +28,7 @@ const {
 
 if (!titreAssociation && !contentAssociation && images.length === 0) {
   return (
-    <div className="pt-24 pb-16 container-custom text-center text-gray-500">
+    <div className="pb-16 container-custom text-center text-gray-500">
       Aucune information à afficher pour l’association.
     </div>
   );
@@ -36,7 +36,7 @@ if (!titreAssociation && !contentAssociation && images.length === 0) {
 
 
   return (
-    <div className="pt-0 pb-16">
+    <div className="pb-16">
       <div className="container-custom">
 <h1 className="font-heading font-bold text-4xl mb-2 text-black">
   {titreAssociation}

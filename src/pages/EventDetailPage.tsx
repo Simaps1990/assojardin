@@ -23,7 +23,7 @@ const EventDetailPage: React.FC = () => {
   }, [id, events, navigate]);
 
 if (!event) return (
-  <div className="pt-0 pb-16">
+  <div className="pb-16">
     <div className="container-custom">
       <p>Chargement de l'événement...</p>
     </div>
@@ -34,7 +34,7 @@ const annexesSansCover = event.imagesannexes?.filter(img => img && img !== event
 
 
   return (
-    <div className="pt-0 pb-16">
+    <div className="pb-16">
       <div className="container-custom">
         <Link 
           to="/events" 

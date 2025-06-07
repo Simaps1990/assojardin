@@ -12,7 +12,7 @@ const BlogPage: React.FC = () => {
   });
 
   return (
-<div className="pt-24 pb-16">
+<div className="pb-16">
 
       <div className="container-custom">
         <h1 className="font-heading font-bold text-4xl mb-2">Nos articles de blog</h1>

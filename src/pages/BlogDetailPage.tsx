@@ -24,7 +24,7 @@ const BlogDetailPage: React.FC = () => {
 
   if (!post) {
     return (
-      <div className="pt-0 pb-16">
+      <div className="pb-16">
         <div className="container-custom">
           <p>Chargement de l'article...</p>
         </div>
@@ -33,7 +33,7 @@ const BlogDetailPage: React.FC = () => {
   }
 
   return (
-    <div className="pt-0 pb-16">
+    <div className="pb-16">
       <div className="container-custom">
         <Link 
           to="/blog" 

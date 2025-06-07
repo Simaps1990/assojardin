@@ -88,7 +88,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
   if (submitted) {
     return (
-      <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mt-24 mb-10">
+<div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mb-10">
 
         <h1 className="text-2xl font-semibold text-green-800 mb-4">Demande envoyée</h1>
         <p>Merci pour votre candidature. Nous vous contacterons prochainement.</p>
