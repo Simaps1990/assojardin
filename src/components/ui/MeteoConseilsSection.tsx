@@ -2,6 +2,12 @@ import React from 'react';
 import WeatherWidget from './WeatherWidget';
 import { Carrot, Leaf } from 'lucide-react';
 
+const getTempColor = (temp: number): string => {
+  if (temp <= 10) return 'text-blue-600';
+  if (temp <= 20) return 'text-green-600';
+  if (temp <= 27) return 'text-yellow-600';
+  return 'text-red-600';
+};
 
 const MONTHLY_PLANTING: Record<string, { name: string; link?: string }[]> = {
   Janvier: [
@@ -175,7 +181,10 @@ const MeteoConseilsSection: React.FC = () => {
         </div>
         <ul className="list-disc list-inside space-y-1 text-sm text-neutral-800">
           <li>Actuellement il {conseilMeteo}</li>
-          <li>Avec une température extérieure de {temperature}°C, {conseilTemp}</li>
+<li>
+  Avec une température extérieure de{' '}
+  <span className={`${getTempColor(temperature)}`}>{temperature}°C</span>, {conseilTemp}
+</li>
           <li>Qualité de l’air : <span className="text-green-600">{airQuality}</span></li>
 <li className="text-sm text-neutral-800">
   {allergyRisks.length === 1 && allergyRisks[0].includes('préoccupant') ? (
