@@ -4,9 +4,9 @@ import { supabase } from '../supabaseClient';
 const uploadToCloudinary = async (file: File): Promise<string | null> => {
   const formData = new FormData();
   formData.append('file', file);
-formData.append('upload_preset', 'ton_upload_preset_cloudinary');
+formData.append('upload_preset', 'sjov_upload');
   try {
-const res = await fetch('https://api.cloudinary.com/v1_1/ton_cloud_name/image/upload', {
+const res = await fetch('https://api.cloudinary.com/v1_1/sjov/image/upload', {
       method: 'POST',
       body: formData,
     });
@@ -17,10 +17,8 @@ const res = await fetch('https://api.cloudinary.com/v1_1/ton_cloud_name/image/up
     return null;
   }
 };
-
 const AnnoncesPage: React.FC = () => {
-  const { annonces } = useContent();
-
+const { annonces, fetchAnnonces } = useContent();
 const [formData, setFormData] = useState<{
   nom: string;
   email: string;
@@ -52,6 +50,11 @@ const handleSubmit = async (e: React.FormEvent) => {
     alert('Les champs obligatoires (*) doivent être remplis.');
     return;
   }
+const captcha = document.querySelector<HTMLInputElement>('input[placeholder="Écrire: SJOV"]');
+if (!captcha || captcha.value.trim().toLowerCase() !== 'sjov') {
+  alert("Captcha incorrect. Veuillez écrire : SJOV");
+  return;
+}
 
   const photo1Url = formData.photo1 ? await uploadToCloudinary(formData.photo1) : '';
   const photo2Url = formData.photo2 ? await uploadToCloudinary(formData.photo2) : '';
@@ -59,7 +62,7 @@ const handleSubmit = async (e: React.FormEvent) => {
   const { error } = await supabase.from('annonces').insert([{
     nom: formData.nom,
     email: formData.email,
-    phone: formData.telephone,
+    telephone: formData.telephone,
 type: formData.type,
     contenu: formData.contenu,
     photo1: photo1Url,
@@ -74,7 +77,9 @@ type: formData.type,
     return;
   }
 
-  setSubmitted(true);
+ 
+  await fetchAnnonces();
+ setSubmitted(true);
 };
 
 
@@ -138,6 +143,10 @@ return new Date(b.created_at ?? b.date).getTime() - new Date(a.created_at ?? a.d
     }
   />
 </div>
+<div>
+  <label className="font-medium">Captcha</label>
+  <input type="text" placeholder="Écrire: SJOV" className="w-full border px-3 py-2 rounded" required />
+</div>
 
               <button type="submit" className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Envoyer</button>
             </form>
@@ -150,7 +159,7 @@ return new Date(b.created_at ?? b.date).getTime() - new Date(a.created_at ?? a.d
             {sortedAnnonces.map((post) => (
               <div key={post.id} className="border rounded-lg p-4 bg-white shadow">
                 <p className="text-sm text-neutral-400 mb-1">{new Date(post.created_at ?? post.date).toLocaleDateString()}</p>
-<h3 className="text-lg font-semibold mb-2">{post.type?.toUpperCase() ?? post.choix}</h3>
+<h3 className="text-lg font-semibold mb-2">{post.type?.toUpperCase()}</h3>
                 <p className="text-neutral-700 whitespace-pre-line">{post.contenu}</p>
                 {post.photo1 && <img src={post.photo1} alt="photo1" className="mt-3 rounded" />}
               </div>

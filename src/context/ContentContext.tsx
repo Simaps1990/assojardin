@@ -63,6 +63,7 @@ interface ContentContextType {
 
 updateAssociationContent: (content: Partial<AssociationContentType>) => Promise<AssociationContentType | undefined>;
 }
+//const [annonces, setAnnonces] = useState<any[]>([]);
 
 const ContentContext = createContext<ContentContextType | undefined>(undefined);
 
@@ -492,6 +493,7 @@ const fetchAnnonces = async () => {
   const { data, error } = await supabase
     .from('annonces')
     .select('*')
+    .eq('statut', 'validé') // 🔥 On ne récupère que les annonces validées
     .order('date', { ascending: false });
 
   if (error) {
@@ -500,6 +502,7 @@ const fetchAnnonces = async () => {
   }
   setAnnonces(data || []);
 };
+
 
 useEffect(() => {
   fetchAnnonces();
@@ -532,6 +535,7 @@ const deleteAnnonce = async (id: string) => {
   setAnnonces((prev) => prev.filter((a) => a.id !== id));
 };
 
+console.log("Annonces récupérées depuis le contexte :", annonces);
 
   return (
     <ContentContext.Provider
