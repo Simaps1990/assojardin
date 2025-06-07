@@ -48,7 +48,7 @@ const Header = forwardRef<HTMLElement>((_, ref) => {
                 className={({ isActive }) =>
                   isActive
                     ? 'text-primary-600'
-                    : 'hover:text-primary-600'
+                    : 'text-neutral-700 hover:text-primary-600'
                 }
               >
                 {label}
