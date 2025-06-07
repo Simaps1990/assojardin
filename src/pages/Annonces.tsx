@@ -83,9 +83,13 @@ type: formData.type,
 };
 
 
-  const sortedAnnonces = [...annonces].filter(a => a.statut === 'validé').sort((a, b) => {
-return new Date(b.created_at ?? b.date).getTime() - new Date(a.created_at ?? a.date).getTime();
-  });
+const sortedAnnonces = [...annonces].sort((a, b) => {
+  const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+  const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+  return dateB - dateA;
+});
+
+
 
   return (
     <div className="pb-16">
@@ -158,7 +162,9 @@ return new Date(b.created_at ?? b.date).getTime() - new Date(a.created_at ?? a.d
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {sortedAnnonces.map((post) => (
               <div key={post.id} className="border rounded-lg p-4 bg-white shadow">
-                <p className="text-sm text-neutral-400 mb-1">{new Date(post.created_at ?? post.date).toLocaleDateString()}</p>
+<p className="text-sm text-neutral-400 mb-1">
+  {post.created_at ? new Date(post.created_at).toLocaleDateString() : 'Date inconnue'}
+</p>
 <h3 className="text-lg font-semibold mb-2">{post.type?.toUpperCase()}</h3>
                 <p className="text-neutral-700 whitespace-pre-line">{post.contenu}</p>
                 {post.photo1 && <img src={post.photo1} alt="photo1" className="mt-3 rounded" />}
