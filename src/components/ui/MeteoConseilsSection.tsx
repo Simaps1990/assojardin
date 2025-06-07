@@ -71,9 +71,9 @@ const MeteoConseilsSection: React.FC = () => {
             <p className="mb-4 text-sm text-neutral-600">
               {monthKey} est idéal pour ces plantations :
             </p>
-            <ul className="list-disc list-inside text-sm text-neutral-700 space-y-1">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm text-neutral-700">
               {plantingList.map((item, idx) => (
-                <li key={idx}>
+                <li key={idx} className="list-disc list-inside">
                   {item.link ? (
                     <a
                       href={item.link}
