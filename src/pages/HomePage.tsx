@@ -16,7 +16,10 @@ const texteIntro = associationContent?.texteIntro;
 const backgroundImageUrl = associationContent?.imageAccueil;
 
 
-  const latestPost = blogPosts.length > 0 ? blogPosts[0] : null;
+const sortedPosts = [...blogPosts].sort((a, b) =>
+  new Date(b.date).getTime() - new Date(a.date).getTime()
+);
+const latestPost = sortedPosts[0] ?? null;
 
 const upcomingEvents = events
   .filter((event) => !event.isPast)
