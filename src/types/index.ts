@@ -69,3 +69,20 @@ export interface GardenApplication {
   date: string;
   status: 'pending' | 'approved' | 'rejected';
 }
+
+export interface Annonce {
+  id: string;
+  nom: string;
+  email?: string;
+  phone: string;
+  choix: 'RECHERCHE' | 'VEND' | 'DONNE' | 'ECHANGE';
+  message?: string;
+  photo1?: string;
+  photo2?: string;
+  isValidated: boolean;
+  statut?: 'en_attente' | 'validé' | 'rejeté';
+  date: string;
+  created_at?: string;
+  contenu?: string;
+  type?: string; // pour compatibilité avec les anciens champs du formulaire
+}
