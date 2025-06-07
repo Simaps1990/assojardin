@@ -179,10 +179,13 @@ const MeteoConseilsSection: React.FC = () => {
           <li>Qualité de l’air : <span className="text-green-600">{airQuality}</span></li>
 <li className="text-sm text-neutral-800">
   {allergyRisks.length === 1 && allergyRisks[0].includes('préoccupant') ? (
-    <span className="text-green-600 font-normal">Risques allergènes : {allergyRisks[0]}</span>
+    <>
+      <span className="font-medium">Risques allergènes :</span>{' '}
+      <span className="text-green-600 font-normal">{allergyRisks[0]}</span>
+    </>
   ) : (
     <>
-      <span className="text-green-600 font-normal">Risques allergènes :</span>
+      <span className="font-medium">Risques allergènes :</span>
       <ul className="list-disc list-inside pl-4 mt-1 space-y-1">
         {allergyRisks.map((risk, idx) => (
           <li key={idx}>{risk}</li>
@@ -191,6 +194,7 @@ const MeteoConseilsSection: React.FC = () => {
     </>
   )}
 </li>
+
 
         </ul>
       </>
