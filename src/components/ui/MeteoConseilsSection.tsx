@@ -1,67 +1,115 @@
 import React from 'react';
 import WeatherWidget from './WeatherWidget';
-import { Carrot, Leaf, ExternalLink } from 'lucide-react';
+import { Carrot, Leaf } from 'lucide-react';
 
-const MONTHLY_PLANTING: Record<string, { name: string; link?: string }[]> = {
+const MONTHLY_PLANTING: Record<string, { name: string }[]> = {
   Janvier: [
-    { name: 'Betterave', link: 'https://youtu.be/VZpcjA9RQFw?si=bv8y35F2dIkMZGTu' },
-    { name: 'Carotte', link: 'https://youtu.be/-a5_mTCV8O8?si=o2DFJcAZxZ58FgVX' },
-    { name: 'Poireau', link: 'https://youtu.be/uPe-by7x5us?si=KVV9lwNhCgWWyEvt' },
-    { name: 'Chou-fleur', link: 'https://youtu.be/q_FyPyqITxQ?si=pznmUhDO71AW93EX' },
-    { name: 'Navet', link: 'https://youtu.be/HSpvVSEqh4k?si=kanblhW0tu-dhLVP' }
+    { name: 'Betterave' },
+    { name: 'Carotte' },
+    { name: 'Poireau' },
+    { name: 'Chou-fleur' },
+    { name: 'Navet' }
   ],
   Février: [
-    { name: 'Céleri', link: 'https://youtu.be/ZRh9NHKBjOc?si=smbDcunaw_gdFPFx' },
-    { name: 'Chou', link: 'https://youtu.be/wClY4CN2OY4?si=nuRhs55ssy1SsaiV' },
-    { name: 'Oignon', link: 'https://youtu.be/SQQ5JBgAgik?si=OzMAbNh5jgGyysTp' },
-    { name: 'Épinard', link: 'https://youtu.be/g1QH_jb-yTU?si=SKHi-OQ3fVcZjhdb' },
-    { name: 'Laitue', link: 'https://youtu.be/QeZ9u1d4Snw?si=RCoCsaVIugss_t0v' }
+    { name: 'Céleri' },
+    { name: 'Chou' },
+    { name: 'Oignon' },
+    { name: 'Épinard' },
+    { name: 'Laitue' }
   ],
   Mars: [
-    { name: 'Asperge', link: 'https://youtu.be/FyTAOI6atiI?si=iIBJUGgOFW27NMpH' },
-    { name: 'Laitue', link: 'https://youtu.be/QeZ9u1d4Snw?si=RCoCsaVIugss_t0v' },
-    { name: 'Radis', link: 'https://youtu.be/4sF422O9cvw?si=ygLyhnocgYC4gvKG' },
-    { name: 'Chou-fleur', link: 'https://youtu.be/q_FyPyqITxQ?si=pznmUhDO71AW93EX' },
-    { name: 'Carotte', link: 'https://youtu.be/-a5_mTCV8O8?si=o2DFJcAZxZ58FgVX' },
-    { name: 'Poireau', link: 'https://youtu.be/uPe-by7x5us?si=KVV9lwNhCgWWyEvt' }
+    { name: 'Asperge' },
+    { name: 'Laitue' },
+    { name: 'Radis' },
+    { name: 'Chou-fleur' },
+    { name: 'Carotte' },
+    { name: 'Poireau' }
   ],
   Avril: [
-    { name: 'Petit pois', link: 'https://youtu.be/l7bSOZl8G0o?si=u-0XXHIV9kTBV_gO' },
-    { name: 'Navet', link: 'https://youtu.be/HSpvVSEqh4k?si=kanblhW0tu-dhLVP' },
-    { name: 'Épinard', link: 'https://youtu.be/g1QH_jb-yTU?si=SKHi-OQ3fVcZjhdb' },
-    { name: 'Oignon', link: 'https://youtu.be/SQQ5JBgAgik?si=OzMAbNh5jgGyysTp' },
-    { name: 'Laitue', link: 'https://youtu.be/QeZ9u1d4Snw?si=RCoCsaVIugss_t0v' },
-    { name: 'Radis', link: 'https://youtu.be/4sF422O9cvw?si=ygLyhnocgYC4gvKG' }
+    { name: 'Petit pois' },
+    { name: 'Navet' },
+    { name: 'Épinard' },
+    { name: 'Oignon' },
+    { name: 'Laitue' },
+    { name: 'Radis' }
   ],
   Mai: [
-    { name: 'Tomate', link: 'https://youtu.be/_MOMnBl5uwE?si=qbNksKthCdJL299m' },
-    { name: 'Courgette', link: 'https://youtu.be/MuFOH6Rtm1Y?si=xHTZldazuoMmBYZe' },
-    { name: 'Aubergine', link: 'https://youtu.be/QPpNSeOnuro?si=7i77LWvANq8S8Iob' },
-    { name: 'Concombre', link: 'https://youtu.be/6kiJw_hwb4I?si=og68csELOp425KZ0' },
-    { name: 'Fève', link: 'https://youtu.be/1MAdGyuFao8?si=dHP2ar-6FjZjOPlb' },
-    { name: 'Carotte', link: 'https://youtu.be/-a5_mTCV8O8?si=o2DFJcAZxZ58FgVX' }
+    { name: 'Tomate' },
+    { name: 'Courgette' },
+    { name: 'Aubergine' },
+    { name: 'Concombre' },
+    { name: 'Fève' },
+    { name: 'Carotte' }
   ],
   Juin: [
-    { name: 'Poivron', link: 'https://youtu.be/1vJ0TlTEsHY?si=9bNjTBQIdTHJc8Zj' },
-    { name: 'Haricot vert', link: 'https://youtu.be/uGSYtNrpUic?si=DxgsvOvpuL-iFtCG' },
-    { name: 'Laitue', link: 'https://youtu.be/QeZ9u1d4Snw?si=RCoCsaVIugss_t0v' },
-    { name: 'Épinard', link: 'https://youtu.be/g1QH_jb-yTU?si=SKHi-OQ3fVcZjhdb' },
-    { name: 'Courgette', link: 'https://youtu.be/MuFOH6Rtm1Y?si=xHTZldazuoMmBYZe' },
-    { name: 'Artichaut', link: 'https://youtu.be/0q3UY_CMR-w?si=YOFU6CFXTx2mdMM7' }
+    { name: 'Poivron' },
+    { name: 'Haricot vert' },
+    { name: 'Laitue' },
+    { name: 'Épinard' },
+    { name: 'Courgette' },
+    { name: 'Artichaut' }
+  ],
+  Juillet: [
+    { name: 'Maïs' },
+    { name: 'Navet' },
+    { name: 'Oignon' },
+    { name: 'Radis' },
+    { name: 'Blette' },
+    { name: 'Haricot vert' }
+  ],
+  Août: [
+    { name: 'Chou' },
+    { name: 'Poireau' },
+    { name: 'Concombre' },
+    { name: 'Courgette' },
+    { name: 'Tomate' },
+    { name: 'Laitue' }
+  ],
+  Septembre: [
+    { name: 'Chou-fleur' },
+    { name: 'Navet' },
+    { name: 'Radis' },
+    { name: 'Carotte' },
+    { name: 'Épinard' },
+    { name: 'Céleri' }
+  ],
+  Octobre: [
+    { name: 'Chou' },
+    { name: 'Poireau' },
+    { name: 'Carotte' },
+    { name: 'Mâche' },
+    { name: 'Oignon' },
+    { name: 'Courge' }
+  ],
+  Novembre: [
+    { name: 'Fève' },
+    { name: 'Pois' },
+    { name: 'Ail' },
+    { name: 'Oignon' },
+    { name: 'Échalote' },
+    { name: 'Laitue' }
+  ],
+  Décembre: [
+    { name: 'Ail' },
+    { name: 'Échalote' },
+    { name: 'Oignon blanc' },
+    { name: 'Repos du jardin' },
+    { name: 'Préparer le sol' },
+    { name: 'Paillage' }
   ]
 };
 
 const MeteoConseilsSection: React.FC = () => {
   const currentMonth = new Date().toLocaleString('fr-FR', { month: 'long' });
   const monthKey = currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1);
-  const plantingList: { name: string; link?: string }[] = MONTHLY_PLANTING[monthKey] || [];
+  const plantingList = MONTHLY_PLANTING[monthKey] || [];
 
   return (
     <section className="py-12 bg-white">
       <div className="container-custom">
         <div className="grid md:grid-cols-2 gap-8">
 
-          {/* Ce mois-ci on plante */}
+          {/* Bloc plantation */}
           <div className="card p-6 shadow-md rounded-2xl bg-green-50">
             <div className="flex items-center mb-4">
               <Carrot className="text-green-600 mr-2" />
@@ -70,32 +118,20 @@ const MeteoConseilsSection: React.FC = () => {
             <p className="mb-4 text-sm text-neutral-600">
               {monthKey} est idéal pour ces plantations :
             </p>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm text-neutral-700">
-              {plantingList.map((item: { name: string; link?: string }, idx: number) => (
-                <li key={idx} className="list-disc list-inside">
-                  {item.link ? (
-                    <a
-                      href={item.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-green-700 hover:underline flex items-center gap-1"
-                    >
-                      {item.name} <ExternalLink className="w-4 h-4" />
-                    </a>
-                  ) : (
-                    item.name
-                  )}
-                </li>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm text-neutral-700 list-disc list-inside">
+              {plantingList.map((item, idx) => (
+                <li key={idx}>{item.name}</li>
               ))}
             </ul>
           </div>
 
-          {/* Météo actuelle */}
+          {/* Bloc météo */}
           <div className="card p-6 shadow-md rounded-2xl bg-blue-50">
             <WeatherWidget
               renderTips={({ weatherCode, temperature, city, icon }) => {
                 let conseilMeteo = '';
                 let conseilTemp = '';
+                let conseilHumidite = '';
 
                 if ([0].includes(weatherCode)) conseilMeteo = 'fait un temps clair : pensez à arroser en soirée.';
                 else if ([1, 2, 3].includes(weatherCode)) conseilMeteo = 'fait un temps nuageux : conditions idéales pour semer.';
@@ -109,6 +145,11 @@ const MeteoConseilsSection: React.FC = () => {
                 else if (temperature >= 20) conseilTemp = 'arrosez de préférence le matin.';
                 else if (temperature <= 10) conseilTemp = 'attention au froid, couvrez les semis.';
                 else conseilTemp = 'continuez l’entretien habituel.';
+
+                if ([0, 1, 2, 3].includes(weatherCode)) conseilHumidite = 'le sol peut être sec, surveillez l’humidité.';
+                else if ([51, 53, 61, 63].includes(weatherCode)) conseilHumidite = 'l’humidité est suffisante pour les semis.';
+                else if ([95, 96, 99].includes(weatherCode)) conseilHumidite = 'évitez tout travail du sol, trop détrempé.';
+                else conseilHumidite = 'vérifiez le sol avant de travailler.';
 
                 return (
                   <>
@@ -127,6 +168,7 @@ const MeteoConseilsSection: React.FC = () => {
                     <ul className="list-disc list-inside space-y-1 text-sm text-neutral-800">
                       <li>Actuellement il {conseilMeteo}</li>
                       <li>Avec une température extérieure de <strong>{temperature}°C</strong>, {conseilTemp}</li>
+                      <li>En ce moment, {conseilHumidite}</li>
                     </ul>
                   </>
                 );
