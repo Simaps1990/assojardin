@@ -77,12 +77,12 @@ return (
 {/* Section Météo + Plantation */}
 <MeteoConseilsSection />
 
-<div className="flex justify-center my-1">
+<div className="flex justify-center my-4">
       <hr className="w-1/2 border-t border-neutral-300" />
     </div>
 
     {/* Latest Blog Post */}
-<section className="pt-11 pb-16 bg-neutral-50">
+<section className="pt-11 pb-24 bg-neutral-50">
       <div className="container-custom">
         <div className="flex justify-between items-center mb-2">
           <Link
