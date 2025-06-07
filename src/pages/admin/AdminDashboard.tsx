@@ -56,13 +56,6 @@ useEffect(() => {
       console.error('Erreur chargement demandes :', error.message);
       return;
     }
-
-    setNonTraitees(count || 0);
-  };
-
-  fetchNonTraitees();
-  const interval = setInterval(fetchNonTraitees, 30000);
-  return () => clearInterval(interval);
 const fetchAnnoncesValidees = async () => {
   const { count, error } = await supabase
     .from('annonces')
@@ -75,7 +68,12 @@ const fetchAnnoncesValidees = async () => {
 };
 
 fetchAnnoncesValidees();
+    setNonTraitees(count || 0);
+  };
 
+  fetchNonTraitees();
+  const interval = setInterval(fetchNonTraitees, 30000);
+  return () => clearInterval(interval);
 
 }, [associationContent]);
 
