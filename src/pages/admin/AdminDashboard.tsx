@@ -10,7 +10,6 @@ import {
 import { useContent } from '../../context/ContentContext';
 import { supabase } from '../../supabaseClient';
 import { Megaphone } from 'lucide-react';
-const [annoncesCount, setAnnoncesCount] = useState<number>(0);
 
 const AdminDashboard: React.FC = () => {
   const { blogPosts, events } = useContent();
@@ -19,6 +18,7 @@ const AdminDashboard: React.FC = () => {
 
 
 const { associationContent } = useContent();
+const [annoncesCount, setAnnoncesCount] = useState<number>(0);
 
 const [nonTraitees, setNonTraitees] = useState(0);
 const [parcellesOccupees, setParcellesOccupees] = useState<number | null>(null);
