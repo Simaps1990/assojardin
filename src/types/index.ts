@@ -77,12 +77,13 @@ export interface Annonce {
   phone: string;
   choix: 'RECHERCHE' | 'VEND' | 'DONNE' | 'ECHANGE';
   message?: string;
+  contenu?: string; // ✅ garder pour compat compatibilité
+  type?: string;    // ✅ idem
   photo1?: string;
   photo2?: string;
+  statut: 'en_attente' | 'validé' | 'rejeté'; // ✅
   isValidated: boolean;
-  statut?: 'en_attente' | 'validé' | 'rejeté';
   date: string;
-  created_at?: string;
-  contenu?: string;
-  type?: string; // pour compatibilité avec les anciens champs du formulaire
+  created_at?: string; // ✅ utilisé dans le tri
 }
+

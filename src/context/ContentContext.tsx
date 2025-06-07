@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { BlogPost, Event, FormField } from '../types';
 import { supabase } from '../supabaseClient';
+import { BlogPost, Event, FormField, Annonce } from '../types';
 
 export interface Application {
   id: string;
@@ -32,6 +32,7 @@ export interface AssociationContentType {
 
 
 
+
 interface ContentContextType {
   blogPosts: BlogPost[];
   setBlogPosts: React.Dispatch<React.SetStateAction<BlogPost[]>>;
@@ -53,6 +54,11 @@ interface ContentContextType {
   updateApplication: (id: string, app: Partial<Application>) => void;
   deleteApplication: (id: string) => void;
   updateFormFields: (fields: FormField[]) => void;
+  annonces: Annonce[];
+  fetchAnnonces: () => Promise<void>;
+  addAnnonce: (a: Omit<Annonce, 'id' | 'date' | 'isValidated'>) => void;
+  updateAnnonce: (id: string, a: Partial<Annonce>) => void;
+  deleteAnnonce: (id: string) => void;
 
 
 updateAssociationContent: (content: Partial<AssociationContentType>) => Promise<AssociationContentType | undefined>;
@@ -480,6 +486,51 @@ const updateAssociationContent = async (
   setEvents(dataWithFlags);
 };
 
+const [annonces, setAnnonces] = useState<Annonce[]>([]);
+
+const fetchAnnonces = async () => {
+  const { data, error } = await supabase
+    .from('annonces')
+    .select('*')
+    .order('date', { ascending: false });
+
+  if (error) {
+    console.error('Erreur chargement annonces :', error.message);
+    return;
+  }
+  setAnnonces(data || []);
+};
+
+useEffect(() => {
+  fetchAnnonces();
+}, []);
+
+const addAnnonce = async (a: Omit<Annonce, 'id' | 'date' | 'isValidated'>) => {
+  const { data, error } = await supabase
+    .from('annonces')
+    .insert([{ ...a, date: new Date().toISOString(), isValidated: false }])
+    .select();
+
+  if (error) return console.error('Erreur ajout annonce :', error.message);
+  if (data?.[0]) setAnnonces((prev) => [data[0], ...prev]);
+};
+
+const updateAnnonce = async (id: string, a: Partial<Annonce>) => {
+  const { data, error } = await supabase
+    .from('annonces')
+    .update(a)
+    .eq('id', id)
+    .select();
+
+  if (error) return console.error('Erreur maj annonce :', error.message);
+  if (data?.[0]) setAnnonces((prev) => prev.map((an) => (an.id === id ? data[0] : an)));
+};
+
+const deleteAnnonce = async (id: string) => {
+  const { error } = await supabase.from('annonces').delete().eq('id', id);
+  if (error) return console.error('Erreur suppression annonce :', error.message);
+  setAnnonces((prev) => prev.filter((a) => a.id !== id));
+};
 
 
   return (
@@ -505,6 +556,12 @@ fetchEvents,
         updateApplication,
         deleteApplication,
         updateFormFields,
+                annonces,
+        fetchAnnonces,
+        addAnnonce,
+        updateAnnonce,
+        deleteAnnonce,
+
         updateAssociationContent,
       }}
     >

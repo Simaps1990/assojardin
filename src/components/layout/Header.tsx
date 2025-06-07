@@ -16,14 +16,16 @@ const Header = forwardRef<HTMLElement>((_, ref) => {
     }
   };
 
-  const navLinks = [
-    { to: '/', label: 'Accueil' },
-    { to: '/association', label: 'Notre association' },
-    { to: '/blog', label: 'Blog' },
-    { to: '/events', label: 'Événements' },
-    { to: '/apply', label: 'Postuler' },
-    { to: '/contact', label: 'Contact' },
-  ];
+const navLinks = [
+  { to: '/', label: 'Accueil' },
+  { to: '/association', label: 'Notre association' },
+  { to: '/blog', label: 'Blog' },
+  { to: '/events', label: 'Événements' },
+  { to: '/annonces', label: 'Annonces' }, // ✅ ajout ici
+  { to: '/apply', label: 'Postuler' },
+  { to: '/contact', label: 'Contact' },
+];
+
 
   return (
     <header

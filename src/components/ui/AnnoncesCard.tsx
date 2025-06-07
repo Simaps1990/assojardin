@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Calendar, Phone, Mail, User } from 'lucide-react';
 import { Annonce } from '../../types';
 import { formatDate } from '../../utils/formatters';
@@ -11,11 +10,11 @@ interface AnnonceCardProps {
 const AnnonceCard: React.FC<AnnonceCardProps> = ({ annonce }) => {
   return (
     <article className="card group transition-all duration-300 h-full">
-      {/* Image principale (s'il y en a une) */}
-      {annonce.images?.[0] && (
+      {/* Image principale (photo1) */}
+      {annonce.photo1 && (
         <div className="relative overflow-hidden h-48">
           <img
-            src={annonce.images[0]}
+            src={annonce.photo1}
             alt={annonce.nom}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
@@ -34,10 +33,10 @@ const AnnonceCard: React.FC<AnnonceCardProps> = ({ annonce }) => {
               <User size={16} className="mr-2 text-primary-500" />
               <span>{annonce.nom}</span>
             </div>
-            {annonce.telephone && (
+            {annonce.phone && (
               <div className="flex items-center">
                 <Phone size={16} className="mr-2 text-primary-500" />
-                <span>{annonce.telephone}</span>
+                <span>{annonce.phone}</span>
               </div>
             )}
             {annonce.email && (
@@ -49,19 +48,19 @@ const AnnonceCard: React.FC<AnnonceCardProps> = ({ annonce }) => {
           </div>
 
           <h3 className="font-heading font-semibold text-xl mb-2 text-neutral-800">
-            {annonce.choix} : {annonce.titre}
+            {annonce.choix} : {annonce.message?.slice(0, 30)}...
           </h3>
 
           <p className="text-sm text-gray-700 whitespace-pre-line">
-            {annonce.contenu}
+            {annonce.message}
           </p>
         </div>
 
-        {annonce.images?.[1] && (
+        {annonce.photo2 && (
           <div className="mt-4">
             <img
-              src={annonce.images[1]}
-              alt="annexe"
+              src={annonce.photo2}
+              alt="photo secondaire"
               className="w-full h-40 object-cover rounded"
             />
           </div>

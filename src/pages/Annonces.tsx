@@ -2,11 +2,35 @@ import React, { useState } from 'react';
 import { useContent } from '../context/ContentContext';
 import { supabase } from '../supabaseClient';
 import type { Annonce } from '../types/index';
+const uploadToCloudinary = async (file: File): Promise<string | null> => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', 'VOTRE_UPLOAD_PRESET');
+  try {
+    const res = await fetch('https://api.cloudinary.com/v1_1/VOTRE_CLOUD_NAME/image/upload', {
+      method: 'POST',
+      body: formData,
+    });
+    const data = await res.json();
+    return data.secure_url;
+  } catch (err) {
+    console.error('Erreur upload Cloudinary :', err);
+    return null;
+  }
+};
 
 const AnnoncesPage: React.FC = () => {
   const { annonces } = useContent();
 
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState<{
+  nom: string;
+  email: string;
+  telephone: string;
+  type: string;
+  contenu: string;
+  photo1: File | null;
+  photo2: File | null;
+}>({
     nom: '',
     email: '',
     telephone: '',
@@ -22,37 +46,41 @@ const AnnoncesPage: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    if (!formData.nom || !formData.telephone || !formData.type) {
-      alert('Les champs obligatoires (*) doivent être remplis.');
-      return;
-    }
+  if (!formData.nom || !formData.telephone || !formData.type) {
+    alert('Les champs obligatoires (*) doivent être remplis.');
+    return;
+  }
 
-const { error } = await supabase.from('annonces').insert([{
-  nom: formData.nom,
-  email: formData.email,
-  phone: formData.telephone, // correspond à "phone" dans l'interface
-  choix: formData.type.toUpperCase() as Annonce['choix'], // transformation
-  contenu: formData.contenu,
-  photo1: '',
-  photo2: '',
-  statut: 'en_attente',
-  isValidated: false,
-  date: new Date().toISOString()
-}]);
+  const photo1Url = formData.photo1 ? await uploadToCloudinary(formData.photo1) : '';
+  const photo2Url = formData.photo2 ? await uploadToCloudinary(formData.photo2) : '';
 
+  const { error } = await supabase.from('annonces').insert([{
+    nom: formData.nom,
+    email: formData.email,
+    phone: formData.telephone,
+    choix: formData.type.toUpperCase() as Annonce['choix'],
+    contenu: formData.contenu,
+    photo1: photo1Url,
+    photo2: photo2Url,
+    statut: 'en_attente',
+    isValidated: false,
+    date: new Date().toISOString()
+  }]);
 
-    if (error) {
-      alert("Erreur lors de l'envoi de l'annonce");
-      return;
-    }
-    setSubmitted(true);
-  };
+  if (error) {
+    alert("Erreur lors de l'envoi de l'annonce");
+    return;
+  }
+
+  setSubmitted(true);
+};
+
 
   const sortedAnnonces = [...annonces].filter(a => a.statut === 'validé').sort((a, b) => {
-    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+return new Date(b.created_at ?? b.date).getTime() - new Date(a.created_at ?? a.date).getTime();
   });
 
   return (
@@ -95,10 +123,23 @@ const { error } = await supabase.from('annonces').insert([{
                 <label className="font-medium">Contenu de l'annonce</label>
                 <textarea name="contenu" value={formData.contenu} onChange={handleChange} className="w-full border px-3 py-2 rounded" rows={4} />
               </div>
-              <div className="flex gap-4">
-                <input type="file" accept="image/*" />
-                <input type="file" accept="image/*" />
-              </div>
+<div className="flex gap-4">
+  <input
+    type="file"
+    accept="image/*"
+    onChange={(e) =>
+      setFormData((prev) => ({ ...prev, photo1: e.target.files?.[0] ?? null }))
+    }
+  />
+  <input
+    type="file"
+    accept="image/*"
+    onChange={(e) =>
+      setFormData((prev) => ({ ...prev, photo2: e.target.files?.[0] ?? null }))
+    }
+  />
+</div>
+
               <button type="submit" className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Envoyer</button>
             </form>
           )}
@@ -110,7 +151,7 @@ const { error } = await supabase.from('annonces').insert([{
             {sortedAnnonces.map((post) => (
               <div key={post.id} className="border rounded-lg p-4 bg-white shadow">
                 <p className="text-sm text-neutral-400 mb-1">{new Date(post.created_at ?? post.date).toLocaleDateString()}</p>
-                <h3 className="text-lg font-semibold mb-2">{post.type.toUpperCase()}</h3>
+<h3 className="text-lg font-semibold mb-2">{post.type?.toUpperCase() ?? post.choix}</h3>
                 <p className="text-neutral-700 whitespace-pre-line">{post.contenu}</p>
                 {post.photo1 && <img src={post.photo1} alt="photo1" className="mt-3 rounded" />}
               </div>
