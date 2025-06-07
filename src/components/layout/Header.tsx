@@ -54,7 +54,7 @@ const headerIcon: string | undefined = associationContent.headerIcon;
       to={to}
       className={({ isActive }) =>
         isActive
-          ? 'text-primary-600 font-semibold'
+          ? 'text-primary-600'
           : 'text-neutral-700 hover:text-primary-600'
       }
     >
