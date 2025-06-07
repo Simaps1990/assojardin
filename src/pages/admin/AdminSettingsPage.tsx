@@ -45,10 +45,14 @@ imagesAssociation: associationImageUploadedUrls,
 
 const refreshed = await updateAssociationContent(updated);
 if (refreshed !== undefined) {
-  setLocalContent(refreshed);
-  setContentAssociation(refreshed.contentAssociation || ''); // ← ajoute cette ligne
+  setLocalContent({
+    ...refreshed,
+    contentAssociation: refreshed.contentAssociation || ''
+  });
+  setContentAssociation(refreshed.contentAssociation || '');
   setSuccessMessage('Tous les contenus ont été enregistrés.');
 }
+
 
 };
 
