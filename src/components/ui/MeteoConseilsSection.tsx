@@ -49,13 +49,12 @@ const MONTHLY_PLANTING: Record<string, { name: string; link?: string }[]> = {
     { name: 'Courgette', link: 'https://youtu.be/MuFOH6Rtm1Y?si=xHTZldazuoMmBYZe' },
     { name: 'Artichaut', link: 'https://youtu.be/0q3UY_CMR-w?si=YOFU6CFXTx2mdMM7' }
   ]
-  // Ajoute les autres mois ici selon le même format
 };
 
 const MeteoConseilsSection: React.FC = () => {
   const currentMonth = new Date().toLocaleString('fr-FR', { month: 'long' });
   const monthKey = currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1);
-  const plantingList = MONTHLY_PLANTING[monthKey] || [];
+  const plantingList: { name: string; link?: string }[] = MONTHLY_PLANTING[monthKey] || [];
 
   return (
     <section className="py-12 bg-white">
@@ -72,7 +71,7 @@ const MeteoConseilsSection: React.FC = () => {
               {monthKey} est idéal pour ces plantations :
             </p>
             <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm text-neutral-700">
-              {plantingList.map((item, idx) => (
+              {plantingList.map((item: { name: string; link?: string }, idx: number) => (
                 <li key={idx} className="list-disc list-inside">
                   {item.link ? (
                     <a
@@ -93,11 +92,46 @@ const MeteoConseilsSection: React.FC = () => {
 
           {/* Météo actuelle */}
           <div className="card p-6 shadow-md rounded-2xl bg-blue-50">
-            <div className="flex items-center mb-4">
-              <Leaf className="text-sky-500 mr-2" />
-              <h2 className="text-xl font-bold">Météo actuelle</h2>
-            </div>
-            <WeatherWidget />
+            <WeatherWidget
+              renderTips={({ weatherCode, temperature, city, icon }) => {
+                let conseilMeteo = '';
+                let conseilTemp = '';
+
+                if ([0].includes(weatherCode)) conseilMeteo = 'fait un temps clair : pensez à arroser en soirée.';
+                else if ([1, 2, 3].includes(weatherCode)) conseilMeteo = 'fait un temps nuageux : conditions idéales pour semer.';
+                else if ([45, 48].includes(weatherCode)) conseilMeteo = 'y a du brouillard : évitez les traitements.';
+                else if ([51, 53, 55, 61, 63, 65].includes(weatherCode)) conseilMeteo = 'pleut : ne semez pas aujourd’hui.';
+                else if ([71, 73, 75].includes(weatherCode)) conseilMeteo = 'neige : protégez vos plantes.';
+                else if ([95, 96, 99].includes(weatherCode)) conseilMeteo = 'y a un orage : rentrez vos outils.';
+                else conseilMeteo = 'y a des conditions normales : observez votre sol.';
+
+                if (temperature >= 28) conseilTemp = 'pensez à pailler et arroser tôt le matin.';
+                else if (temperature >= 20) conseilTemp = 'arrosez de préférence le matin.';
+                else if (temperature <= 10) conseilTemp = 'attention au froid, couvrez les semis.';
+                else conseilTemp = 'continuez l’entretien habituel.';
+
+                return (
+                  <>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-2">
+                        <Leaf className="text-sky-500 h-5 w-5" />
+                        <h2 className="text-xl font-bold leading-tight mb-0">Météo actuelle</h2>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-neutral-700">
+                        <span>{icon}</span>
+                        <span className="font-medium">{temperature}°C</span>
+                        <span className="mx-1 text-neutral-400">|</span>
+                        <span className="text-green-500">{city}</span>
+                      </div>
+                    </div>
+                    <ul className="list-disc list-inside space-y-1 text-sm text-neutral-800">
+                      <li>Actuellement il {conseilMeteo}</li>
+                      <li>Avec une température extérieure de <strong>{temperature}°C</strong>, {conseilTemp}</li>
+                    </ul>
+                  </>
+                );
+              }}
+            />
           </div>
 
         </div>
