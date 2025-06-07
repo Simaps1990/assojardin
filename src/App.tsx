@@ -29,6 +29,7 @@ import AdminEventsPage from './pages/admin/AdminEventsPage';
 import AdminApplicationsPage from './pages/admin/AdminApplicationsPage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage.tsx';
 import ProtectedRoute from './ProtectedRoute';
+import AdminAnnoncesPage from './pages/admin/AdminAnnoncesPage';
 
 // Public Layout
 const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -90,6 +91,7 @@ function App() {
               <Route path="events" element={<AdminEventsPage />} />
               <Route path="applications" element={<AdminApplicationsPage />} />
               <Route path="settings" element={<AdminSettingsPage />} />
+              <Route path="annonces" element={<AdminAnnoncesPage />} /> {/* ❗ AJOUT ICI */}
             </Route>
 
             {/* Catch-all */}
