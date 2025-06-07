@@ -32,47 +32,45 @@ const Header = forwardRef<HTMLElement>((_, ref) => {
         </Link>
 
         {/* Bloc Navigation complet */}
-<div className="flex flex-wrap items-center justify-end gap-x-4 grow">
-          {/* Liens principaux */}
-          <nav className="flex flex-wrap gap-x-4 text-sm font-medium text-neutral-700">
-            {[{ to: '/', label: 'Accueil' },
-              { to: '/association', label: 'Notre association' },
-              { to: '/blog', label: 'Blog' },
-              { to: '/events', label: 'Événements' },
-              { to: '/apply', label: 'Postuler' },
-              { to: '/contact', label: 'Contact' }
-            ].map(({ to, label }) => (
-              <NavLink
-                key={to}
-                to={to}
-                className={({ isActive }) =>
-                  isActive
-                    ? 'text-primary-600'
-                    : 'text-neutral-700 hover:text-primary-600'
-                }
-              >
-                {label}
-              </NavLink>
-            ))}
-          </nav>
+<div className="flex flex-wrap items-center gap-x-4 gap-y-2 grow justify-between">
+  {[{ to: '/', label: 'Accueil' },
+    { to: '/association', label: 'Notre association' },
+    { to: '/blog', label: 'Blog' },
+    { to: '/events', label: 'Événements' },
+    { to: '/apply', label: 'Postuler' },
+    { to: '/contact', label: 'Contact' }
+  ].map(({ to, label }) => (
+    <NavLink
+      key={to}
+      to={to}
+      className={({ isActive }) =>
+        `text-sm font-medium ${
+          isActive ? 'text-primary-600' : 'text-neutral-700 hover:text-primary-600'
+        }`
+      }
+    >
+      {label}
+    </NavLink>
+  ))}
 
-          {/* Recherche + Login */}
-          <div className="flex items-center gap-2">
-            <form onSubmit={handleSearch} className="relative w-full max-w-[160px] md:max-w-[180px]">
-              <input
-                type="text"
-                placeholder="Rechercher..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="form-input w-full pl-10 pr-4 py-2 rounded border border-neutral-300"
-              />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={16} />
-            </form>
-            <Link to="/login" className="text-neutral-700 hover:text-primary-600 p-2" aria-label="Administration">
-              <Lock size={22} />
-            </Link>
-          </div>
-        </div>
+  {/* Recherche + Login, intégré au flux */}
+  <div className="flex items-center gap-2 ml-auto">
+    <form onSubmit={handleSearch} className="relative w-full max-w-[160px] md:max-w-[180px]">
+      <input
+        type="text"
+        placeholder="Rechercher..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="form-input w-full pl-10 pr-4 py-2 rounded border border-neutral-300"
+      />
+      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={16} />
+    </form>
+    <Link to="/login" className="text-neutral-700 hover:text-primary-600 p-2" aria-label="Administration">
+      <Lock size={22} />
+    </Link>
+  </div>
+</div>
+
       </div>
     </header>
   );
