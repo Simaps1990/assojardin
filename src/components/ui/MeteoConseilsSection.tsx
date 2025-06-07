@@ -140,53 +140,48 @@ const MeteoConseilsSection: React.FC = () => {
 
           {/* Météo */}
           <div className="bg-white p-6 shadow-md rounded-2xl">
-            <WeatherWidget
-              renderTips={({ weatherCode, temperature, city, icon }) => {
-                let conseilMeteo = '';
-                let conseilTemp = '';
-                let conseilHumidite = '';
+<WeatherWidget
+  renderTips={({ weatherCode, temperature, city, icon, airQuality }) => {
+    let conseilMeteo = '';
+    let conseilTemp = '';
 
-                if ([0].includes(weatherCode)) conseilMeteo = 'fait un temps clair : pensez à arroser en soirée.';
-                else if ([1, 2, 3].includes(weatherCode)) conseilMeteo = 'fait un temps nuageux : conditions idéales pour semer.';
-                else if ([45, 48].includes(weatherCode)) conseilMeteo = 'y a du brouillard : évitez les traitements.';
-                else if ([51, 53, 55, 61, 63, 65].includes(weatherCode)) conseilMeteo = 'pleut : ne semez pas aujourd’hui.';
-                else if ([71, 73, 75].includes(weatherCode)) conseilMeteo = 'neige : protégez vos plantes.';
-                else if ([95, 96, 99].includes(weatherCode)) conseilMeteo = 'y a un orage : rentrez vos outils.';
-                else conseilMeteo = 'y a des conditions normales : observez votre sol.';
+    if ([0].includes(weatherCode)) conseilMeteo = 'fait un temps clair : pensez à arroser en soirée.';
+    else if ([1, 2, 3].includes(weatherCode)) conseilMeteo = 'fait un temps nuageux : conditions idéales pour semer.';
+    else if ([45, 48].includes(weatherCode)) conseilMeteo = 'y a du brouillard : évitez les traitements.';
+    else if ([51, 53, 55, 61, 63, 65].includes(weatherCode)) conseilMeteo = 'pleut : ne semez pas aujourd’hui.';
+    else if ([71, 73, 75].includes(weatherCode)) conseilMeteo = 'neige : protégez vos plantes.';
+    else if ([95, 96, 99].includes(weatherCode)) conseilMeteo = 'y a un orage : rentrez vos outils.';
+    else conseilMeteo = 'y a des conditions normales : observez votre sol.';
 
-                if (temperature >= 28) conseilTemp = 'pensez à pailler et arroser tôt le matin.';
-                else if (temperature >= 20) conseilTemp = 'arrosez de préférence le matin.';
-                else if (temperature <= 10) conseilTemp = 'attention au froid, couvrez les semis.';
-                else conseilTemp = 'continuez l’entretien habituel.';
+    if (temperature >= 28) conseilTemp = 'pensez à pailler et arroser tôt le matin.';
+    else if (temperature >= 20) conseilTemp = 'arrosez de préférence le matin.';
+    else if (temperature <= 10) conseilTemp = 'attention au froid, couvrez les semis.';
+    else conseilTemp = 'continuez l’entretien habituel.';
 
-                if ([0, 1, 2, 3].includes(weatherCode)) conseilHumidite = 'le sol peut être sec, surveillez l’humidité.';
-                else if ([51, 53, 61, 63].includes(weatherCode)) conseilHumidite = 'l’humidité est suffisante pour les semis.';
-                else if ([95, 96, 99].includes(weatherCode)) conseilHumidite = 'évitez tout travail du sol, trop détrempé.';
-                else conseilHumidite = 'vérifiez le sol avant de travailler.';
+    return (
+      <>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Leaf className="text-sky-500 h-5 w-5" />
+            <h2 className="text-xl font-bold leading-tight mb-0">Météo actuelle</h2>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-neutral-700">
+            <span>{icon}</span>
+            <span className="font-medium">{temperature}°C</span>
+            <span className="mx-1 text-neutral-400">|</span>
+            <span className="text-green-500">{city}</span>
+          </div>
+        </div>
+        <ul className="list-disc list-inside space-y-1 text-sm text-neutral-800">
+          <li>Actuellement il {conseilMeteo}</li>
+          <li>Avec une température extérieure de <strong>{temperature}°C</strong>, {conseilTemp}</li>
+          <li>Qualité de l’air : <span className="font-medium text-green-600">{airQuality}</span></li>
+        </ul>
+      </>
+    );
+  }}
+/>
 
-                return (
-                  <>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-2">
-                        <Leaf className="text-sky-500 h-5 w-5" />
-                        <h2 className="text-xl font-bold leading-tight mb-0">Météo actuelle</h2>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-neutral-700">
-                        <span>{icon}</span>
-                        <span className="font-medium">{temperature}°C</span>
-                        <span className="mx-1 text-neutral-400">|</span>
-                        <span className="text-green-500">{city}</span>
-                      </div>
-                    </div>
-                    <ul className="list-disc list-inside space-y-1 text-sm text-neutral-800">
-                      <li>Actuellement il {conseilMeteo}</li>
-                      <li>Avec une température extérieure de <strong>{temperature}°C</strong>, {conseilTemp}</li>
-                      <li>En ce moment, {conseilHumidite}</li>
-                    </ul>
-                  </>
-                );
-              }}
-            />
           </div>
 
         </div>

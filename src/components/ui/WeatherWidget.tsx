@@ -14,6 +14,7 @@ type WeatherWidgetProps = {
     temperature: number;
     city: string;
     icon: React.ReactNode;
+    airQuality: string;
   }) => React.ReactNode;
 };
 
@@ -22,6 +23,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ renderTips }) => {
     location: string;
     temperature: number;
     weatherCode: number;
+    airQuality: string;
   } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,32 +40,43 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ renderTips }) => {
   };
 
   useEffect(() => {
-    const fetchWeather = async () => {
+    const fetchData = async () => {
       setLoading(true);
       try {
-        const url = '/.netlify/functions/meteo';
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Erreur API météo: ${response.status}`);
-        const data = await response.json();
-        if (!data.current_weather) throw new Error('Données météo actuelles manquantes');
+        const meteoRes = await fetch('/.netlify/functions/meteo');
+        const meteoData = await meteoRes.json();
+
+        const airRes = await fetch(`https://api.airvisual.com/v2/nearest_city?key=17c1f31a-4a2e-4104-bf9e-3ad4349c3f39`);
+        const airData = await airRes.json();
+
+        const aqi = airData?.data?.current?.pollution?.aqius;
+        let airQuality = 'Indisponible';
+        if (aqi <= 50) airQuality = 'Bonne';
+        else if (aqi <= 100) airQuality = 'Modérée';
+        else if (aqi <= 150) airQuality = 'Mauvaise pour les sensibles';
+        else if (aqi <= 200) airQuality = 'Mauvaise';
+        else if (aqi <= 300) airQuality = 'Très mauvaise';
+        else airQuality = 'Dangereuse';
+
         setWeather({
           location: 'Villeurbanne',
-          temperature: Math.round(data.current_weather.temperature),
-          weatherCode: data.current_weather.weathercode,
+          temperature: Math.round(meteoData.current_weather.temperature),
+          weatherCode: meteoData.current_weather.weathercode,
+          airQuality: airQuality,
         });
+
         setError(null);
       } catch (err) {
-        console.error('Erreur récupération météo:', err);
-        setError('Impossible de charger la météo');
+        console.error('Erreur récupération données météo / qualité air:', err);
+        setError('Impossible de charger les données météo');
         setWeather(null);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchWeather();
-    const interval = setInterval(fetchWeather, 30 * 60 * 1000);
-
+    fetchData();
+    const interval = setInterval(fetchData, 30 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -92,6 +105,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ renderTips }) => {
           temperature: weather.temperature,
           city: weather.location,
           icon: getWeatherIcon(weather.weatherCode),
+          airQuality: weather.airQuality,
         })}
     </>
   );
