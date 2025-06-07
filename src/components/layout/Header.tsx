@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Lock } from 'lucide-react';
 import { useContent } from '../../context/ContentContext'; // ✅ correction du chemin
+import { NavLink } from 'react-router-dom';
 
 const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -39,14 +40,29 @@ const headerIcon: string | undefined = associationContent.headerIcon;
 
         {/* Navigation + Recherche + Connexion */}
 <div className="flex flex-wrap items-center justify-end gap-4 w-full md:w-auto">
-  <nav className="flex flex-wrap justify-center md:justify-start gap-2 text-sm font-medium whitespace-nowrap overflow-x-auto md:overflow-visible">
-    <Link to="/" className="hover:text-primary-600 text-neutral-700">Accueil</Link>
-    <Link to="/association" className="hover:text-primary-600 text-neutral-700">Notre association</Link>
-    <Link to="/blog" className="hover:text-primary-600 text-neutral-700">Blog</Link>
-    <Link to="/events" className="hover:text-primary-600 text-neutral-700">Événements</Link>
-    <Link to="/apply" className="hover:text-primary-600 text-neutral-700">Postuler</Link>
-    <Link to="/contact" className="hover:text-primary-600 text-neutral-700">Contact</Link>
-  </nav>
+<nav className="flex flex-wrap justify-center md:justify-start gap-4 text-sm font-medium whitespace-nowrap overflow-x-auto md:overflow-visible">
+  {[
+    { to: '/', label: 'Accueil' },
+    { to: '/association', label: 'Notre association' },
+    { to: '/blog', label: 'Blog' },
+    { to: '/events', label: 'Événements' },
+    { to: '/apply', label: 'Postuler' },
+    { to: '/contact', label: 'Contact' },
+  ].map(({ to, label }) => (
+    <NavLink
+      key={to}
+      to={to}
+      className={({ isActive }) =>
+        isActive
+          ? 'text-primary-600 font-semibold'
+          : 'text-neutral-700 hover:text-primary-600'
+      }
+    >
+      {label}
+    </NavLink>
+  ))}
+</nav>
+
 
   <form onSubmit={handleSearch} className="relative w-full max-w-[180px] md:w-40">
     <input
