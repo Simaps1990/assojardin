@@ -34,7 +34,7 @@ const Header = forwardRef<HTMLElement>((_, ref) => {
         {/* Bloc Navigation complet */}
 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 ml-auto">
     {[{ to: '/', label: 'Accueil' },
-    { to: '/association', label: 'Notre association' },
+    { to: '/association', label: 'A propos' },
     { to: '/blog', label: 'Blog' },
     { to: '/events', label: 'Événements' },
     { to: '/apply', label: 'Postuler' },
