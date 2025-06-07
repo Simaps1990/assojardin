@@ -52,7 +52,7 @@ const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   return (
     <>
       <Header ref={headerRef} />
-      <main style={{ paddingTop }}>{children}</main>
+<main style={{ paddingTop: paddingTop + 24 }}>{children}</main>
       <Footer />
     </>
   );
