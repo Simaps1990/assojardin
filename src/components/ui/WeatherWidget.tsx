@@ -64,7 +64,12 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({ renderTips }) => {
         // Pollens
         const pollenRes = await fetch('https://air-quality-api.open-meteo.com/v1/air-quality?latitude=45.766&longitude=4.8795&hourly=birch_pollen,grass_pollen,mugwort_pollen,ragweed_pollen');
         const pollenData = await pollenRes.json();
-        const nowIndex = 0; // index 0 = heure actuelle
+const now = new Date();
+const hours = pollenData.hourly?.time || [];
+const nowIndex = hours.findIndex((h: string) => {
+  return new Date(h).getHours() === now.getHours();
+}) || 0;
+
 
         const allergens: { [key: string]: string } = {
           grass_pollen: 'Graminées',

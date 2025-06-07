@@ -1,6 +1,30 @@
 import React from 'react';
 import WeatherWidget from './WeatherWidget';
 import { Carrot, Leaf } from 'lucide-react';
+const getTempColor = (t: number) => {
+  if (t <= 10) return 'text-blue-600';
+  if (t <= 20) return 'text-green-600';
+  if (t <= 27) return 'text-yellow-600';
+  return 'text-red-600';
+};
+
+const getAirQualityColor = (qual: string) => {
+  if (qual.includes('Bonne')) return 'text-green-600';
+  if (qual.includes('Modérée')) return 'text-yellow-600';
+  if (qual.includes('Mauvaise pour les personnes sensibles')) return 'text-orange-500';
+  if (qual.includes('Mauvaise')) return 'text-orange-600';
+  if (qual.includes('Très mauvaise')) return 'text-red-500';
+  if (qual.includes('Dangereuse')) return 'text-red-700';
+  return 'text-neutral-500';
+};
+
+const getAllergyColor = (entry: string) => {
+  const match = entry.match(/\((\d+)/);
+  const value = match ? parseInt(match[1]) : 0;
+  if (value <= 80) return 'text-yellow-600';
+  if (value <= 200) return 'text-orange-600';
+  return 'text-red-600';
+};
 
 const MONTHLY_PLANTING: Record<string, { name: string; link?: string }[]> = {
   Janvier: [
@@ -174,13 +198,28 @@ const MeteoConseilsSection: React.FC = () => {
         </div>
         <ul className="list-disc list-inside space-y-1 text-sm text-neutral-800">
           <li>Actuellement il {conseilMeteo}</li>
-          <li>Avec une température extérieure de <strong>{temperature}°C</strong>, {conseilTemp}</li>
-          <li>Qualité de l’air : <span className="font-medium text-green-600">{airQuality}</span></li>
-          {allergyRisks.length > 0 && (
-            <li className="text-warning-600">
-              Risques allergiques : <span className="font-medium">{allergyRisks.join(', ')}</span>
-            </li>
-          )}
+<li>
+  Avec une température extérieure de{' '}
+  <strong className={getTempColor(temperature)}>{temperature}°C</strong>, {conseilTemp}
+</li>
+<li>
+  Qualité de l’air :{' '}
+  <span className={`font-medium ${getAirQualityColor(airQuality)}`}>
+    {airQuality}
+  </span>
+</li>
+{allergyRisks.length > 0 && (
+  <li>
+    Risques allergiques :{' '}
+    {allergyRisks.map((a, i) => (
+      <span key={i} className={`font-medium ${getAllergyColor(a)}`}>
+        {a}
+        {i < allergyRisks.length - 1 && ', '}
+      </span>
+    ))}
+  </li>
+)}
+
         </ul>
       </>
     );
