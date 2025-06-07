@@ -62,15 +62,18 @@ const Header = forwardRef<HTMLElement>((_, ref) => {
 
 <div className="flex gap-4 text-sm font-medium text-neutral-700">
   {[{ to: '/apply', label: 'Postuler' }, { to: '/contact', label: 'Contact' }].map(({ to, label }) => (
-    <NavLink
-      key={to}
-      to={to}
-      className={({ isActive }) =>
-        `${isActive ? 'text-primary-600' : 'hover:text-primary-600'}`
-      }
-    >
-      {label}
-    </NavLink>
+<NavLink
+  key={to}
+  to={to}
+  className={({ isActive }) =>
+    isActive
+      ? 'text-primary-600 font-medium text-sm'
+      : 'text-neutral-700 hover:text-primary-600 font-medium text-sm'
+  }
+>
+  {label}
+</NavLink>
+
   ))}
 </div>
 
