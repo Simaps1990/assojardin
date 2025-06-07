@@ -208,17 +208,21 @@ const MeteoConseilsSection: React.FC = () => {
     {airQuality}
   </span>
 </li>
-{allergyRisks.length > 0 && (
-  <li>
-    Risques allergiques :{' '}
-    {allergyRisks.map((a, i) => (
-      <span key={i} className={`font-medium ${getAllergyColor(a)}`}>
-        {a}
-        {i < allergyRisks.length - 1 && ', '}
-      </span>
-    ))}
-  </li>
-)}
+<li>
+  Risques allergiques :{' '}
+  {allergyRisks.map((a, i) => (
+    <span
+      key={i}
+      className={
+        a.includes('g/m³') ? `font-medium ${getAllergyColor(a)}` : 'text-green-600'
+      }
+    >
+      {a}
+      {i < allergyRisks.length - 1 && ', '}
+    </span>
+  ))}
+</li>
+
 
         </ul>
       </>
