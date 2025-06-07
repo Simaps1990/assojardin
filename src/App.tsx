@@ -30,10 +30,12 @@ import ProtectedRoute from './ProtectedRoute';
 import React, { useRef } from 'react';
 
 // dans le composant App
-const headerRef = useRef<HTMLElement | null>(null);
 
 
-const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+const PublicLayout: React.FC<{
+  children: React.ReactNode;
+  headerRef?: React.RefObject<HTMLElement>;
+}> = ({ children, headerRef }) => (
   <>
     <Header ref={headerRef} />
     <main className="pt-16 md:pt-0">{children}</main> {/* ← Ajout ici */}
@@ -46,6 +48,8 @@ const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
 
 function App() {
+  const headerRef = useRef<HTMLElement | null>(null);
+
   return (
     <AuthProvider>
       <ContentProvider>
@@ -54,7 +58,9 @@ function App() {
           <Routes>
             
 <Route path="/" element={
-  <PublicLayout><HomePage headerRef={headerRef} /></PublicLayout>
+<PublicLayout headerRef={headerRef}>
+  <HomePage headerRef={headerRef} />
+</PublicLayout>
 } />
 
             <Route path="/association" element={
