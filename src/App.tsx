@@ -32,20 +32,32 @@ import React from 'react';
 // dans le composant App
 
 
-const headerRef = document.querySelector('header');
+import { useEffect, useState, useRef } from 'react';
 
 const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const height = headerRef?.clientHeight || 0;
-  const paddingTop = height + 16;
+  const headerRef = useRef<HTMLElement | null>(null);
+  const [paddingTop, setPaddingTop] = useState(0);
+
+  useEffect(() => {
+    const updatePadding = () => {
+      const height = headerRef.current?.offsetHeight || 0;
+      setPaddingTop(height + 16);
+    };
+
+    updatePadding();
+    window.addEventListener('resize', updatePadding);
+    return () => window.removeEventListener('resize', updatePadding);
+  }, []);
 
   return (
     <>
-      <Header />
+      <Header ref={headerRef} />
       <main style={{ paddingTop }}>{children}</main>
       <Footer />
     </>
   );
 };
+
 
 
 
