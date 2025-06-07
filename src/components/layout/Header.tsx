@@ -32,7 +32,7 @@ const Header = forwardRef<HTMLElement>((_, ref) => {
         </Link>
 
         {/* Bloc Navigation complet */}
-        <div className="flex flex-wrap items-center justify-end gap-x-4 flex-1">
+<div className="flex flex-wrap items-center justify-end gap-x-4 grow">
           {/* Liens principaux */}
           <nav className="flex flex-wrap gap-x-4 text-sm font-medium text-neutral-700">
             {[{ to: '/', label: 'Accueil' },
