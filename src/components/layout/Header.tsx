@@ -35,13 +35,15 @@ const Header = forwardRef<HTMLElement>((_, ref) => {
           </div>
         </Link>
 
-        {/* Navigation ligne 1 */}
-        <nav className="flex flex-wrap justify-start md:justify-start gap-4 text-sm font-medium whitespace-nowrap overflow-x-auto md:overflow-visible w-full md:w-auto">
+        {/* Navigation responsive unique */}
+        <nav className="flex flex-wrap items-center justify-start gap-4 text-sm font-medium whitespace-nowrap overflow-x-auto md:overflow-visible w-full md:w-auto">
           {[
             { to: '/', label: 'Accueil' },
             { to: '/association', label: 'Notre association' },
             { to: '/blog', label: 'Blog' },
             { to: '/events', label: 'Événements' },
+            { to: '/apply', label: 'Postuler' },
+            { to: '/contact', label: 'Contact' },
           ].map(({ to, label }) => (
             <NavLink
               key={to}
@@ -57,79 +59,22 @@ const Header = forwardRef<HTMLElement>((_, ref) => {
           ))}
         </nav>
 
-        {/* Ligne 2 mobile uniquement */}
-<div className="flex flex-wrap justify-between items-center gap-2 w-full md:hidden mt-1 px-1">
-
-<div className="flex gap-4 text-sm font-medium text-neutral-700">
-  {[{ to: '/apply', label: 'Postuler' }, { to: '/contact', label: 'Contact' }].map(({ to, label }) => (
-<NavLink
-  key={to}
-  to={to}
-  className={({ isActive }) =>
-    isActive
-      ? 'text-primary-600 font-medium text-sm'
-      : 'text-neutral-700 hover:text-primary-600 font-medium text-sm'
-  }
->
-  {label}
-</NavLink>
-
-  ))}
-</div>
-
-
-          <div className="flex items-center gap-2 flex-1 justify-end">
-            <form onSubmit={handleSearch} className="relative w-full max-w-[160px]">
-              <input
-                type="text"
-                placeholder="Rechercher..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="form-input w-full pl-10 pr-4 py-2 rounded border border-neutral-300"
-              />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={16} />
-            </form>
-            <Link to="/login" className="text-neutral-700 hover:text-primary-600 p-2" aria-label="Administration">
-              <Lock size={22} />
-            </Link>
-          </div>
+        {/* Zone recherche + admin */}
+        <div className="flex items-center gap-2 w-full md:w-auto justify-end">
+          <form onSubmit={handleSearch} className="relative w-full max-w-[160px] md:max-w-[180px] md:w-40">
+            <input
+              type="text"
+              placeholder="Rechercher..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="form-input w-full pl-10 pr-4 py-2 rounded border border-neutral-300"
+            />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={16} />
+          </form>
+          <Link to="/login" className="text-neutral-700 hover:text-primary-600 p-2" aria-label="Administration">
+            <Lock size={22} />
+          </Link>
         </div>
-
-{/* Desktop : tout en ligne */}
-<div className="hidden md:flex items-center gap-4">
-  <nav className="flex gap-4 text-sm font-medium">
-    {[
-      { to: '/apply', label: 'Postuler' },
-      { to: '/contact', label: 'Contact' }
-    ].map(({ to, label }) => (
-      <NavLink
-        key={to}
-        to={to}
-        className={({ isActive }) =>
-          isActive
-            ? 'text-primary-600'
-            : 'text-neutral-700 hover:text-primary-600'
-        }
-      >
-        {label}
-      </NavLink>
-    ))}
-  </nav>
-  <form onSubmit={handleSearch} className="relative w-full max-w-[180px] md:w-40">
-    <input
-      type="text"
-      placeholder="Rechercher..."
-      value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
-      className="form-input w-full pl-10 pr-4 py-2 rounded border border-neutral-300"
-    />
-    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={16} />
-  </form>
-  <Link to="/login" className="text-neutral-700 hover:text-primary-600 p-2" aria-label="Administration">
-    <Lock size={22} />
-  </Link>
-</div>
-
       </div>
     </header>
   );
