@@ -32,8 +32,8 @@ const Header = forwardRef<HTMLElement>((_, ref) => {
         </Link>
 
         {/* Bloc Navigation complet */}
-<div className="flex flex-wrap items-center gap-x-4 gap-y-2 w-full justify-end">
-  {[{ to: '/', label: 'Accueil' },
+<div className="flex flex-wrap items-center gap-x-4 gap-y-2 ml-auto">
+    {[{ to: '/', label: 'Accueil' },
     { to: '/association', label: 'Notre association' },
     { to: '/blog', label: 'Blog' },
     { to: '/events', label: 'Événements' },
