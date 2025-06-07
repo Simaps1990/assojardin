@@ -72,10 +72,10 @@ const nowIndex = hours.findIndex((h: string) => {
 
 
         const allergens: { [key: string]: string } = {
-          grass_pollen: 'Graminées',
-          birch_pollen: 'Bouleau',
-          mugwort_pollen: 'Armoise',
-          ragweed_pollen: 'Ambroisie',
+          grass_pollen: 'de graminées',
+          birch_pollen: 'de pollen de bouleau',
+          mugwort_pollen: 'd\'armoise',
+          ragweed_pollen: 'd\'ambroisie',
         };
 
 const allergyRisksRaw = Object.entries(allergens)
@@ -87,7 +87,16 @@ const allergyRisksRaw = Object.entries(allergens)
 
 const allergyRisks = allergyRisksRaw
   .filter(({ value }) => value > 80)
-  .map(({ label, value }) => `${label} (${value} g/m³)`);
+  .map(({ label, value }) => {
+    const niveau =
+      value > 200 ? 'très élevé' : 'élevé';
+    return `Taux ${label.toLowerCase()} ${niveau}`;
+  });
+
+if (allergyRisks.length === 0) {
+  allergyRisks.push('Aucun allergène préoccupant actuellement');
+}
+
 
 // 🔁 S’il n’y a aucun allergène élevé, on le signale quand même
 if (allergyRisks.length === 0) {
