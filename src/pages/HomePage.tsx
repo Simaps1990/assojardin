@@ -5,8 +5,26 @@ import BlogCard from '../components/ui/BlogCard';
 import EventCard from '../components/ui/EventCard';
 import { Carrot, Leaf } from 'lucide-react';
 import WeatherWidget from '../components/ui/WeatherWidget';
+import React, { useEffect, useState } from 'react';
 
-const HomePage: React.FC = () => {
+interface HomePageProps {
+  headerRef: React.RefObject<HTMLElement>;
+}
+
+const HomePage: React.FC<HomePageProps> = ({ headerRef }) => {
+const [paddingTop, setPaddingTop] = useState(0);
+
+useEffect(() => {
+  const updatePadding = () => {
+    const headerHeight = headerRef.current?.offsetHeight || 0;
+    setPaddingTop(headerHeight + 16);
+  };
+
+  updatePadding();
+  window.addEventListener('resize', updatePadding);
+  return () => window.removeEventListener('resize', updatePadding);
+}, []);
+
   const { blogPosts, events, associationContent } = useContent();
 
 const titreAccueil = associationContent?.titreAccueil;
@@ -92,7 +110,7 @@ const pastEvents = events
 
 
 return (
-<div className="pt-24 md:pt-16">
+<div style={{ paddingTop }}>
 
     {/* Hero Section */}
     {backgroundImageUrl && (

@@ -92,54 +92,57 @@ useEffect(() => {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Link to="/admin/blog" className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors">
-          <div className="flex items-center">
-            <div className="bg-primary-100 p-3 rounded-full mr-4">
-              <FileText className="text-primary-600" size={24} />
-            </div>
-            <div>
-              <p className="text-neutral-500 text-sm">Articles</p>
-              <p className="text-2xl font-semibold">{blogPosts.length}</p>
-            </div>
-          </div>
+<div className="flex items-center gap-4">
+  <div className="bg-primary-100 p-3 rounded-full flex items-center justify-center">
+    <FileText className="text-primary-600" size={24} />
+  </div>
+  <div className="flex flex-col justify-center">
+    <p className="text-neutral-500 text-sm">Articles</p>
+    <p className="text-2xl">{blogPosts.length}</p>
+  </div>
+</div>
+
         </Link>
 
         <Link to="/admin/events" className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors">
-          <div className="flex items-center">
-            <div className="bg-accent-100 p-3 rounded-full mr-4">
-              <Calendar className="text-accent-600" size={24} />
-            </div>
-            <div>
-              <p className="text-neutral-500 text-sm">Événements à venir</p>
-              <p className="text-2xl font-semibold">{upcomingEvents.length}</p>
-            </div>
-          </div>
+<div className="flex items-center gap-4">
+  <div className="bg-accent-100 p-3 rounded-full flex items-center justify-center">
+    <Calendar className="text-accent-600" size={24} />
+  </div>
+  <div className="flex flex-col justify-center">
+    <p className="text-neutral-500 text-sm">Événements à venir</p>
+    <p className="text-2xl">{upcomingEvents.length}</p>
+  </div>
+</div>
+
         </Link>
 
         <Link to="/admin/applications" className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors">
-          <div className="flex items-center">
-            <div className="bg-secondary-100 p-3 rounded-full mr-4">
-              <FileText className="text-secondary-600" size={24} />
+<div className="flex items-center gap-4">
+  <div className="bg-secondary-100 p-3 rounded-full flex items-center justify-center">
+    <FileText className="text-secondary-600" size={24} />
+  </div>
+  <div className="flex flex-col justify-center">
+    <p className="text-neutral-500 text-sm">Demandes de jardin</p>
+    <p className="text-2xl">{nonTraitees}</p>
+  </div>
+</div>
 
-            </div>
-            <div>
-              <p className="text-neutral-500 text-sm">Demandes de jardin</p>
-              <p className="text-2xl font-semibold">{nonTraitees}</p>
-            </div>
-          </div>
         </Link>
 
         <div className="bg-white rounded-lg shadow-sm p-6">
-  <div className="flex items-center">
-    <div className="bg-green-100 p-3 rounded-full mr-4">
-      <Users className="text-green-600" size={24} />
-    </div>
-    <div>
-      <p className="text-neutral-500 text-sm">Parcelles occupées</p>
-      <p className="text-2xl font-semibold">
-        {parcellesOccupees ?? '--'} / {parcellesTotales ?? '--'}
-      </p>
-    </div>
+<div className="flex items-center gap-4">
+  <div className="bg-green-100 p-3 rounded-full flex items-center justify-center">
+    <Users className="text-green-600" size={24} />
   </div>
+  <div className="flex flex-col justify-center">
+    <p className="text-neutral-500 text-sm">Parcelles occupées</p>
+    <p className="text-2xl">
+      {parcellesOccupees ?? '--'} / {parcellesTotales ?? '--'}
+    </p>
+  </div>
+</div>
+
 </div>
 
       </div>

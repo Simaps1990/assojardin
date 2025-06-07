@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ContentProvider } from './context/ContentContext';
@@ -28,15 +27,22 @@ import AdminEventsPage from './pages/admin/AdminEventsPage';
 import AdminApplicationsPage from './pages/admin/AdminApplicationsPage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage.tsx';
 import ProtectedRoute from './ProtectedRoute';
+import React, { useRef } from 'react';
+
+// dans le composant App
+const headerRef = useRef<HTMLElement | null>(null);
 
 
 const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
-    <Header />
-<main className="pt-16 md:pt-0">{children}</main>
+    <Header ref={headerRef} />
+    <main className="pt-16 md:pt-0">{children}</main> {/* ← Ajout ici */}
     <Footer />
   </>
 );
+
+
+
 
 
 function App() {
@@ -47,9 +53,10 @@ function App() {
           <ScrollToTop />
           <Routes>
             
-            <Route path="/" element={
-              <PublicLayout><HomePage /></PublicLayout>
-            } />
+<Route path="/" element={
+  <PublicLayout><HomePage headerRef={headerRef} /></PublicLayout>
+} />
+
             <Route path="/association" element={
               <PublicLayout><AssociationPage /></PublicLayout>
             } />
