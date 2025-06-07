@@ -19,7 +19,7 @@ import ApplyPage from './pages/ApplyPage';
 import ContactPage from './pages/ContactPage';
 import SearchPage from './pages/SearchPage';
 import LoginPage from './pages/LoginPage';
-
+import AnnoncesPage from './pages/Annonces'; // ✅ importer en haut
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminBlogPage from './pages/admin/AdminBlogPage';
@@ -118,7 +118,15 @@ function App() {
   <Route path="applications" element={<AdminApplicationsPage />} />
   <Route path="settings" element={<AdminSettingsPage />} />
 </Route>
-
+<Routes>
+  <Route path="/" element={<HomePage />} />
+  <Route path="/association" element={<AssociationPage />} />
+  <Route path="/blog" element={<BlogPage />} />
+  <Route path="/events" element={<EventsPage />} />
+  <Route path="/annonces" element={<AnnoncesPage />} /> {/* ✅ ici */}
+  <Route path="/apply" element={<ApplyPage />} />
+  <Route path="/contact" element={<ContactPage />} />
+</Routes>
 
             
             <Route path="*" element={<Navigate to="/" replace />} />
