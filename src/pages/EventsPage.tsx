@@ -11,7 +11,7 @@ const EventsPage: React.FC = () => {
   });
 
   return (
-    <div className="pt-24 pb-16">
+    <div className="pb-16">
       <div className="container-custom">
         <h1 className="font-heading font-bold text-4xl mb-2">Événements</h1>
         <p className="text-neutral-600 text-lg mb-8">
