@@ -27,28 +27,20 @@ import AdminEventsPage from './pages/admin/AdminEventsPage';
 import AdminApplicationsPage from './pages/admin/AdminApplicationsPage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage.tsx';
 import ProtectedRoute from './ProtectedRoute';
-import React, { useRef, useState, useEffect } from 'react';
+import React from 'react';
 
 // dans le composant App
 
 
-const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const headerRef = useRef<HTMLElement | null>(null);
-  const [paddingTop, setPaddingTop] = useState(0);
+const headerRef = document.querySelector('header');
 
-  useEffect(() => {
-    const updatePadding = () => {
-      const height = headerRef.current?.offsetHeight || 0;
-      setPaddingTop(height + 16);
-    };
-    updatePadding();
-    window.addEventListener('resize', updatePadding);
-    return () => window.removeEventListener('resize', updatePadding);
-  }, []);
+const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const height = headerRef?.clientHeight || 0;
+  const paddingTop = height + 16;
 
   return (
     <>
-      <Header ref={headerRef} />
+      <Header />
       <main style={{ paddingTop }}>{children}</main>
       <Footer />
     </>
