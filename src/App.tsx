@@ -27,28 +27,37 @@ import AdminEventsPage from './pages/admin/AdminEventsPage';
 import AdminApplicationsPage from './pages/admin/AdminApplicationsPage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage.tsx';
 import ProtectedRoute from './ProtectedRoute';
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 // dans le composant App
 
 
-const PublicLayout: React.FC<{
-  children: React.ReactNode;
-  headerRef?: React.RefObject<HTMLElement>;
-}> = ({ children, headerRef }) => (
-  <>
-    <Header ref={headerRef} />
-<main>{children}</main>
-    <Footer />
-  </>
-);
+const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const headerRef = useRef<HTMLElement | null>(null);
+  const [paddingTop, setPaddingTop] = useState(0);
 
+  useEffect(() => {
+    const updatePadding = () => {
+      const height = headerRef.current?.offsetHeight || 0;
+      setPaddingTop(height + 16);
+    };
+    updatePadding();
+    window.addEventListener('resize', updatePadding);
+    return () => window.removeEventListener('resize', updatePadding);
+  }, []);
 
+  return (
+    <>
+      <Header ref={headerRef} />
+      <main style={{ paddingTop }}>{children}</main>
+      <Footer />
+    </>
+  );
+};
 
 
 
 function App() {
-  const headerRef = useRef<HTMLElement | null>(null);
 
   return (
     <AuthProvider>
@@ -58,10 +67,11 @@ function App() {
           <Routes>
             
 <Route path="/" element={
-<PublicLayout headerRef={headerRef}>
-  <HomePage headerRef={headerRef} />
-</PublicLayout>
+  <PublicLayout>
+    <HomePage />
+  </PublicLayout>
 } />
+
 
             <Route path="/association" element={
               <PublicLayout><AssociationPage /></PublicLayout>
