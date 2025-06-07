@@ -36,7 +36,7 @@ if (!titreAssociation && !contentAssociation && images.length === 0) {
 
 
   return (
-    <div className="pt-24 pb-16">
+    <div className="pt-0 pb-16">
       <div className="container-custom">
 <h1 className="font-heading font-bold text-4xl mb-2 text-black">
   {titreAssociation}
