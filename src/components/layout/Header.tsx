@@ -95,42 +95,41 @@ const Header = forwardRef<HTMLElement>((_, ref) => {
           </div>
         </div>
 
-        {/* Desktop : tout en ligne */}
-        <div className="hidden md:flex items-center gap-4">
-          <NavLink
-            to="/apply"
-            className={({ isActive }) =>
-              isActive
-                ? 'text-primary-600'
-                : 'text-neutral-700 hover:text-primary-600'
-            }
-          >
-            Postuler
-          </NavLink>
-          <NavLink
-            to="/contact"
-            className={({ isActive }) =>
-              isActive
-                ? 'text-primary-600'
-                : 'text-neutral-700 hover:text-primary-600'
-            }
-          >
-            Contact
-          </NavLink>
-          <form onSubmit={handleSearch} className="relative w-full max-w-[180px] md:w-40">
-            <input
-              type="text"
-              placeholder="Rechercher..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="form-input w-full pl-10 pr-4 py-2 rounded border border-neutral-300"
-            />
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={16} />
-          </form>
-          <Link to="/login" className="text-neutral-700 hover:text-primary-600 p-2" aria-label="Administration">
-            <Lock size={22} />
-          </Link>
-        </div>
+{/* Desktop : tout en ligne */}
+<div className="hidden md:flex items-center gap-4">
+  <nav className="flex gap-4 text-sm font-medium">
+    {[
+      { to: '/apply', label: 'Postuler' },
+      { to: '/contact', label: 'Contact' }
+    ].map(({ to, label }) => (
+      <NavLink
+        key={to}
+        to={to}
+        className={({ isActive }) =>
+          isActive
+            ? 'text-primary-600'
+            : 'text-neutral-700 hover:text-primary-600'
+        }
+      >
+        {label}
+      </NavLink>
+    ))}
+  </nav>
+  <form onSubmit={handleSearch} className="relative w-full max-w-[180px] md:w-40">
+    <input
+      type="text"
+      placeholder="Rechercher..."
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      className="form-input w-full pl-10 pr-4 py-2 rounded border border-neutral-300"
+    />
+    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={16} />
+  </form>
+  <Link to="/login" className="text-neutral-700 hover:text-primary-600 p-2" aria-label="Administration">
+    <Lock size={22} />
+  </Link>
+</div>
+
       </div>
     </header>
   );
