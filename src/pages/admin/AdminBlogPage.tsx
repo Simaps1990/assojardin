@@ -120,7 +120,7 @@ const AdminBlogPage = () => {
   };
 
 const handleSubmit = async () => {
-  let newUploadedUrls: string[];
+  let newUploadedUrls: string[] = [];
 
   if (!title || !contentRef.current?.innerHTML.trim()) {
     setError("Le titre et le contenu sont requis.");
@@ -134,8 +134,15 @@ const handleSubmit = async () => {
     return;
   }
 
-  const visibleUrls = imagesannexesUrls.filter((url): url is string => url !== null);
-  const annexUrls = [...visibleUrls.slice(0, 3 - newUploadedUrls.length), ...newUploadedUrls];
+  // Fusion propre des URLs : on remplace uniquement les indexes où on a uploadé une nouvelle image
+  const annexUrls: (string | null)[] = [null, null, null];
+  for (let i = 0; i < 3; i++) {
+    if (newUploadedUrls[i]) {
+      annexUrls[i] = newUploadedUrls[i];
+    } else {
+      annexUrls[i] = imagesannexesUrls[i];
+    }
+  }
 
   const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
   if (fileInput) {
@@ -145,8 +152,8 @@ const handleSubmit = async () => {
   const payload = {
     title,
     content: contentRef.current?.innerHTML ?? '',
-    image: uploadedImageUrl ?? '',  // <-- ne jamais envoyer null
-    imagesannexes: annexUrls.length > 0 ? annexUrls : [], // jamais null
+    image: uploadedImageUrl ?? '',  // photo couverture
+    imagesannexes: annexUrls.filter((url): url is string => url !== null), // enlever les nulls
     excerpt: '',
     author: 'Admin',
     date: new Date().toISOString(),
@@ -178,6 +185,7 @@ const handleSubmit = async () => {
   setError('');
   window.scrollTo(0, 0);
 };
+
 
 
 
