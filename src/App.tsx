@@ -1,3 +1,4 @@
+import React, { useEffect, useState, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ContentProvider } from './context/ContentContext';
@@ -19,7 +20,8 @@ import ApplyPage from './pages/ApplyPage';
 import ContactPage from './pages/ContactPage';
 import SearchPage from './pages/SearchPage';
 import LoginPage from './pages/LoginPage';
-import AnnoncesPage from './pages/Annonces'; // ✅ importer en haut
+import AnnoncesPage from './pages/Annonces'; // ✅ Import correct
+
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminBlogPage from './pages/admin/AdminBlogPage';
@@ -27,13 +29,8 @@ import AdminEventsPage from './pages/admin/AdminEventsPage';
 import AdminApplicationsPage from './pages/admin/AdminApplicationsPage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage.tsx';
 import ProtectedRoute from './ProtectedRoute';
-import React from 'react';
 
-// dans le composant App
-
-
-import { useEffect, useState, useRef } from 'react';
-
+// Public Layout
 const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const headerRef = useRef<HTMLElement | null>(null);
   const [paddingTop, setPaddingTop] = useState(0);
@@ -52,83 +49,50 @@ const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   return (
     <>
       <Header ref={headerRef} />
-<main style={{ paddingTop: paddingTop + 24 }}>{children}</main>
+      <main style={{ paddingTop: paddingTop + 24 }}>{children}</main>
       <Footer />
     </>
   );
 };
 
-
-
-
 function App() {
-
   return (
     <AuthProvider>
       <ContentProvider>
         <Router>
           <ScrollToTop />
           <Routes>
-            
-<Route path="/" element={
-  <PublicLayout>
-    <HomePage />
-  </PublicLayout>
-} />
 
-
-            <Route path="/association" element={
-              <PublicLayout><AssociationPage /></PublicLayout>
-            } />
-            <Route path="/events" element={
-              <PublicLayout><EventsPage /></PublicLayout>
-            } />
-            <Route path="/events/:id" element={
-              <PublicLayout><EventDetailPage /></PublicLayout>
-            } />
-            <Route path="/blog" element={
-              <PublicLayout><BlogPage /></PublicLayout>
-            } />
-            <Route path="/blog/:id" element={
-              <PublicLayout><BlogDetailPage /></PublicLayout>
-            } />
-            <Route path="/apply" element={
-              <PublicLayout><ApplyPage /></PublicLayout>
-            } />
-            <Route path="/contact" element={
-              <PublicLayout><ContactPage /></PublicLayout>
-            } />
-            <Route path="/search" element={
-              <PublicLayout><SearchPage /></PublicLayout>
-            } />
+            {/* Public Routes */}
+            <Route path="/" element={<PublicLayout><HomePage /></PublicLayout>} />
+            <Route path="/association" element={<PublicLayout><AssociationPage /></PublicLayout>} />
+            <Route path="/events" element={<PublicLayout><EventsPage /></PublicLayout>} />
+            <Route path="/events/:id" element={<PublicLayout><EventDetailPage /></PublicLayout>} />
+            <Route path="/blog" element={<PublicLayout><BlogPage /></PublicLayout>} />
+            <Route path="/blog/:id" element={<PublicLayout><BlogDetailPage /></PublicLayout>} />
+            <Route path="/apply" element={<PublicLayout><ApplyPage /></PublicLayout>} />
+            <Route path="/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
+            <Route path="/search" element={<PublicLayout><SearchPage /></PublicLayout>} />
+            <Route path="/annonces" element={<PublicLayout><AnnoncesPage /></PublicLayout>} />
             <Route path="/login" element={<LoginPage />} />
 
-            
-<Route
-  path="/admin"
-  element={
-    <ProtectedRoute>
-      <AdminLayout />
-    </ProtectedRoute>
-  }
->
-  <Route index element={<AdminDashboard />} />
-  <Route path="blog" element={<AdminBlogPage />} />
-  <Route path="events" element={<AdminEventsPage />} />
-  <Route path="applications" element={<AdminApplicationsPage />} />
-  <Route path="settings" element={<AdminSettingsPage />} />
-</Route>
-<Routes>
-  <Route path="/" element={<HomePage />} />
-  <Route path="/association" element={<AssociationPage />} />
-  <Route path="/blog" element={<BlogPage />} />
-  <Route path="/events" element={<EventsPage />} />
-  <Route path="/annonces" element={<AnnoncesPage />} /> {/* ✅ ici */}
-  <Route path="/apply" element={<ApplyPage />} />
-  <Route path="/contact" element={<ContactPage />} />
-</Routes>
+            {/* Admin Routes */}
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<AdminDashboard />} />
+              <Route path="blog" element={<AdminBlogPage />} />
+              <Route path="events" element={<AdminEventsPage />} />
+              <Route path="applications" element={<AdminApplicationsPage />} />
+              <Route path="settings" element={<AdminSettingsPage />} />
+            </Route>
 
-            
+            {/* Catch-all */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Router>
