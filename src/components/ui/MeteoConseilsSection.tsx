@@ -199,22 +199,24 @@ const MeteoConseilsSection: React.FC = () => {
         <ul className="list-disc list-inside space-y-1 text-sm text-neutral-800">
           <li>Actuellement il {conseilMeteo}</li>
 <li>
-  Avec une température extérieure de{' '}
-  <strong className={getTempColor(temperature)}>{temperature}°C</strong>, {conseilTemp}
+  La température extérieure est de {' '}
+  <span className={getTempColor(temperature)}>{temperature}°C</span>, {conseilTemp}
 </li>
+
 <li>
   Qualité de l’air :{' '}
-  <span className={`font-medium ${getAirQualityColor(airQuality)}`}>
+  <span className={getAirQualityColor(airQuality)}>
     {airQuality}
   </span>
 </li>
+
 <li>
   Risques allergiques :{' '}
   {allergyRisks.map((a, i) => (
     <span
       key={i}
       className={
-        a === 'Aucun allergène préoccupant actuellement'
+        a === 'Rien de préoccupant actuellement'
           ? 'text-green-600'
           : `font-medium ${getAllergyColor(a)}`
       }
