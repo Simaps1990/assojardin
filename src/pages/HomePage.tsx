@@ -77,7 +77,7 @@ return (
 {/* Section Météo + Plantation */}
 <MeteoConseilsSection />
 
-<div className="flex justify-center my-3">
+<div className="flex justify-center my-5">
       <hr className="w-1/2 border-t border-neutral-300" />
     </div>
 
