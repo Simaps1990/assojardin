@@ -25,8 +25,8 @@ const Header = forwardRef<HTMLElement>((_, ref) => {
           )}
           <div className="ml-3 text-primary-700 leading-tight flex items-baseline space-x-2">
             <h1 className="text-xl font-bold m-0 p-0">SJOV</h1>
-            <p className="text-base font-sans font-normal text-primary-600 m-0 p-0">
-              Jardins Ouvriers de Villeurbanne
+<p className="text-sm font-medium text-primary-600 m-0 p-0">
+                Jardins Ouvriers de Villeurbanne
             </p>
           </div>
         </Link>
