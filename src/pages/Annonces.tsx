@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { useContent } from '../context/ContentContext';
 import { supabase } from '../supabaseClient';
-import type { Annonce } from '../types/index';
 const uploadToCloudinary = async (file: File): Promise<string | null> => {
   const formData = new FormData();
   formData.append('file', file);
-  formData.append('upload_preset', 'VOTRE_UPLOAD_PRESET');
+formData.append('upload_preset', 'ton_upload_preset_cloudinary');
   try {
-    const res = await fetch('https://api.cloudinary.com/v1_1/VOTRE_CLOUD_NAME/image/upload', {
+const res = await fetch('https://api.cloudinary.com/v1_1/ton_cloud_name/image/upload', {
       method: 'POST',
       body: formData,
     });
@@ -61,7 +60,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     nom: formData.nom,
     email: formData.email,
     phone: formData.telephone,
-    choix: formData.type.toUpperCase() as Annonce['choix'],
+type: formData.type,
     contenu: formData.contenu,
     photo1: photo1Url,
     photo2: photo2Url,

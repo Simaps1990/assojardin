@@ -9,6 +9,8 @@ import {
 } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
 import { supabase } from '../../supabaseClient';
+import { Megaphone } from 'lucide-react';
+const [annoncesCount, setAnnoncesCount] = useState<number>(0);
 
 const AdminDashboard: React.FC = () => {
   const { blogPosts, events } = useContent();
@@ -61,6 +63,20 @@ useEffect(() => {
   fetchNonTraitees();
   const interval = setInterval(fetchNonTraitees, 30000);
   return () => clearInterval(interval);
+const fetchAnnoncesValidees = async () => {
+  const { count, error } = await supabase
+    .from('annonces')
+    .select('*', { count: 'exact', head: true })
+    .eq('statut', 'validé');
+
+  if (!error) {
+    setAnnoncesCount(count || 0);
+  }
+};
+
+fetchAnnoncesValidees();
+
+
 }, [associationContent]);
 
 
@@ -129,6 +145,19 @@ useEffect(() => {
 </div>
 
         </Link>
+
+<Link to="/admin/annonces" className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors">
+  <div className="flex items-center gap-4">
+    <div className="bg-yellow-100 p-3 rounded-full flex items-center justify-center">
+      <Megaphone className="text-yellow-600" size={24} />
+    </div>
+    <div className="flex flex-col justify-center">
+      <p className="text-neutral-500 text-sm">Annonces</p>
+<p className="text-2xl">{annoncesCount}</p>
+    </div>
+  </div>
+</Link>
+
 
         <div className="bg-white rounded-lg shadow-sm p-6">
 <div className="flex items-center gap-4">

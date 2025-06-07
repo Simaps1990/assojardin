@@ -10,7 +10,9 @@ import {
   Menu,
   X,
   Home,
+  Megaphone,
 } from 'lucide-react';
+
 import { useAuth } from '../../context/AuthContext';
 //import { supabase } from '../../supabaseClient';
 import { useContent } from '../../context/ContentContext';
@@ -73,6 +75,12 @@ useEffect(() => {
         </div>
       ),
     },
+    {
+  path: '/admin/annonces',
+  label: 'Annonces',
+  icon: <Megaphone size={20} />,
+},
+
     {
       path: '/admin/settings',
       label: 'Paramètres',
