@@ -214,7 +214,9 @@ const MeteoConseilsSection: React.FC = () => {
     <span
       key={i}
       className={
-        a.includes('g/m³') ? `font-medium ${getAllergyColor(a)}` : 'text-green-600'
+        a === 'Aucun allergène préoccupant actuellement'
+          ? 'text-green-600'
+          : `font-medium ${getAllergyColor(a)}`
       }
     >
       {a}
@@ -222,6 +224,7 @@ const MeteoConseilsSection: React.FC = () => {
     </span>
   ))}
 </li>
+
 
 
         </ul>
