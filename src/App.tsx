@@ -38,7 +38,7 @@ const PublicLayout: React.FC<{
 }> = ({ children, headerRef }) => (
   <>
     <Header ref={headerRef} />
-    <main className="pt-16 md:pt-0">{children}</main> {/* ← Ajout ici */}
+<main>{children}</main>
     <Footer />
   </>
 );
