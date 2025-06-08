@@ -12,7 +12,7 @@ const [confirmImageDelete, setConfirmImageDelete] = useState<{ id: string; field
 
   const startEdit = (annonce: Annonce) => {
     setEditingId(annonce.id);
-    setEditedAnnonce(annonce);
+setEditedAnnonce({ ...annonce }); // copie indépendante
 
   };
 
@@ -118,35 +118,43 @@ setEditingId(null);
               )}
 
               <div className="flex gap-4 pt-2">
-                {annonce.photo1 && (
-                  <div className="flex flex-col items-start">
-                    <img src={annonce.photo1} className="h-24 rounded object-cover" alt="photo1" />
-                    {editingId === annonce.id && (
-  <button
-  onClick={() => setConfirmImageDelete({ id: annonce.id, field: 'photo1' })}
-  className="text-red-600 text-sm mt-1 inline-block whitespace-nowrap"
->
-  Supprimer l’image
-</button>
+{editingId === annonce.id
+  ? editedAnnonce.photo1 && (
+      <div className="flex flex-col items-start">
+        <img src={editedAnnonce.photo1} className="h-24 rounded object-cover" alt="photo1" />
+        <button
+          onClick={() => setConfirmImageDelete({ id: annonce.id, field: 'photo1' })}
+          className="text-red-600 text-sm mt-1 inline-block whitespace-nowrap"
+        >
+          Supprimer l’image
+        </button>
+      </div>
+    )
+  : annonce.photo1 && (
+      <div className="flex flex-col items-start">
+        <img src={annonce.photo1} className="h-24 rounded object-cover" alt="photo1" />
+      </div>
+    )}
 
-                    )}
-                  </div>
-                )}
 
-                {annonce.photo2 && (
-                  <div className="flex flex-col items-start">
-                    <img src={annonce.photo2} className="h-24 rounded object-cover" alt="photo2" />
-                    {editingId === annonce.id && (
-<button
-  onClick={() => setConfirmImageDelete({ id: annonce.id, field: 'photo2' })}
-  className="text-red-600 text-sm mt-1 inline-block whitespace-nowrap"
->
-  Supprimer l’image
-</button>
+{editingId === annonce.id
+  ? editedAnnonce.photo2 && (
+      <div className="flex flex-col items-start">
+        <img src={editedAnnonce.photo2} className="h-24 rounded object-cover" alt="photo2" />
+        <button
+          onClick={() => setConfirmImageDelete({ id: annonce.id, field: 'photo2' })}
+          className="text-red-600 text-sm mt-1 inline-block whitespace-nowrap"
+        >
+          Supprimer l’image
+        </button>
+      </div>
+    )
+  : annonce.photo2 && (
+      <div className="flex flex-col items-start">
+        <img src={annonce.photo2} className="h-24 rounded object-cover" alt="photo2" />
+      </div>
+    )}
 
-                    )}
-                  </div>
-                )}
               </div>
 
               <div className="flex gap-4 pt-3">
