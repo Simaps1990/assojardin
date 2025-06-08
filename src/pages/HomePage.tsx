@@ -9,7 +9,7 @@ import MeteoConseilsSection from '../components/ui/MeteoConseilsSection'; // ada
 const HomePage: React.FC = () => {
 
 
-  const { blogPosts, events, associationContent } = useContent();
+const { blogPosts, events, associationContent, annonces } = useContent();
 
 const titreAccueil = associationContent?.titreAccueil;
 const texteIntro = associationContent?.texteIntro;
@@ -184,6 +184,44 @@ return (
         </div>
       </div>
     </section>
+{/* Dernière annonce validée */}
+<section className="pt-9 pb-16 bg-neutral-50">
+  <div className="container-custom">
+    <div className="flex justify-between items-center mb-2">
+      <Link
+        to="/annonces"
+        className="text-3xl font-heading font-bold hover:underline"
+      >
+        Les petites annonces
+      </Link>
+      <Link
+        to="/annonces"
+        className="flex items-center text-primary-600 hover:text-primary-700"
+      >
+        Voir toutes les annonces <ChevronRight size={16} />
+      </Link>
+    </div>
+
+    {annonces.length > 0 ? (
+      <div className="bg-white p-6 rounded-lg shadow">
+<p className="text-sm text-neutral-400 mb-1">
+  {new Date(annonces[0].created_at ?? annonces[0].date ?? '').toLocaleDateString()}
+</p>
+
+        <h3 className="text-xl font-semibold mb-2 text-primary-700">
+          {annonces[0].type?.toUpperCase()}
+        </h3>
+        <p className="text-neutral-700 whitespace-pre-line">
+          {annonces[0].contenu || 'Contenu non renseigné.'}
+        </p>
+      </div>
+    ) : (
+      <p className="text-neutral-500">
+        Aucune annonce n’a encore été validée.
+      </p>
+    )}
+  </div>
+</section>
 
     {/* Call to Action */}
     <section className="py-16 bg-primary-700 text-white">
