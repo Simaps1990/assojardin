@@ -104,7 +104,7 @@ const sortedAnnonces = [...annonces].sort((a, b) => {
           {submitted ? (
             <p className="text-green-600 font-medium">Annonce envoyée, en attente de validation.</p>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
+<form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="font-medium">Nom Prénom *</label>
                 <input type="text" name="nom" value={formData.nom} onChange={handleChange} className="w-full border px-3 py-2 rounded" required />
@@ -127,7 +127,7 @@ const sortedAnnonces = [...annonces].sort((a, b) => {
                   <option value="échange">Échange</option>
                 </select>
               </div>
-              <div>
+              <div className="col-span-2">
                 <label className="font-medium">Contenu de l'annonce</label>
                 <textarea name="contenu" value={formData.contenu} onChange={handleChange} className="w-full border px-3 py-2 rounded" rows={4} />
               </div>
@@ -147,12 +147,16 @@ const sortedAnnonces = [...annonces].sort((a, b) => {
     }
   />
 </div>
-<div>
+<div className="col-span-2">
   <label className="font-medium">Captcha</label>
   <input type="text" placeholder="Écrire: SJOV" className="w-full border px-3 py-2 rounded" required />
 </div>
 
-              <button type="submit" className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Envoyer</button>
+<div className="col-span-2">
+  <button type="submit" className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+    Envoyer
+  </button>
+</div>
             </form>
           )}
         </div>
