@@ -58,7 +58,7 @@ const [formData, setFormData] = useState<{
   const [submitted, setSubmitted] = useState(false);
 const photo1Ref = useRef<HTMLInputElement>(null);
 const photo2Ref = useRef<HTMLInputElement>(null);
-
+const [fullscreenImage, setFullscreenImage] = useState<{ current: string; next?: string } | null>(null);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -254,14 +254,80 @@ className="text-red-600 text-sm mt-1 inline-block whitespace-nowrap"
 </p>
 <h3 className="text-lg font-semibold mb-2">{post.type?.toUpperCase()}</h3>
                 <p className="text-neutral-700 whitespace-pre-line">{post.contenu}</p>
-                {post.photo1 && <img src={post.photo1} alt="photo1" className="mt-3 rounded" />}
-              </div>
+<p className="text-sm text-neutral-500 italic mt-2">
+  {post.nom} • {post.telephone} {post.email && `• ${post.email}`}
+</p>
+{(post.photo1 || post.photo2) && (
+  <div className="flex gap-3 mt-3">
+    {post.photo1 && (
+      <img
+        src={post.photo1}
+        alt="photo1"
+        className="w-32 h-32 object-cover rounded cursor-pointer"
+        onClick={() =>
+          setFullscreenImage({ current: post.photo1 || '', next: post.photo2 || undefined })
+        }
+      />
+    )}
+    {post.photo2 && (
+      <img
+        src={post.photo2}
+        alt="photo2"
+        className="w-32 h-32 object-cover rounded cursor-pointer"
+        onClick={() =>
+          setFullscreenImage({ current: post.photo2 || '', next: post.photo1 || undefined })
+        }
+      />
+    )}
+  </div>
+)}            
+
+</div>
             ))}
           </div>
         ) : (
           <p className="text-neutral-500 text-center">Aucune annonce pour le moment.</p>
         )}
       </div>
+      {fullscreenImage && (
+  <div
+    className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+    onClick={() => setFullscreenImage(null)}
+  >
+    <div className="relative" onClick={(e) => e.stopPropagation()}>
+<img src={fullscreenImage.current || ''} className="max-h-[80vh] max-w-[90vw] rounded shadow-lg" />      {fullscreenImage.next && (
+  <button
+    onClick={() =>
+setFullscreenImage({
+  current: fullscreenImage.next || '',
+  next: fullscreenImage.current || ''
+})    }
+    className="absolute top-1/2 left-2 transform -translate-y-1/2 text-white text-2xl bg-black/50 px-2 rounded"
+  >
+    ←
+  </button>
+)}
+{fullscreenImage.next && (
+  <button
+    onClick={() =>
+      setFullscreenImage({
+        current: fullscreenImage.next as string,
+        next: fullscreenImage.current
+      })
+    }
+    className="absolute top-1/2 right-2 transform -translate-y-1/2 text-white text-2xl bg-black/50 px-2 rounded"
+  >
+    →
+  </button>
+)}
+
+      <button
+        onClick={() => setFullscreenImage(null)}
+        className="absolute top-2 right-2 text-white text-xl bg-black/60 px-2 rounded"
+      >✕</button>
+    </div>
+  </div>
+)}
     </div>
   );
 };
