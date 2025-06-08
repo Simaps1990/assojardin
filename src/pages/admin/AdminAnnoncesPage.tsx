@@ -8,6 +8,7 @@ const AdminAnnoncesPage = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editedAnnonce, setEditedAnnonce] = useState<Partial<Annonce>>({});
   const [confirmId, setConfirmId] = useState<string | null>(null);
+const [confirmImageDelete, setConfirmImageDelete] = useState<{ id: string; field: 'photo1' | 'photo2' } | null>(null);
 
   const startEdit = (annonce: Annonce) => {
     setEditingId(annonce.id);
@@ -119,15 +120,13 @@ const AdminAnnoncesPage = () => {
                   <div className="flex flex-col items-start">
                     <img src={annonce.photo1} className="h-24 rounded object-cover" alt="photo1" />
                     {editingId === annonce.id && (
-                      <button
-                        onClick={async () => {
-                          await supabase.from('annonces').update({ photo1: null }).eq('id', annonce.id);
-                          fetchAnnonces();
-                        }}
-                        className="text-red-600 text-sm mt-1 inline-block whitespace-nowrap"
-                      >
-                        Supprimer l’image
-                      </button>
+  <button
+  onClick={() => setConfirmImageDelete({ id: annonce.id, field: 'photo1' })}
+  className="text-red-600 text-sm mt-1 inline-block whitespace-nowrap"
+>
+  Supprimer l’image
+</button>
+
                     )}
                   </div>
                 )}
@@ -136,15 +135,13 @@ const AdminAnnoncesPage = () => {
                   <div className="flex flex-col items-start">
                     <img src={annonce.photo2} className="h-24 rounded object-cover" alt="photo2" />
                     {editingId === annonce.id && (
-                      <button
-                        onClick={async () => {
-                          await supabase.from('annonces').update({ photo2: null }).eq('id', annonce.id);
-                          fetchAnnonces();
-                        }}
-                        className="text-red-600 text-sm mt-1 inline-block whitespace-nowrap"
-                      >
-                        Supprimer l’image
-                      </button>
+<button
+  onClick={() => setConfirmImageDelete({ id: annonce.id, field: 'photo2' })}
+  className="text-red-600 text-sm mt-1 inline-block whitespace-nowrap"
+>
+  Supprimer l’image
+</button>
+
                     )}
                   </div>
                 )}
@@ -221,6 +218,39 @@ const AdminAnnoncesPage = () => {
           ))}
         </div>
       )}
+{confirmImageDelete && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-lg shadow-lg max-w-sm w-full p-6 text-center">
+      <h2 className="text-xl font-semibold mb-4 text-red-700">Confirmer la suppression</h2>
+      <p className="mb-6">Êtes-vous sûr de vouloir supprimer cette image ?</p>
+      <div className="flex justify-center gap-4">
+        <button
+          onClick={() => setConfirmImageDelete(null)}
+          className="px-4 py-2 bg-neutral-400 text-white rounded hover:bg-neutral-500"
+        >
+          Annuler
+        </button>
+        <button
+          onClick={async () => {
+            if (confirmImageDelete) {
+              await supabase
+                .from('annonces')
+                .update({ [confirmImageDelete.field]: null })
+                .eq('id', confirmImageDelete.id);
+              setConfirmImageDelete(null);
+              fetchAnnonces();
+            }
+          }}
+          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+        >
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
     </div>
   );
 };
