@@ -17,8 +17,9 @@ const backgroundImageUrl = associationContent?.imageAccueil;
 
 
 const sortedPosts = [...blogPosts].sort((a, b) =>
-  new Date(b.created_at || b.date).getTime() - new Date(a.created_at || a.date).getTime()
+  new Date(b.date).getTime() - new Date(a.date).getTime()
 );
+
 
 
 const latestPost = sortedPosts[0] ?? null;
@@ -186,6 +187,11 @@ return (
         </div>
       </div>
     </section>
+
+<div className="flex justify-center my-6">
+      <hr className="w-1/2 border-t border-neutral-300" />
+    </div>
+
 {/* Dernière annonce validée */}
 <section className="pt-9 pb-16 bg-neutral-50">
   <div className="container-custom">

@@ -184,20 +184,24 @@ useEffect(() => {
 }, []);
 
 useEffect(() => {
-const fetchBlogPosts = async () => {
-  const { data, error } = await supabase
-    .from('blogPosts')
-    .select('*')
-    .order('created_at', { ascending: false }); // ✅ utiliser "date" au lieu de "created_at"
+  const fetchBlogPosts = async () => {
+    const { data, error } = await supabase
+      .from('blogPosts')
+      .select('*')
+      .order('date', { ascending: false }); // ✅ ordre basé sur le champ "date"
 
-  if (error) {
-    console.error('Erreur de chargement des articles Supabase:', error.message);
-    return;
-  }
+    if (error) {
+      console.error('❌ Erreur de chargement des articles Supabase:', error.message);
+      return;
+    }
 
-  setBlogPosts(data || []);
-};
+    if (!data || data.length === 0) {
+      console.warn('⚠️ Aucun article de blog reçu.');
+    }
 
+    console.log('✅ Blog posts chargés :', data);
+    setBlogPosts(data || []);
+  };
 
   fetchBlogPosts();
 }, []);
