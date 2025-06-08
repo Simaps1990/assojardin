@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useContent } from '../context/ContentContext';
 import { supabase } from '../supabaseClient';
 const uploadToCloudinary = async (file: File): Promise<string | null> => {
@@ -7,10 +7,20 @@ const uploadToCloudinary = async (file: File): Promise<string | null> => {
   formData.append('upload_preset', 'sjov_upload');
 
   try {
-    const res = await fetch('https://api.cloudinary.com/v1_1/sjov/image/upload', {
-      method: 'POST',
-      body: formData,
-    });
+    console.log('📤 Envoi Cloudinary :', {
+  fileName: file.name,
+  size: file.size,
+  type: file.type,
+});
+const res = await fetch('https://api.cloudinary.com/v1_1/sjov/image/upload', {
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+  },
+  body: formData,
+});
+
+console.log("📥 Cloudinary Response Status:", res.status);
 
     const data = await res.json();
 
@@ -46,6 +56,8 @@ const [formData, setFormData] = useState<{
     photo2: null,
   });
   const [submitted, setSubmitted] = useState(false);
+const photo1Ref = useRef<HTMLInputElement>(null);
+const photo2Ref = useRef<HTMLInputElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -145,14 +157,16 @@ const sortedAnnonces = [...annonces].sort((a, b) => {
 <div className="flex gap-8 items-start">
 <div className="flex flex-col">
   <label className="font-medium">Photo 1</label>
-  <input
-    type="file"
-    name="photo1"
-    accept="image/*"
-    onChange={(e) =>
-      setFormData((prev) => ({ ...prev, photo1: e.target.files?.[0] ?? null }))
-    }
-  />
+<input
+  ref={photo1Ref}
+  type="file"
+  name="photo1"
+  accept="image/*"
+  onChange={(e) =>
+    setFormData((prev) => ({ ...prev, photo1: e.target.files?.[0] ?? null }))
+  }
+/>
+
 
   {formData.photo1 && (
     <div className="relative mt-2 w-32">
@@ -163,8 +177,11 @@ const sortedAnnonces = [...annonces].sort((a, b) => {
       />
       <button
         type="button"
-        onClick={() => setFormData((prev) => ({ ...prev, photo1: null }))}
-        className="text-red-600 text-sm underline mt-1"
+onClick={() => {
+  setFormData((prev) => ({ ...prev, photo1: null }));
+  if (photo1Ref.current) photo1Ref.current.value = '';
+}}
+className="text-red-600 text-sm underline mt-1 inline-block whitespace-nowrap"
       >
         Supprimer l’image
       </button>
@@ -172,10 +189,10 @@ const sortedAnnonces = [...annonces].sort((a, b) => {
   )}
 </div>
 
-
 <div className="flex flex-col">
   <label className="font-medium">Photo 2</label>
   <input
+    ref={photo2Ref}
     type="file"
     name="photo2"
     accept="image/*"
@@ -193,14 +210,18 @@ const sortedAnnonces = [...annonces].sort((a, b) => {
       />
       <button
         type="button"
-        onClick={() => setFormData((prev) => ({ ...prev, photo2: null }))}
-        className="text-red-600 text-sm underline mt-1"
+        onClick={() => {
+          setFormData((prev) => ({ ...prev, photo2: null }));
+          if (photo2Ref.current) photo2Ref.current.value = '';
+        }}
+        className="text-red-600 text-sm underline mt-1 inline-block whitespace-nowrap"
       >
         Supprimer l’image
       </button>
     </div>
   )}
 </div>
+
 
 </div>
 
