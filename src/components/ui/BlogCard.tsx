@@ -17,17 +17,18 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, isFeature = false }) => {
       }`}
     >
       {/* Image principale */}
-      <div
-        className={`relative overflow-hidden ${
-          isFeature ? 'md:w-2/5' : 'h-48'
-        }`}
-      >
-        <img
-          src={post.image}
-          alt={post.title}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-        />
-      </div>
+<div
+  className={`relative overflow-hidden ${
+    isFeature ? 'md:w-2/5 h-64' : 'h-64'
+  }`}
+>
+  <img
+    src={post.image}
+    alt={post.title}
+    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+  />
+</div>
+
 
       {/* Contenu texte + bouton */}
       <div

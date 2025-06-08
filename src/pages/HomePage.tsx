@@ -104,15 +104,18 @@ return (
             Tous nos articles de Blog <ChevronRight size={16} />
           </Link>
         </div>
-        {latestPost ? (
-          <Link to={`/blog/${latestPost.id}`} className="block">
-            <BlogCard post={latestPost} isFeature={true} />
-          </Link>
-        ) : (
-          <p className="text-neutral-500">
-            Aucun article de blog n'a été publié pour le moment.
-          </p>
-        )}
+{latestPost ? (
+  <div className="max-w-4xl mx-auto">
+    <Link to={`/blog/${latestPost.id}`} className="block">
+      <BlogCard post={latestPost} isFeature={true} />
+    </Link>
+  </div>
+) : (
+  <p className="text-neutral-500">
+    Aucun article de blog n'a été publié pour le moment.
+  </p>
+)}
+
       </div>
     </section>
 
