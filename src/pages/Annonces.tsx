@@ -4,19 +4,28 @@ import { supabase } from '../supabaseClient';
 const uploadToCloudinary = async (file: File): Promise<string | null> => {
   const formData = new FormData();
   formData.append('file', file);
-formData.append('upload_preset', 'sjov_upload');
+  formData.append('upload_preset', 'sjov_upload');
+
   try {
-const res = await fetch('https://api.cloudinary.com/v1_1/sjov/image/upload', {
+    const res = await fetch('https://api.cloudinary.com/v1_1/sjov/image/upload', {
       method: 'POST',
       body: formData,
     });
+
     const data = await res.json();
+
+    if (!res.ok || !data.secure_url) {
+      console.error('Erreur Cloudinary :', data);
+      return null;
+    }
+
     return data.secure_url;
   } catch (err) {
-    console.error('Erreur upload Cloudinary :', err);
+    console.error('Exception Cloudinary :', err);
     return null;
   }
 };
+
 const AnnoncesPage: React.FC = () => {
 const { annonces, fetchAnnonces } = useContent();
 const [formData, setFormData] = useState<{
@@ -55,9 +64,12 @@ if (!captcha || captcha.value.trim().toLowerCase() !== 'sjov') {
   alert("Captcha incorrect. Veuillez écrire : SJOV");
   return;
 }
+const photo1Url = formData.photo1 ? await uploadToCloudinary(formData.photo1) : '';
+const photo2Url = formData.photo2 ? await uploadToCloudinary(formData.photo2) : '';
 
-  const photo1Url = formData.photo1 ? await uploadToCloudinary(formData.photo1) : '';
-  const photo2Url = formData.photo2 ? await uploadToCloudinary(formData.photo2) : '';
+console.log("Photo 1 URL =>", photo1Url);
+console.log("Photo 2 URL =>", photo2Url);
+
 
 const { error } = await supabase.from('annonces').insert([{
   nom: formData.nom,
@@ -131,43 +143,65 @@ const sortedAnnonces = [...annonces].sort((a, b) => {
                 <textarea name="contenu" value={formData.contenu} onChange={handleChange} className="w-full border px-3 py-2 rounded" rows={4} />
               </div>
 <div className="flex gap-8 items-start">
-  <div className="flex flex-col">
-    <label className="font-medium">Photo 1</label>
-    <input
-      type="file"
-      name="photo1"
-      accept="image/*"
-      onChange={(e) =>
-        setFormData((prev) => ({ ...prev, photo1: e.target.files?.[0] ?? null }))
-      }
-    />
-    {formData.photo1 && (
+<div className="flex flex-col">
+  <label className="font-medium">Photo 1</label>
+  <input
+    type="file"
+    name="photo1"
+    accept="image/*"
+    onChange={(e) =>
+      setFormData((prev) => ({ ...prev, photo1: e.target.files?.[0] ?? null }))
+    }
+  />
+
+  {formData.photo1 && (
+    <div className="relative mt-2 w-32">
       <img
         src={URL.createObjectURL(formData.photo1)}
         alt="Aperçu photo 1"
-        className="w-32 h-32 object-cover rounded mt-2 border"
+        className="w-32 h-32 object-cover rounded border"
       />
-    )}
-  </div>
+      <button
+        type="button"
+        onClick={() => setFormData((prev) => ({ ...prev, photo1: null }))}
+        className="text-red-600 text-sm underline mt-1"
+      >
+        Supprimer l’image
+      </button>
+    </div>
+  )}
+</div>
 
-  <div className="flex flex-col">
-    <label className="font-medium">Photo 2</label>
-    <input
-      type="file"
-      name="photo2"
-      accept="image/*"
-      onChange={(e) =>
-        setFormData((prev) => ({ ...prev, photo2: e.target.files?.[0] ?? null }))
-      }
-    />
-    {formData.photo2 && (
+
+<div className="flex flex-col">
+  <label className="font-medium">Photo 2</label>
+  <input
+    type="file"
+    name="photo2"
+    accept="image/*"
+    onChange={(e) =>
+      setFormData((prev) => ({ ...prev, photo2: e.target.files?.[0] ?? null }))
+    }
+  />
+
+  {formData.photo2 && (
+    <div className="relative mt-2 w-32">
       <img
         src={URL.createObjectURL(formData.photo2)}
         alt="Aperçu photo 2"
-        className="w-32 h-32 object-cover rounded mt-2 border"
+        className="w-32 h-32 object-cover rounded border"
       />
-    )}
-  </div>
+      <button
+        type="button"
+        onClick={() => setFormData((prev) => ({ ...prev, photo2: null }))}
+        className="text-red-600 text-sm underline mt-1"
+      >
+        Supprimer l’image
+      </button>
+    </div>
+  )}
+</div>
+
 </div>
 
 <div className="col-span-2">
