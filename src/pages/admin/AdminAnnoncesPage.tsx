@@ -85,6 +85,7 @@ const supprimerAnnonce = async (id: string) => {
   </>
 )}
 
+
 <div className="flex gap-4 pt-2">
   {annonce.photo1 && (
     <div className="flex flex-col items-start">
