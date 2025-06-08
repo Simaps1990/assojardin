@@ -59,17 +59,17 @@ if (!captcha || captcha.value.trim().toLowerCase() !== 'sjov') {
   const photo1Url = formData.photo1 ? await uploadToCloudinary(formData.photo1) : '';
   const photo2Url = formData.photo2 ? await uploadToCloudinary(formData.photo2) : '';
 
-  const { error } = await supabase.from('annonces').insert([{
-    nom: formData.nom,
-    email: formData.email,
-    telephone: formData.telephone,
-type: formData.type,
-    contenu: formData.contenu,
-    photo1: photo1Url,
-    photo2: photo2Url,
-    statut: 'en_attente',
-    isValidated: false,
-  }]);
+const { error } = await supabase.from('annonces').insert([{
+  nom: formData.nom,
+  email: formData.email,
+  telephone: formData.telephone,
+  type: formData.type,
+  contenu: formData.contenu,
+  photo1: photo1Url,
+  photo2: photo2Url,
+  statut: 'en_attente'
+}]);
+
 
   if (error) {
     alert("Erreur lors de l'envoi de l'annonce");

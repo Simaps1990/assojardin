@@ -205,7 +205,7 @@ return (
     {annonces.length > 0 ? (
       <div className="bg-white p-6 rounded-lg shadow">
 <p className="text-sm text-neutral-400 mb-1">
-  {new Date(annonces[0].created_at ?? annonces[0].date ?? '').toLocaleDateString()}
+new Date(annonces[0].created_at ?? '').toLocaleDateString()
 </p>
 
         <h3 className="text-xl font-semibold mb-2 text-primary-700">

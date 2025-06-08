@@ -34,12 +34,12 @@ const saveEdit = async (id: string) => {
     fetchAnnonces();
   }, []);
 
-  const validerAnnonce = async (id: number) => {
+const validerAnnonce = async (id: string) => {
     await supabase.from('annonces').update({ statut: 'validé' }).eq('id', id);
     fetchAnnonces();
   };
 
-  const supprimerAnnonce = async (id: number) => {
+const supprimerAnnonce = async (id: string) => {
     await supabase.from('annonces').delete().eq('id', id);
     fetchAnnonces();
   };
@@ -73,13 +73,14 @@ const saveEdit = async (id: string) => {
       className="border rounded px-2 py-1 w-full"
     />
     <input
-      value={editedAnnonce.phone}
-      onChange={(e) => setEditedAnnonce({ ...editedAnnonce, phone: e.target.value })}
+      value={editedAnnonce.telephone}
+      onChange={(e) => setEditedAnnonce({ ...editedAnnonce, telephone: e.target.value })}
       className="border rounded px-2 py-1 w-full"
     />
     <input
       value={editedAnnonce.type}
-      onChange={(e) => setEditedAnnonce({ ...editedAnnonce, type: e.target.value })}
+      onChange={(e) => setEditedAnnonce({ ...editedAnnonce, type: e.target.value as 'recherche' | 'vend' | 'donne' | 'échange' })
+}
       className="border rounded px-2 py-1 w-full"
     />
     <textarea
@@ -91,7 +92,7 @@ const saveEdit = async (id: string) => {
 ) : (
   <>
     <div className="font-semibold">{annonce.nom}</div>
-    <div className="text-sm text-gray-600">{annonce.email} | {annonce.phone}</div>
+    <div className="text-sm text-gray-600">{annonce.email} | {annonce.telephone}</div>
     <div className="text-sm">Type : {annonce.type}</div>
     <div className="text-gray-800">{annonce.contenu}</div>
   </>

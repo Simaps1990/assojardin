@@ -70,20 +70,17 @@ export interface GardenApplication {
   status: 'pending' | 'approved' | 'rejected';
 }
 
-export interface Annonce {
+export type Annonce = {
   id: string;
   nom: string;
   email?: string;
-  phone: string;
-  choix: 'RECHERCHE' | 'VEND' | 'DONNE' | 'ECHANGE';
-  message?: string;
-  contenu?: string; // ✅ garder pour compat compatibilité
-  type?: string;    // ✅ idem
+  telephone: string;
+  type: 'recherche' | 'vend' | 'donne' | 'échange';
+  contenu: string;
   photo1?: string;
   photo2?: string;
-  statut: 'en_attente' | 'validé' | 'rejeté'; // ✅
-  isValidated: boolean;
-  date: string;
-  created_at?: string; // ✅ utilisé dans le tri
-}
+  statut: 'en_attente' | 'validé' | 'refusé';
+  created_at?: string;
+};
+
 

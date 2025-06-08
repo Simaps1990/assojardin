@@ -27,18 +27,19 @@ const AnnonceCard: React.FC<AnnonceCardProps> = ({ annonce }) => {
           <div className="flex flex-col space-y-1 text-sm text-neutral-500 mb-3">
             <div className="flex items-center">
               <Calendar size={16} className="mr-2 text-primary-500" />
-              <span>{formatDate(annonce.date)}</span>
+<span>{annonce.created_at ? formatDate(annonce.created_at) : 'Date inconnue'}</span>
             </div>
             <div className="flex items-center">
               <User size={16} className="mr-2 text-primary-500" />
               <span>{annonce.nom}</span>
             </div>
-            {annonce.phone && (
-              <div className="flex items-center">
-                <Phone size={16} className="mr-2 text-primary-500" />
-                <span>{annonce.phone}</span>
-              </div>
-            )}
+{annonce.telephone && (
+  <div className="flex items-center">
+    <Phone size={16} className="mr-2 text-primary-500" />
+    <span>{annonce.telephone}</span>
+  </div>
+)}
+
             {annonce.email && (
               <div className="flex items-center">
                 <Mail size={16} className="mr-2 text-primary-500" />
@@ -47,13 +48,14 @@ const AnnonceCard: React.FC<AnnonceCardProps> = ({ annonce }) => {
             )}
           </div>
 
-          <h3 className="font-heading font-semibold text-xl mb-2 text-neutral-800">
-            {annonce.choix} : {annonce.message?.slice(0, 30)}...
-          </h3>
+<h3 className="font-heading font-semibold text-xl mb-2 text-neutral-800">
+  {annonce.type?.toUpperCase()}
+</h3>
 
-          <p className="text-sm text-gray-700 whitespace-pre-line">
-            {annonce.message}
-          </p>
+<p className="text-sm text-gray-700 whitespace-pre-line">
+  {annonce.contenu}
+</p>
+
         </div>
 
         {annonce.photo2 && (
