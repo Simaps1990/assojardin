@@ -4,7 +4,7 @@ import { supabase } from '../supabaseClient';
 const uploadToCloudinary = async (file: File): Promise<string | null> => {
   const formData = new FormData();
   formData.append('file', file);
-  formData.append('upload_preset', 'sjov_upload');
+formData.append('upload_preset', 'site_global_uploads');
 
   try {
     console.log('📤 Envoi Cloudinary :', {
@@ -181,7 +181,7 @@ onClick={() => {
   setFormData((prev) => ({ ...prev, photo1: null }));
   if (photo1Ref.current) photo1Ref.current.value = '';
 }}
-className="text-red-600 text-sm underline mt-1 inline-block whitespace-nowrap"
+className="text-red-600 text-sm mt-1 inline-block whitespace-nowrap"
       >
         Supprimer l’image
       </button>
@@ -214,7 +214,7 @@ className="text-red-600 text-sm underline mt-1 inline-block whitespace-nowrap"
           setFormData((prev) => ({ ...prev, photo2: null }));
           if (photo2Ref.current) photo2Ref.current.value = '';
         }}
-        className="text-red-600 text-sm underline mt-1 inline-block whitespace-nowrap"
+        className="text-red-600 text-sm mt-1 inline-block whitespace-nowrap"
       >
         Supprimer l’image
       </button>
