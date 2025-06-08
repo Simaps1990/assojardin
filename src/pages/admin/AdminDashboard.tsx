@@ -3,8 +3,6 @@ import {
   FileText,
   Calendar,
   Users,
- // Settings,
-  Plus
 } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
 import { supabase } from '../../supabaseClient';
@@ -104,56 +102,71 @@ fetchAnnoncesValidees();
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <a href="/admin/blog" className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors">
-<div className="flex items-center gap-4">
-  <div className="bg-primary-100 p-3 rounded-full flex items-center justify-center">
-    <FileText className="text-primary-600" size={24} />
+<button
+  onClick={() => window.location.href = '/admin/blog'}
+  className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors w-full text-left"
+>
+  <div className="flex items-center gap-4">
+    <div className="bg-primary-100 p-3 rounded-full flex items-center justify-center">
+      <FileText className="text-primary-600" size={24} />
+    </div>
+    <div className="flex flex-col justify-center">
+      <p className="text-neutral-500 text-sm">Articles</p>
+      <p className="text-2xl">{blogPosts.length}</p>
+    </div>
   </div>
-  <div className="flex flex-col justify-center">
-    <p className="text-neutral-500 text-sm">Articles</p>
-    <p className="text-2xl">{blogPosts.length}</p>
+</button>
+
+
+
+<button
+  onClick={() => window.location.href = '/admin/events'}
+  className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors w-full text-left"
+>
+  <div className="flex items-center gap-4">
+    <div className="bg-accent-100 p-3 rounded-full flex items-center justify-center">
+      <Calendar className="text-accent-600" size={24} />
+    </div>
+    <div className="flex flex-col justify-center">
+      <p className="text-neutral-500 text-sm">Événements à venir</p>
+      <p className="text-2xl">{upcomingEvents.length}</p>
+    </div>
   </div>
-</div>
+</button>
 
-        </a>
 
-        <a href="/admin/events" className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors">
-<div className="flex items-center gap-4">
-  <div className="bg-accent-100 p-3 rounded-full flex items-center justify-center">
-    <Calendar className="text-accent-600" size={24} />
+
+<button
+  onClick={() => window.location.href = '/admin/applications'}
+  className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors w-full text-left"
+>
+  <div className="flex items-center gap-4">
+    <div className="bg-secondary-100 p-3 rounded-full flex items-center justify-center">
+      <FileText className="text-secondary-600" size={24} />
+    </div>
+    <div className="flex flex-col justify-center">
+      <p className="text-neutral-500 text-sm">Demandes de jardin</p>
+      <p className="text-2xl">{nonTraitees}</p>
+    </div>
   </div>
-  <div className="flex flex-col justify-center">
-    <p className="text-neutral-500 text-sm">Événements à venir</p>
-    <p className="text-2xl">{upcomingEvents.length}</p>
-  </div>
-</div>
+</button>
 
-        </a>
 
-        <a href="/admin/applications" className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors">
-<div className="flex items-center gap-4">
-  <div className="bg-secondary-100 p-3 rounded-full flex items-center justify-center">
-    <FileText className="text-secondary-600" size={24} />
-  </div>
-  <div className="flex flex-col justify-center">
-    <p className="text-neutral-500 text-sm">Demandes de jardin</p>
-    <p className="text-2xl">{nonTraitees}</p>
-  </div>
-</div>
-
-        </a>
-
-<a href="/admin/annonces" className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors">
+<button
+  onClick={() => window.location.href = '/admin/annonces'}
+  className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors w-full text-left"
+>
   <div className="flex items-center gap-4">
     <div className="bg-yellow-100 p-3 rounded-full flex items-center justify-center">
       <Megaphone className="text-yellow-600" size={24} />
     </div>
     <div className="flex flex-col justify-center">
       <p className="text-neutral-500 text-sm">Annonces</p>
-<p className="text-2xl">{annoncesCount}</p>
+      <p className="text-2xl">{annoncesCount}</p>
     </div>
   </div>
-</a>
+</button>
+
 
 
         <div className="bg-white rounded-lg shadow-sm p-6">
@@ -178,11 +191,21 @@ fetchAnnoncesValidees();
         <div className="bg-white rounded-lg shadow-sm p-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Articles récents</h2>
-            <a href="/admin/blog"
-              className="btn-primary flex items-center text-sm py-1.5"
-            >
-              <Plus size={16} className="mr-1" /> Nouvel article
-            </a>
+<button
+  onClick={() => window.location.href = '/admin/blog'}
+  className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors w-full text-left"
+>
+  <div className="flex items-center gap-4">
+    <div className="bg-primary-100 p-3 rounded-full flex items-center justify-center">
+      <FileText className="text-primary-600" size={24} />
+    </div>
+    <div className="flex flex-col justify-center">
+      <p className="text-neutral-500 text-sm">Articles</p>
+      <p className="text-2xl">{blogPosts.length}</p>
+    </div>
+  </div>
+</button>
+
           </div>
 
           {recentPosts.length > 0 ? (
@@ -200,11 +223,13 @@ fetchAnnoncesValidees();
 
           {blogPosts.length > 3 && (
             <div className="mt-4 text-center">
-              <a href="/admin/blog"
-                className="text-primary-600 hover:text-primary-700 font-medium text-sm"
-              >
-                Voir tous les articles
-              </a>
+<button
+  onClick={() => window.location.href = '/admin/blog'}
+  className="text-primary-600 hover:text-primary-700 font-medium text-sm"
+>
+  Voir tous les articles
+</button>
+
             </div>
           )}
         </div>
@@ -213,11 +238,21 @@ fetchAnnoncesValidees();
         <div className="bg-white rounded-lg shadow-sm p-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Événements à venir</h2>
-            <a href="/admin/events"
-              className="btn-primary flex items-center text-sm py-1.5"
-            >
-              <Plus size={16} className="mr-1" /> Nouvel événement
-            </a>
+<button
+  onClick={() => window.location.href = '/admin/events'}
+  className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors w-full text-left"
+>
+  <div className="flex items-center gap-4">
+    <div className="bg-accent-100 p-3 rounded-full flex items-center justify-center">
+      <Calendar className="text-accent-600" size={24} />
+    </div>
+    <div className="flex flex-col justify-center">
+      <p className="text-neutral-500 text-sm">Événements à venir</p>
+      <p className="text-2xl">{upcomingEvents.length}</p>
+    </div>
+  </div>
+</button>
+
           </div>
 
           {upcomingEvents.length > 0 ? (
@@ -238,11 +273,13 @@ fetchAnnoncesValidees();
 
           {events.length > 3 && (
             <div className="mt-4 text-center">
-              <a href="/admin/events"
-                className="text-primary-600 hover:text-primary-700 font-medium text-sm"
-              >
-                Voir tous les événements
-              </a>
+<button
+  onClick={() => window.location.href = '/admin/events'}
+  className="text-primary-600 hover:text-primary-700 font-medium text-sm"
+>
+  Voir tous les événements
+</button>
+
             </div>
           )}
         </div>
