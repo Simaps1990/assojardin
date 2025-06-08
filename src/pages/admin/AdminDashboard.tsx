@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import {
   FileText,
   Calendar,
@@ -105,7 +104,7 @@ fetchAnnoncesValidees();
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Link to="/admin/blog" className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors">
+        <a href="/admin/blog" className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors">
 <div className="flex items-center gap-4">
   <div className="bg-primary-100 p-3 rounded-full flex items-center justify-center">
     <FileText className="text-primary-600" size={24} />
@@ -116,9 +115,9 @@ fetchAnnoncesValidees();
   </div>
 </div>
 
-        </Link>
+        </a>
 
-        <Link to="/admin/events" className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors">
+        <a href="/admin/events" className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors">
 <div className="flex items-center gap-4">
   <div className="bg-accent-100 p-3 rounded-full flex items-center justify-center">
     <Calendar className="text-accent-600" size={24} />
@@ -129,9 +128,9 @@ fetchAnnoncesValidees();
   </div>
 </div>
 
-        </Link>
+        </a>
 
-        <Link to="/admin/applications" className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors">
+        <a href="/admin/applications" className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors">
 <div className="flex items-center gap-4">
   <div className="bg-secondary-100 p-3 rounded-full flex items-center justify-center">
     <FileText className="text-secondary-600" size={24} />
@@ -142,9 +141,9 @@ fetchAnnoncesValidees();
   </div>
 </div>
 
-        </Link>
+        </a>
 
-<Link to="/admin/annonces" className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors">
+<a href="/admin/annonces" className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors">
   <div className="flex items-center gap-4">
     <div className="bg-yellow-100 p-3 rounded-full flex items-center justify-center">
       <Megaphone className="text-yellow-600" size={24} />
@@ -154,7 +153,7 @@ fetchAnnoncesValidees();
 <p className="text-2xl">{annoncesCount}</p>
     </div>
   </div>
-</Link>
+</a>
 
 
         <div className="bg-white rounded-lg shadow-sm p-6">
@@ -179,12 +178,11 @@ fetchAnnoncesValidees();
         <div className="bg-white rounded-lg shadow-sm p-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Articles récents</h2>
-            <Link
-              to="/admin/blog"
+            <a href="/admin/blog"
               className="btn-primary flex items-center text-sm py-1.5"
             >
               <Plus size={16} className="mr-1" /> Nouvel article
-            </Link>
+            </a>
           </div>
 
           {recentPosts.length > 0 ? (
@@ -202,12 +200,11 @@ fetchAnnoncesValidees();
 
           {blogPosts.length > 3 && (
             <div className="mt-4 text-center">
-              <Link
-                to="/admin/blog"
+              <a href="/admin/blog"
                 className="text-primary-600 hover:text-primary-700 font-medium text-sm"
               >
                 Voir tous les articles
-              </Link>
+              </a>
             </div>
           )}
         </div>
@@ -216,12 +213,11 @@ fetchAnnoncesValidees();
         <div className="bg-white rounded-lg shadow-sm p-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Événements à venir</h2>
-            <Link
-              to="/admin/events"
+            <a href="/admin/events"
               className="btn-primary flex items-center text-sm py-1.5"
             >
               <Plus size={16} className="mr-1" /> Nouvel événement
-            </Link>
+            </a>
           </div>
 
           {upcomingEvents.length > 0 ? (
@@ -242,12 +238,11 @@ fetchAnnoncesValidees();
 
           {events.length > 3 && (
             <div className="mt-4 text-center">
-              <Link
-                to="/admin/events"
+              <a href="/admin/events"
                 className="text-primary-600 hover:text-primary-700 font-medium text-sm"
               >
                 Voir tous les événements
-              </Link>
+              </a>
             </div>
           )}
         </div>

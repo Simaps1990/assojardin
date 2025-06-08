@@ -1,5 +1,5 @@
 import React, { useState, forwardRef } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Search, Lock, Menu, X } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
 
@@ -49,19 +49,14 @@ const navLinks = [
         {/* Desktop menu */}
         <div className="hidden md:flex items-center gap-4 ml-auto">
           {navLinks.map(({ to, label }) => (
-            <NavLink
-              key={to}
-              to={to}
-              className={({ isActive }) =>
-                `text-sm font-medium ${
-                  isActive
-                    ? 'text-primary-600'
-                    : 'text-neutral-700 hover:text-primary-600'
-                }`
-              }
-            >
-              {label}
-            </NavLink>
+<button
+  key={to}
+  onClick={() => { window.location.href = to; }}
+  className="text-sm font-medium text-neutral-700 hover:text-primary-600"
+>
+  {label}
+</button>
+
           ))}
 
           <form
@@ -100,20 +95,14 @@ const navLinks = [
         <div className="md:hidden px-4 pb-4 animate-slide-down">
           <nav className="flex flex-col items-end gap-3 text-sm font-medium mt-3">
             {navLinks.map(({ to, label }) => (
-              <NavLink
-                key={to}
-                to={to}
-                onClick={() => setMobileOpen(false)}
-                className={({ isActive }) =>
-                  `text-sm font-medium ${
-                    isActive
-                      ? 'text-primary-600'
-                      : 'text-neutral-700 hover:text-primary-600'
-                  }`
-                }
-              >
-                {label}
-              </NavLink>
+<button
+  key={to}
+  onClick={() => { window.location.href = to; }}
+  className="text-sm font-medium text-neutral-700 hover:text-primary-600"
+>
+  {label}
+</button>
+
             ))}
 
             <form
