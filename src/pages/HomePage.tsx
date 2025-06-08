@@ -17,8 +17,9 @@ const backgroundImageUrl = associationContent?.imageAccueil;
 
 
 const sortedPosts = [...blogPosts].sort((a, b) =>
-  new Date(b.date).getTime() - new Date(a.date).getTime()
+  new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
 );
+
 const latestPost = sortedPosts[0] ?? null;
 
 const upcomingEvents = events

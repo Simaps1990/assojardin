@@ -4,10 +4,12 @@ export interface BlogPost {
   content: string;
   excerpt: string;
   image: string;
-imagesannexes?: string[];
+  imagesannexes?: string[];
   date: string;
   author: string;
+  created_at: string; // 👈 AJOUT SEUL ET SUFFISANT
 }
+
 
 
 export interface Event {
