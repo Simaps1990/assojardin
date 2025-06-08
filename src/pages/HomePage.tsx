@@ -189,7 +189,7 @@ return (
       </div>
     </section>
 
-<div className="flex justify-center my-12">
+<div className="flex justify-center pt-10">
       <hr className="w-1/2 border-t border-neutral-300" />
     </div>
 
