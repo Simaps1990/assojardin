@@ -102,19 +102,50 @@ const supprimerAnnonce = async (id: string) => {
                 {annonce.photo1 && (
                   <img src={annonce.photo1} className="h-24 rounded object-cover" alt="photo1" />
                 )}
+                
                 {annonce.photo2 && (
                   <img src={annonce.photo2} className="h-24 rounded object-cover" alt="photo2" />
                 )}
+                {annonce.photo1 && (
+  <div className="relative">
+    <img src={annonce.photo1} className="h-24 rounded object-cover" alt="photo1" />
+    <button
+      onClick={async () => {
+        await supabase.from('annonces').update({ photo1: null }).eq('id', annonce.id);
+        fetchAnnonces();
+      }}
+      className="absolute top-1 right-1 bg-red-600 text-white px-2 py-1 text-xs rounded"
+    >
+      Supprimer
+    </button>
+  </div>
+)}
+{annonce.photo2 && (
+  <div className="relative">
+    <img src={annonce.photo2} className="h-24 rounded object-cover" alt="photo2" />
+    <button
+      onClick={async () => {
+        await supabase.from('annonces').update({ photo2: null }).eq('id', annonce.id);
+        fetchAnnonces();
+      }}
+      className="absolute top-1 right-1 bg-red-600 text-white px-2 py-1 text-xs rounded"
+    >
+      Supprimer
+    </button>
+  </div>
+)}
+
               </div>
 <div className="flex gap-4 pt-3">
-  {annonce.statut === 'en_attente' && (
-    <button
-      onClick={() => validerAnnonce(annonce.id)}
-      className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-    >
-      Valider
-    </button>
-  )}
+{annonce.statut === 'en_attente' && editingId !== annonce.id && (
+  <button
+    onClick={() => validerAnnonce(annonce.id)}
+    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+  >
+    Valider
+  </button>
+)}
+
 
 {editingId === annonce.id ? (
   <>

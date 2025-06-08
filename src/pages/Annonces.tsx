@@ -108,11 +108,14 @@ const { error } = await supabase.from('annonces').insert([{
 };
 
 
-const sortedAnnonces = [...annonces].sort((a, b) => {
-  const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
-  const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
-  return dateB - dateA;
-});
+const sortedAnnonces = [...annonces]
+  .filter(a => a.statut === 'validé')
+  .sort((a, b) => {
+    const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+    const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+    return dateB - dateA;
+  });
+
 
 
 
