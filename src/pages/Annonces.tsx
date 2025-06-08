@@ -130,22 +130,46 @@ const sortedAnnonces = [...annonces].sort((a, b) => {
                 <label className="font-medium">Contenu de l'annonce</label>
                 <textarea name="contenu" value={formData.contenu} onChange={handleChange} className="w-full border px-3 py-2 rounded" rows={4} />
               </div>
-<div className="flex gap-4">
-  <input
-    type="file"
-    accept="image/*"
-    onChange={(e) =>
-      setFormData((prev) => ({ ...prev, photo1: e.target.files?.[0] ?? null }))
-    }
-  />
-  <input
-    type="file"
-    accept="image/*"
-    onChange={(e) =>
-      setFormData((prev) => ({ ...prev, photo2: e.target.files?.[0] ?? null }))
-    }
-  />
+<div className="flex gap-8 items-start">
+  <div className="flex flex-col">
+    <label className="font-medium">Photo 1</label>
+    <input
+      type="file"
+      name="photo1"
+      accept="image/*"
+      onChange={(e) =>
+        setFormData((prev) => ({ ...prev, photo1: e.target.files?.[0] ?? null }))
+      }
+    />
+    {formData.photo1 && (
+      <img
+        src={URL.createObjectURL(formData.photo1)}
+        alt="Aperçu photo 1"
+        className="w-32 h-32 object-cover rounded mt-2 border"
+      />
+    )}
+  </div>
+
+  <div className="flex flex-col">
+    <label className="font-medium">Photo 2</label>
+    <input
+      type="file"
+      name="photo2"
+      accept="image/*"
+      onChange={(e) =>
+        setFormData((prev) => ({ ...prev, photo2: e.target.files?.[0] ?? null }))
+      }
+    />
+    {formData.photo2 && (
+      <img
+        src={URL.createObjectURL(formData.photo2)}
+        alt="Aperçu photo 2"
+        className="w-32 h-32 object-cover rounded mt-2 border"
+      />
+    )}
+  </div>
 </div>
+
 <div className="col-span-2">
   <label className="font-medium">Captcha</label>
   <input type="text" placeholder="Écrire: SJOV" className="w-full border px-3 py-2 rounded" required />
