@@ -188,7 +188,7 @@ useEffect(() => {
     const { data, error } = await supabase
       .from('blogPosts')
       .select('*')
-      .order('date', { ascending: false }); // ✅ ordre basé sur le champ "date"
+      .order('created_at', { ascending: false }); // ✅ ordre basé sur le champ "date"
 
     if (error) {
       console.error('❌ Erreur de chargement des articles Supabase:', error.message);

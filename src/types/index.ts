@@ -5,10 +5,11 @@ export interface BlogPost {
   excerpt: string;
   image: string;
   imagesannexes?: string[];
-  date: string;
+  date: string; // date de publication
   author: string;
-  created_at: string; // 👈 AJOUT SEUL ET SUFFISANT
+  created_at?: string; // rendu facultatif si jamais absent dans certaines lignes
 }
+
 
 
 

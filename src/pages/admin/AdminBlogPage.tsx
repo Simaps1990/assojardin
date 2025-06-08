@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { BlogPost } from '../../types';
 import { useContent } from '../../context/ContentContext';
-
 const AdminBlogPage = () => {
   const {
     blogPosts,
@@ -9,6 +8,7 @@ const AdminBlogPage = () => {
     updateBlogPost,
     deleteBlogPost,
   } = useContent();
+console.log("🧪 blogPosts dans AdminBlogPage :", blogPosts);
 
   const [imagesannexesFiles, setImagesannexesFiles] = useState<(File | null)[]>([null, null, null]);
   const [imagesannexesUrls, setImagesannexesUrls] = useState<(string | null)[]>([null, null, null]);
