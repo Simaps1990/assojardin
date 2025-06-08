@@ -17,10 +17,8 @@ const backgroundImageUrl = associationContent?.imageAccueil;
 
 
 const sortedPosts = [...blogPosts].sort(
-  (a, b) => new Date(b.created_at || b.date).getTime() - new Date(a.created_at || a.date).getTime()
+  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
 );
-
-
 
 
 const latestPost = sortedPosts[0] ?? null;
@@ -215,24 +213,24 @@ return (
   <div className={`grid gap-6 ${annonces.length === 1 ? '' : 'md:grid-cols-2'}`}>
     {[...annonces]
       .filter(a => a.statut === 'validé')
-      .sort((a, b) => new Date(b.created_at || '').getTime() - new Date(a.created_at || '').getTime())
-      .slice(0, 2)
-      .map((a) => (
-        <Link
-          key={a.id}
-          to={`/annonces#annonce-${a.id}`}
-          className="bg-white p-6 rounded-lg shadow hover:shadow-md transition"
-        >
-          <p className="text-sm text-neutral-400 mb-1">
-            {a.created_at ? new Date(a.created_at).toLocaleDateString('fr-FR', {
-              day: '2-digit',
-              month: 'long',
-              year: 'numeric'
-            }) : 'Date inconnue'}
-          </p>
-          <h3 className="text-xl font-semibold mb-2 text-primary-700">{a.type?.toUpperCase()}</h3>
-          <p className="text-neutral-700 whitespace-pre-line">{a.contenu || 'Contenu non renseigné.'}</p>
-        </Link>
+  .sort((a, b) => new Date(b.created_at || '').getTime() - new Date(a.created_at || '').getTime())
+  .slice(0, 2)
+  .map((a) => (
+    <button
+      key={a.id}
+      onClick={() => window.location.href = `/annonces#annonce-${a.id}`}
+      className="text-left w-full bg-white p-6 rounded-lg shadow hover:shadow-md transition"
+    >
+      <p className="text-sm text-neutral-400 mb-1">
+        {a.created_at ? new Date(a.created_at).toLocaleDateString('fr-FR', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric'
+        }) : 'Date inconnue'}
+      </p>
+      <h3 className="text-xl font-semibold mb-2 text-primary-700">{a.type?.toUpperCase()}</h3>
+      <p className="text-neutral-700 whitespace-pre-line">{a.contenu || 'Contenu non renseigné.'}</p>
+    </button>
       ))}
   </div>
 ) : (
