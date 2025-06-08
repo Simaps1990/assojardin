@@ -61,7 +61,48 @@ const supprimerAnnonce = async (id: string) => {
               className="bg-white rounded shadow p-4 space-y-2 border border-gray-200"
             >
 {editingId === annonce.id ? (
-  <>
+<>
+  <input
+    value={editedAnnonce.nom || ''}
+    onChange={(e) => setEditedAnnonce({ ...editedAnnonce, nom: e.target.value })}
+    className="border rounded px-2 py-1 w-full"
+    placeholder="Nom"
+  />
+  <input
+    value={editedAnnonce.email || ''}
+    onChange={(e) => setEditedAnnonce({ ...editedAnnonce, email: e.target.value })}
+    className="border rounded px-2 py-1 w-full"
+    placeholder="Email"
+  />
+  <input
+    value={editedAnnonce.telephone || ''}
+    onChange={(e) => setEditedAnnonce({ ...editedAnnonce, telephone: e.target.value })}
+    className="border rounded px-2 py-1 w-full"
+    placeholder="Téléphone"
+  />
+  <select
+    value={editedAnnonce.type || ''}
+    onChange={(e) =>
+      setEditedAnnonce({
+        ...editedAnnonce,
+        type: e.target.value as 'recherche' | 'vend' | 'donne' | 'échange',
+      })
+    }
+    className="border rounded px-2 py-2 w-full"
+  >
+    <option value="">-- Choisir --</option>
+    <option value="recherche">Recherche</option>
+    <option value="vend">Vend</option>
+    <option value="donne">Donne</option>
+    <option value="échange">Échange</option>
+  </select>
+  <textarea
+    value={editedAnnonce.contenu || ''}
+    onChange={(e) => setEditedAnnonce({ ...editedAnnonce, contenu: e.target.value })}
+    className="border rounded px-2 py-1 w-full"
+    placeholder="Contenu"
+  />
+  <div className="flex gap-2 pt-2">
     <button
       onClick={() => setEditingId(null)}
       className="bg-neutral-400 text-white px-4 py-2 rounded hover:bg-neutral-500"
@@ -74,7 +115,9 @@ const supprimerAnnonce = async (id: string) => {
     >
       Mettre à jour
     </button>
-  </>
+  </div>
+</>
+
 ) : (
 
   <>
@@ -133,22 +176,7 @@ const supprimerAnnonce = async (id: string) => {
 )}
 
 
-{editingId === annonce.id ? (
-  <>
-    <button
-      onClick={() => saveEdit(annonce.id)}
-      className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-    >
-      Enregistrer
-    </button>
-    <button
-      onClick={() => setEditingId(null)}
-      className="bg-neutral-400 text-white px-4 py-2 rounded hover:bg-neutral-500"
-    >
-      Annuler
-    </button>
-  </>
-) : (
+{editingId === annonce.id ? null : (
   <button
     onClick={() => startEdit(annonce)}
     className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -156,6 +184,7 @@ const supprimerAnnonce = async (id: string) => {
     Modifier
   </button>
 )}
+
 
 
   <button
