@@ -62,34 +62,21 @@ const supprimerAnnonce = async (id: string) => {
             >
 {editingId === annonce.id ? (
   <>
-    <input
-      value={editedAnnonce.nom}
-      onChange={(e) => setEditedAnnonce({ ...editedAnnonce, nom: e.target.value })}
-      className="border rounded px-2 py-1 w-full"
-    />
-    <input
-      value={editedAnnonce.email}
-      onChange={(e) => setEditedAnnonce({ ...editedAnnonce, email: e.target.value })}
-      className="border rounded px-2 py-1 w-full"
-    />
-    <input
-      value={editedAnnonce.telephone}
-      onChange={(e) => setEditedAnnonce({ ...editedAnnonce, telephone: e.target.value })}
-      className="border rounded px-2 py-1 w-full"
-    />
-    <input
-      value={editedAnnonce.type}
-      onChange={(e) => setEditedAnnonce({ ...editedAnnonce, type: e.target.value as 'recherche' | 'vend' | 'donne' | 'échange' })
-}
-      className="border rounded px-2 py-1 w-full"
-    />
-    <textarea
-      value={editedAnnonce.contenu}
-      onChange={(e) => setEditedAnnonce({ ...editedAnnonce, contenu: e.target.value })}
-      className="border rounded px-2 py-1 w-full"
-    />
+    <button
+      onClick={() => setEditingId(null)}
+      className="bg-neutral-400 text-white px-4 py-2 rounded hover:bg-neutral-500"
+    >
+      Annuler
+    </button>
+    <button
+      onClick={() => saveEdit(annonce.id)}
+      className="bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700"
+    >
+      Mettre à jour
+    </button>
   </>
 ) : (
+
   <>
     <div className="font-semibold">{annonce.nom}</div>
     <div className="text-sm text-gray-600">{annonce.email} | {annonce.telephone}</div>
