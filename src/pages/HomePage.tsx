@@ -211,24 +211,34 @@ return (
       </Link>
     </div>
 
-    {annonces.length > 0 ? (
-      <div className="bg-white p-6 rounded-lg shadow">
-<p className="text-sm text-neutral-400 mb-1">
-new Date(annonces[0].created_at ?? '').toLocaleDateString()
-</p>
+{annonces.length > 0 ? (
+  <div className={`grid gap-6 ${annonces.length === 1 ? '' : 'md:grid-cols-2'}`}>
+    {[...annonces]
+      .filter(a => a.statut === 'validé')
+      .sort((a, b) => new Date(b.created_at || '').getTime() - new Date(a.created_at || '').getTime())
+      .slice(0, 2)
+      .map((a) => (
+        <Link
+          key={a.id}
+          to={`/annonces#annonce-${a.id}`}
+          className="bg-white p-6 rounded-lg shadow hover:shadow-md transition"
+        >
+          <p className="text-sm text-neutral-400 mb-1">
+            {a.created_at ? new Date(a.created_at).toLocaleDateString('fr-FR', {
+              day: '2-digit',
+              month: 'long',
+              year: 'numeric'
+            }) : 'Date inconnue'}
+          </p>
+          <h3 className="text-xl font-semibold mb-2 text-primary-700">{a.type?.toUpperCase()}</h3>
+          <p className="text-neutral-700 whitespace-pre-line">{a.contenu || 'Contenu non renseigné.'}</p>
+        </Link>
+      ))}
+  </div>
+) : (
+  <p className="text-neutral-500">Aucune annonce n’a encore été validée.</p>
+)}
 
-        <h3 className="text-xl font-semibold mb-2 text-primary-700">
-          {annonces[0].type?.toUpperCase()}
-        </h3>
-        <p className="text-neutral-700 whitespace-pre-line">
-          {annonces[0].contenu || 'Contenu non renseigné.'}
-        </p>
-      </div>
-    ) : (
-      <p className="text-neutral-500">
-        Aucune annonce n’a encore été validée.
-      </p>
-    )}
   </div>
 </section>
 

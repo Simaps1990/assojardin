@@ -1,6 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { useContent } from '../context/ContentContext';
 import { supabase } from '../supabaseClient';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
+
+
 const uploadToCloudinary = async (file: File): Promise<string | null> => {
   const formData = new FormData();
   formData.append('file', file);
@@ -38,6 +43,22 @@ console.log("📥 Cloudinary Response Status:", res.status);
 
 const AnnoncesPage: React.FC = () => {
 const { annonces, fetchAnnonces } = useContent();
+const location = useLocation();
+
+useEffect(() => {
+  if (!location.hash) return;
+  try {
+    const target = document.querySelector(location.hash);
+    if (target) {
+      setTimeout(() => {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    }
+  } catch (e) {
+    console.warn("Sélecteur invalide :", location.hash);
+  }
+}, [location]);
+
 const [formData, setFormData] = useState<{
   nom: string;
   email: string;
@@ -248,7 +269,7 @@ className="text-red-600 text-sm mt-1 inline-block whitespace-nowrap"
         {sortedAnnonces.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {sortedAnnonces.map((post) => (
-              <div key={post.id} className="border rounded-lg p-4 bg-white shadow">
+<div key={post.id} id={`annonce-${post.id}`} className="border rounded-lg p-4 bg-white shadow">
 <p className="text-sm text-neutral-400 mb-1">
   {post.created_at ? new Date(post.created_at).toLocaleDateString() : 'Date inconnue'}
 </p>
