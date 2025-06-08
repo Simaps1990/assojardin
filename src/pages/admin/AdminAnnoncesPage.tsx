@@ -3,7 +3,7 @@ import { supabase } from '../../supabaseClient';
 import type { Annonce } from '../../types'; // ajuste le chemin si besoin
 
 const AdminAnnoncesPage = () => {
-  const [annonces, setAnnonces] = useState<any[]>([]);
+const [annonces, setAnnonces] = useState<Annonce[]>([]);
   const [loading, setLoading] = useState(false);
 const [editingId, setEditingId] = useState<string | null>(null);
 const [editedAnnonce, setEditedAnnonce] = useState<Partial<Annonce>>({});

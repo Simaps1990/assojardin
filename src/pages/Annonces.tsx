@@ -69,7 +69,6 @@ type: formData.type,
     photo2: photo2Url,
     statut: 'en_attente',
     isValidated: false,
-    date: new Date().toISOString()
   }]);
 
   if (error) {

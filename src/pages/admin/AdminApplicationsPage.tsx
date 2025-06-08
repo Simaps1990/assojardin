@@ -35,7 +35,7 @@ React.useEffect(() => {
 const { data, error } = await supabase
   .from('applications')  // Sans <Demande, Demande>
   .select('*')
-  .order('date', { ascending: false });
+  .order('created_at', { ascending: false });
 
 
 

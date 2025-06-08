@@ -188,7 +188,7 @@ const fetchBlogPosts = async () => {
   const { data, error } = await supabase
     .from('blogPosts')
     .select('*')
-    .order('date', { ascending: false }); // ✅ utiliser "date" au lieu de "created_at"
+    .order('created_at', { ascending: false }); // ✅ utiliser "date" au lieu de "created_at"
 
   if (error) {
     console.error('Erreur de chargement des articles Supabase:', error.message);
@@ -471,7 +471,7 @@ const updateAssociationContent = async (
   const { data, error } = await supabase
     .from('events')
     .select('*')
-    .order('date', { ascending: false });
+    .order('created_at', { ascending: false });
 
   if (error) {
     console.error('Erreur de chargement des événements Supabase:', error.message);
@@ -495,7 +495,7 @@ const fetchAnnonces = async () => {
     .from('annonces')
     .select('*')
     .eq('statut', 'validé') // 🔥 On ne récupère que les annonces validées
-    .order('date', { ascending: false });
+    .order('created_at', { ascending: false });
 
   if (error) {
     console.error('Erreur chargement annonces :', error.message);
@@ -512,7 +512,7 @@ useEffect(() => {
 const addAnnonce = async (a: Omit<Annonce, 'id' | 'date' | 'isValidated'>) => {
   const { data, error } = await supabase
     .from('annonces')
-    .insert([{ ...a, date: new Date().toISOString(), isValidated: false }])
+.insert([{ ...a, isValidated: false }])
     .select();
 
   if (error) return console.error('Erreur ajout annonce :', error.message);
