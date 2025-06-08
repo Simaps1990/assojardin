@@ -13,11 +13,13 @@ const [confirmImageDelete, setConfirmImageDelete] = useState<{ id: string; field
   const startEdit = (annonce: Annonce) => {
     setEditingId(annonce.id);
     setEditedAnnonce(annonce);
+
   };
 
   const saveEdit = async (id: string) => {
     await supabase.from('annonces').update(editedAnnonce).eq('id', id);
-    setEditingId(null);
+setEditedAnnonce({});
+setEditingId(null);
     fetchAnnonces();
   };
 
@@ -231,16 +233,16 @@ const [confirmImageDelete, setConfirmImageDelete] = useState<{ id: string; field
           Annuler
         </button>
         <button
-          onClick={async () => {
-            if (confirmImageDelete) {
-              await supabase
-                .from('annonces')
-                .update({ [confirmImageDelete.field]: null })
-                .eq('id', confirmImageDelete.id);
-              setConfirmImageDelete(null);
-              fetchAnnonces();
-            }
-          }}
+onClick={() => {
+  if (!confirmImageDelete) return;
+  if (editingId !== confirmImageDelete.id) return;
+
+  const fieldToRemove = confirmImageDelete.field;
+  setEditedAnnonce((prev) => ({ ...prev, [fieldToRemove]: null }));
+  setConfirmImageDelete(null);
+}}
+
+
           className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
         >
           Supprimer
