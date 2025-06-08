@@ -12,7 +12,7 @@ formData.append('upload_preset', 'site_global_uploads');
   size: file.size,
   type: file.type,
 });
-const res = await fetch('https://api.cloudinary.com/v1_1/sjov/image/upload', {
+const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
   method: 'POST',
   headers: {
     Accept: 'application/json',
@@ -103,6 +103,8 @@ const { error } = await supabase.from('annonces').insert([{
  
   await fetchAnnonces();
  setSubmitted(true);
+ window.scrollTo({ top: 0, behavior: 'smooth' });
+
 };
 
 
