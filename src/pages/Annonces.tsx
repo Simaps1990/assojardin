@@ -3,6 +3,7 @@ import { useContent } from '../context/ContentContext';
 import { supabase } from '../supabaseClient';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { renderAnnonceType } from '../constants/annonceTypes'; // ajuste le chemin si besoin
 
 
 
@@ -167,7 +168,7 @@ const sortedAnnonces = [...annonces]
 <p className="text-sm text-neutral-400 mb-1">
   {post.created_at ? new Date(post.created_at).toLocaleDateString() : 'Date inconnue'}
 </p>
-<h3 className="text-lg font-semibold mb-2">{post.type?.toUpperCase()}</h3>
+<div className="text-lg font-semibold mb-2">{renderAnnonceType(post.type)}</div>
                 <p className="text-neutral-700 whitespace-pre-line">{post.contenu}</p>
 <p className="text-sm text-neutral-500 italic mt-2">
   {post.nom} • {post.telephone} {post.email && `• ${post.email}`}

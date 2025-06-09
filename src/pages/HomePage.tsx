@@ -5,6 +5,7 @@ import BlogCard from '../components/ui/BlogCard';
 import EventCard from '../components/ui/EventCard';
 import React from 'react';
 import MeteoConseilsSection from '../components/ui/MeteoConseilsSection'; // adapte le chemin
+import { renderAnnonceType } from '../constants/annonceTypes'; // ajuste le chemin si besoin
 
 const HomePage: React.FC = () => {
 
@@ -229,7 +230,7 @@ return (
           year: 'numeric'
         }) : 'Date inconnue'}
       </p>
-      <h3 className="text-xl font-semibold mb-2 text-primary-700">{a.type?.toUpperCase()}</h3>
+<div className="text-xl font-semibold mb-2 text-primary-700">{renderAnnonceType(a.type)}</div>
       <p className="text-neutral-700 whitespace-pre-line">{a.contenu || 'Contenu non renseigné.'}</p>
     </button>
       ))}

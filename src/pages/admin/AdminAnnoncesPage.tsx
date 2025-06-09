@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../supabaseClient';
 import type { Annonce } from '../../types'; // ajuste le chemin si besoin
+import { renderAnnonceType } from '../constants/annonceTypes'; // ajuste le chemin si besoin
 
 const AdminAnnoncesPage = () => {
   const [annonces, setAnnonces] = useState<Annonce[]>([]);
