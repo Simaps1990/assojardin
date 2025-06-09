@@ -186,21 +186,21 @@ const MeteoConseilsSection: React.FC = () => {
   <span className={`${getTempColor(temperature)}`}>{temperature}°C</span>, {conseilTemp}
 </li>
           <li>Qualité de l’air : <span className="text-green-600">{airQuality}</span></li>
-<li className="text-sm text-neutral-800 list-none">
+<li className="text-sm text-neutral-800 list-disc list-inside">
   <span className="text-neutral-800">Risques allergènes : </span>
   {allergyRisks.map((risk, idx) => (
     <span
       key={idx}
-      className={
-        risk.includes('très élevé')
-          ? 'text-red-600'
-          : 'text-orange-500'
-      }
+      className={`${
+        risk.includes('très élevé') ? 'text-red-600' : 'text-orange-500'
+      }${idx < allergyRisks.length - 1 ? ' mr-2' : ''}`}
     >
       {risk}
     </span>
   ))}
 </li>
+
+
 
 
 
