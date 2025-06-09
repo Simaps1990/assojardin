@@ -2,7 +2,7 @@ import React, { useState, forwardRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Lock, Menu, X } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
-
+import { useLocation } from 'react-router-dom';
 const Header = forwardRef<HTMLElement>((_, ref) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -25,8 +25,8 @@ const navLinks = [
   { to: '/apply', label: 'Postuler' },
   { to: '/contact', label: 'Contact' },
 ];
-
-
+const location = useLocation();
+const currentPath = location.pathname;
   return (
     <header
       ref={ref}
@@ -52,7 +52,11 @@ const navLinks = [
 <button
   key={to}
   onClick={() => { window.location.href = to; }}
-  className="text-sm font-medium text-neutral-700 hover:text-primary-600"
+  className={`text-sm font-medium px-3 py-1.5 rounded transition ${
+    currentPath === to
+      ? 'bg-green-600 text-white'
+      : 'text-neutral-700 hover:text-primary-600'
+  }`}
 >
   {label}
 </button>
@@ -98,8 +102,12 @@ const navLinks = [
             {navLinks.map(({ to, label }) => (
 <button
   key={to}
-  onClick={() => { window.location.href = to; }}
-  className="text-sm font-medium text-neutral-700 hover:text-primary-600"
+  onClick={() => { window.location.href = to; setMobileOpen(false); }}
+  className={`text-sm font-medium px-3 py-1.5 rounded transition ${
+    currentPath === to
+      ? 'bg-green-600 text-white'
+      : 'text-neutral-700 hover:text-primary-600'
+  }`}
 >
   {label}
 </button>
