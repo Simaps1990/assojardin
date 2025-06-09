@@ -128,15 +128,16 @@ return () => {
   className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
 >
   <div className="flex flex-col gap-2 items-start">
-    <p className="text-sm font-medium text-center w-full">Articles</p>
-    <div className="flex items-center">
-      <div className="bg-primary-100 p-2 rounded-full ml-1">
+    <div className="text-sm font-medium">Articles</div>
+    <div className="flex items-center h-5">
+      <div className="bg-primary-100 p-2 rounded-full ml-1 flex items-center justify-center">
         <FileText className="text-primary-600" size={20} />
       </div>
-      <p className="text-xl font-bold ml-2">{blogPosts.length}</p>
+      <p className="text-xl font-bold ml-2 leading-none">{blogPosts.length}</p>
     </div>
   </div>
 </button>
+
 
 
 
@@ -146,15 +147,16 @@ return () => {
   className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
 >
   <div className="flex flex-col gap-2 items-start">
-    <p className="text-sm font-medium text-center w-full">Événements à venir</p>
-    <div className="flex items-center">
-      <div className="bg-accent-100 p-2 rounded-full ml-1">
+    <div className="text-sm font-medium">Événements à venir</div>
+    <div className="flex items-center h-5">
+      <div className="bg-accent-100 p-2 rounded-full ml-1 flex items-center justify-center">
         <Calendar className="text-accent-600" size={20} />
       </div>
-      <p className="text-xl font-bold ml-2">{upcomingEvents.length}</p>
+      <p className="text-xl font-bold ml-2 leading-none">{upcomingEvents.length}</p>
     </div>
   </div>
 </button>
+
 
 
 
@@ -163,15 +165,16 @@ return () => {
   className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
 >
   <div className="flex flex-col gap-2 items-start">
-    <p className="text-sm font-medium text-center w-full">Demandes de jardin</p>
-    <div className="flex items-center">
-      <div className="bg-secondary-100 p-2 rounded-full ml-1">
+    <div className="text-sm font-medium">Demandes de jardin</div>
+    <div className="flex items-center h-5">
+      <div className="bg-secondary-100 p-2 rounded-full ml-1 flex items-center justify-center">
         <FileText className="text-secondary-600" size={20} />
       </div>
-      <p className="text-xl font-bold ml-2">{nonTraitees}</p>
+      <p className="text-xl font-bold ml-2 leading-none">{nonTraitees}</p>
     </div>
   </div>
 </button>
+
 
 
 
@@ -181,27 +184,26 @@ return () => {
   className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
 >
   <div className="flex flex-col gap-2 items-start">
-    <p className="text-sm font-medium text-center w-full">Annonces</p>
-    <div className="flex items-center">
-      <div className="bg-yellow-100 p-2 rounded-full ml-1">
+    <div className="text-sm font-medium">Annonces</div>
+    <div className="flex items-center h-5">
+      <div className="bg-yellow-100 p-2 rounded-full ml-1 flex items-center justify-center">
         <Megaphone className="text-yellow-600" size={20} />
       </div>
-      <p className="text-xl font-bold ml-2">{annoncesCount}</p>
+      <p className="text-xl font-bold ml-2 leading-none">{annoncesCount}</p>
     </div>
   </div>
 </button>
 
 
 
-
 <div className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left">
   <div className="flex flex-col gap-2 items-start">
-    <p className="text-sm font-medium text-center w-full">Parcelles occupées</p>
-    <div className="flex items-center">
-      <div className="bg-green-100 p-2 rounded-full ml-1">
+    <div className="text-sm font-medium">Parcelles occupées</div>
+    <div className="flex items-center h-5">
+      <div className="bg-green-100 p-2 rounded-full ml-1 flex items-center justify-center">
         <Users className="text-green-600" size={20} />
       </div>
-      <p className="text-xl font-bold ml-2">
+      <p className="text-xl font-bold ml-2 leading-none">
         {parcellesOccupees ?? '--'} / {parcellesTotales ?? '--'}
       </p>
     </div>
