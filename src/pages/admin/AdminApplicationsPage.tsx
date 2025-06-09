@@ -34,8 +34,8 @@ React.useEffect(() => {
   const fetchDemandes = async () => {
 const { data, error } = await supabase
   .from('applications')  // Sans <Demande, Demande>
-  .select('*')
-  .order('created_at', { ascending: false });
+.select('*')
+.order('date', { ascending: false });
 
 
 
@@ -116,6 +116,7 @@ setDemandes((prev) => {
                       day: 'numeric',
                       month: 'long',
                       year: 'numeric',
+                      
                     })}
                   </span>
                 </div>
