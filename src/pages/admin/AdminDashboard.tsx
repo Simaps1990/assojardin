@@ -123,6 +123,8 @@ return () => {
       {/* Stats Cards */}
 <div className="flex flex-wrap gap-4 mb-8">
 
+
+
 <button
   onClick={() => window.location.href = '/admin/blog'}
   className="w-[220px] bg-white rounded-lg shadow-sm px-6 py-5 hover:bg-neutral-50 transition-colors text-left"
@@ -130,12 +132,13 @@ return () => {
   <div className="flex flex-col items-start justify-center gap-4">
     <div className="text-sm font-medium">Articles</div>
 
-<div className="flex items-center ml-1 h-6">
+<div className="flex items-center ml-1">
   <div className="bg-primary-100 rounded-full flex items-center justify-center w-6 h-6">
     <FileText className="text-primary-600 w-4 h-4" />
   </div>
-  <p className="text-xl font-bold ml-2 leading-none h-6 flex items-center">{blogPosts.length}</p>
+  <p className="text-xl font-bold ml-2 leading-none translate-y-[1px]">{blogPosts.length}</p>
 </div>
+
 
   </div>
 </button>
