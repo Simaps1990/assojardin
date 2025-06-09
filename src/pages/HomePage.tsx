@@ -85,9 +85,10 @@ return (
   <MeteoConseilsSection />
 </section>
 
-<div className="flex justify-center">
-<hr className="w-1/2 border-t border-neutral-300" />
+<div className="flex justify-center mt-4">
+  <hr className="w-1/2 border-t border-neutral-300" />
 </div>
+
 
 
 
@@ -114,9 +115,10 @@ return (
   </div>
 </section>
 
-<div className="flex justify-center">
-<hr className="w-1/2 border-t border-neutral-300" />
+<div className="flex justify-center mt-4">
+  <hr className="w-1/2 border-t border-neutral-300" />
 </div>
+
 
 {/* Events Section */}
 <section className="py-0 m-14 pt-1 bg-neutral-50">
@@ -168,9 +170,10 @@ return (
   </div>
 </section>
 
-<div className="flex justify-center">
-<hr className="w-1/2 border-t border-neutral-300" />
+<div className="flex justify-center mt-4">
+  <hr className="w-1/2 border-t border-neutral-300" />
 </div>
+
 
 {/* Dernière annonce validée */}
 <section className="py-0 m-14 bg-neutral-50">
