@@ -132,12 +132,13 @@ return () => {
   <div className="flex flex-col items-start justify-center gap-4">
     <div className="text-sm font-medium">Articles</div>
 
-<div className="flex items-center ml-1">
-  <div className="bg-primary-100 rounded-full flex items-center justify-center w-6 h-6">
-    <FileText className="text-primary-600 w-4 h-4" />
+<div className="flex gap-2 items-center ml-1">
+  <div className="bg-primary-100 rounded-full flex items-center justify-center w-8 h-8">
+    <FileText className="text-primary-600 w-5 h-5" />
   </div>
-  <p className="text-xl font-bold ml-2 leading-none translate-y-[1px]">{blogPosts.length}</p>
+  <div className="text-xl font-bold leading-none">{blogPosts.length}</div>
 </div>
+
 
 
   </div>
