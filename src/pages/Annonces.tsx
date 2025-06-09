@@ -278,28 +278,55 @@ className={`flex items-center gap-2 px-4 py-2 rounded transition ${
 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 <div className="w-full">
   <label className="block font-medium mb-1 text-sm text-gray-700">Nom Prénom *</label>
-  <input type="text" name="nom" className="w-full border px-3 py-2 rounded"  required />
+<input
+  type="text"
+  name="nom"
+  value={formData.nom}
+  onChange={handleChange}
+  className="w-full border px-3 py-2 rounded"
+  required
+/>
               </div>
 
 <div className="w-full">
   <label className="block font-medium mb-1 text-sm text-gray-700">Adresse Email</label>
-  <input type="email" name="email" className="w-full border px-3 py-2 rounded" />
+<input
+  type="email"
+  name="email"
+  value={formData.email}
+  onChange={handleChange}
+  className="w-full border px-3 py-2 rounded"
+/>
               </div>
 
 <div className="w-full">
   <label className="block font-medium mb-1 text-sm text-gray-700">Numéro de téléphone *</label>
-  <input type="tel" name="telephone" className="w-full border px-3 py-2 rounded" required />
+<input
+  type="tel"
+  name="telephone"
+  value={formData.telephone}
+  onChange={handleChange}
+  className="w-full border px-3 py-2 rounded"
+  required
+/>
               </div>
 
 <div className="w-full">
   <label className="block font-medium mb-1 text-sm text-gray-700">Type d'annonce *</label>
-  <select name="type" className="w-full border px-3 py-2 rounded" required>
-                  <option value="">-- Choisir --</option>
-                  <option value="recherche">Recherche</option>
-                  <option value="vend">Vend</option>
-                  <option value="donne">Donne</option>
-                  <option value="échange">Échange</option>
-                </select>
+<select
+  name="type"
+  value={formData.type}
+  onChange={handleChange}
+  className="w-full border px-3 py-2 rounded"
+  required
+>
+  <option value="">-- Choisir --</option>
+  <option value="recherche">Recherche</option>
+  <option value="vend">Vend</option>
+  <option value="donne">Donne</option>
+  <option value="échange">Échange</option>
+</select>
+
               </div>
               <div className="col-span-2">
                 <label className="font-medium">Contenu de l'annonce</label>
