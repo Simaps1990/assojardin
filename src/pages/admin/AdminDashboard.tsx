@@ -130,17 +130,14 @@ return () => {
   className="w-[220px] bg-white rounded-lg shadow-sm px-6 py-5 hover:bg-neutral-50 transition-colors text-left"
 >
   <div className="flex flex-col items-start justify-center gap-4">
-    <div className="text-sm font-medium">Articles</div>
+    <div className="text-base font-medium">Articles</div>
 
-<div className="flex gap-2 items-center ml-1">
-  <div className="bg-primary-100 rounded-full flex items-center justify-center w-8 h-8">
-    <FileText className="text-primary-600 w-5 h-5" />
-  </div>
-  <div className="text-xl font-bold leading-none">{blogPosts.length}</div>
-</div>
-
-
-
+    <div className="flex gap-2 items-center ml-1">
+      <div className="bg-primary-100 rounded-full flex items-center justify-center w-9 h-9">
+        <FileText className="text-primary-600 w-6 h-6" />
+      </div>
+      <div className="text-2xl font-bold leading-none">{blogPosts.length}</div>
+    </div>
   </div>
 </button>
 
