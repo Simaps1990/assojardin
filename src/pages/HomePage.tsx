@@ -176,7 +176,7 @@ return (
 
 
 {/* Dernière annonce validée */}
-<section className="py-0 m-14 bg-neutral-50">
+<section className="py-0 m-16 bg-neutral-50">
   <div className="container-custom">
     <div className="flex justify-between items-center">
 <Link to="/annonces" className="text-3xl font-heading font-bold hover:underline mb-2">
