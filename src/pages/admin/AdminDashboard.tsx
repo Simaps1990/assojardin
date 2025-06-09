@@ -145,18 +145,17 @@ return () => {
 
 
 
-
 <button
   onClick={() => window.location.href = '/admin/events'}
-  className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
+  className="w-[220px] bg-white rounded-lg shadow-sm px-6 py-5 hover:bg-neutral-50 transition-colors text-left"
 >
-  <div className="flex flex-col gap-2 items-start">
-    <div className="text-sm font-medium">Événements à venir</div>
-    <div className="flex items-center h-5">
-      <div className="bg-accent-100 p-2 rounded-full ml-1 flex items-center justify-center">
-        <Calendar className="text-accent-600" size={20} />
+  <div className="flex flex-col items-start justify-center gap-4">
+    <div className="text-base font-medium">Événements à venir</div>
+    <div className="flex gap-2 items-center ml-1">
+      <div className="bg-accent-100 rounded-full flex items-center justify-center w-9 h-9">
+        <Calendar className="text-accent-600 w-6 h-6" />
       </div>
-      <p className="text-xl font-bold ml-2 leading-none">{upcomingEvents.length}</p>
+      <div className="text-2xl font-bold leading-none">{upcomingEvents.length}</div>
     </div>
   </div>
 </button>
@@ -164,17 +163,18 @@ return () => {
 
 
 
+
 <button
   onClick={() => window.location.href = '/admin/applications'}
-  className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
+  className="w-[220px] bg-white rounded-lg shadow-sm px-6 py-5 hover:bg-neutral-50 transition-colors text-left"
 >
-  <div className="flex flex-col gap-2 items-start">
-    <div className="text-sm font-medium">Demandes de jardin</div>
-    <div className="flex items-center h-5">
-      <div className="bg-secondary-100 p-2 rounded-full ml-1 flex items-center justify-center">
-        <FileText className="text-secondary-600" size={20} />
+  <div className="flex flex-col items-start justify-center gap-4">
+    <div className="text-base font-medium">Demandes de jardin</div>
+    <div className="flex gap-2 items-center ml-1">
+      <div className="bg-secondary-100 rounded-full flex items-center justify-center w-9 h-9">
+        <FileText className="text-secondary-600 w-6 h-6" />
       </div>
-      <p className="text-xl font-bold ml-2 leading-none">{nonTraitees}</p>
+      <div className="text-2xl font-bold leading-none">{nonTraitees}</div>
     </div>
   </div>
 </button>
@@ -185,34 +185,36 @@ return () => {
 
 <button
   onClick={() => window.location.href = '/admin/annonces'}
-  className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
+  className="w-[220px] bg-white rounded-lg shadow-sm px-6 py-5 hover:bg-neutral-50 transition-colors text-left"
 >
-  <div className="flex flex-col gap-2 items-start">
-    <div className="text-sm font-medium">Annonces</div>
-    <div className="flex items-center h-5">
-      <div className="bg-yellow-100 p-2 rounded-full ml-1 flex items-center justify-center">
-        <Megaphone className="text-yellow-600" size={20} />
+  <div className="flex flex-col items-start justify-center gap-4">
+    <div className="text-base font-medium">Annonces</div>
+    <div className="flex gap-2 items-center ml-1">
+      <div className="bg-yellow-100 rounded-full flex items-center justify-center w-9 h-9">
+        <Megaphone className="text-yellow-600 w-6 h-6" />
       </div>
-      <p className="text-xl font-bold ml-2 leading-none">{annoncesCount}</p>
+      <div className="text-2xl font-bold leading-none">{annoncesCount}</div>
     </div>
   </div>
 </button>
 
 
 
-<div className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left">
-  <div className="flex flex-col gap-2 items-start">
-    <div className="text-sm font-medium">Parcelles occupées</div>
-    <div className="flex items-center h-5">
-      <div className="bg-green-100 p-2 rounded-full ml-1 flex items-center justify-center">
-        <Users className="text-green-600" size={20} />
+
+<div className="w-[220px] bg-white rounded-lg shadow-sm px-6 py-5 hover:bg-neutral-50 transition-colors text-left">
+  <div className="flex flex-col items-start justify-center gap-4">
+    <div className="text-base font-medium">Parcelles occupées</div>
+    <div className="flex gap-2 items-center ml-1">
+      <div className="bg-green-100 rounded-full flex items-center justify-center w-9 h-9">
+        <Users className="text-green-600 w-6 h-6" />
       </div>
-      <p className="text-xl font-bold ml-2 leading-none">
+      <div className="text-2xl font-bold leading-none">
         {parcellesOccupees ?? '--'} / {parcellesTotales ?? '--'}
-      </p>
+      </div>
     </div>
   </div>
 </div>
+
 
 
 
