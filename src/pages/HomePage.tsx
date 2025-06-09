@@ -82,7 +82,7 @@ return (
 
 {/* Section Météo + Plantation */}
 {/* Section Météo + Plantation */}
-<section className="py-20 bg-neutral-50">
+<section className="py-12 bg-neutral-50">
   <MeteoConseilsSection />
 </section>
 
@@ -91,7 +91,7 @@ return (
 </div>
 
 {/* Latest Blog Post */}
-<section className="py-20 bg-neutral-50">
+<section className="py-12 bg-neutral-50">
   <div className="container-custom">
     <div className="flex justify-between items-center mb-2">
       <Link to="/blog" className="text-3xl font-heading font-bold hover:underline">
@@ -118,7 +118,7 @@ return (
 </div>
 
 {/* Events Section */}
-<section className="py-20 bg-neutral-50">
+<section className="py-12 bg-neutral-50">
   <div className="container-custom">
     <div className="flex justify-between items-center mb-2">
       <Link to="/events" className="text-3xl font-heading font-bold hover:underline">
@@ -172,7 +172,7 @@ return (
 </div>
 
 {/* Dernière annonce validée */}
-<section className="py-20 bg-neutral-50">
+<section className="py-12 bg-neutral-50">
   <div className="container-custom">
     <div className="flex justify-between items-center mb-2">
       <Link to="/annonces" className="text-3xl font-heading font-bold hover:underline">
@@ -221,7 +221,7 @@ return (
 
 
     {/* Call to Action */}
-    <section className="py-20 bg-primary-700 text-white">
+    <section className="py-12 bg-primary-700 text-white">
       <div className="container-custom text-center">
         <h2 className="text-3xl font-heading font-bold mb-4">
           Rejoignez-nous dans cette aventure verte
