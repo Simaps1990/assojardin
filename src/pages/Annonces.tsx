@@ -192,15 +192,12 @@ const { error } = await supabase.from('annonces').insert([{
       </button>
     );
   })}
-
-  {sortedAnnonces.length === 0 && (
-    <a
-      href="#poster"
-      className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-base text-center"
-    >
-      Nouvelle annonce
-    </a>
-  )}
+<a
+  href="#poster"
+  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-base text-center"
+>
+  PUBLIER UNE ANNONCE
+</a>
 </div>
 
 
@@ -252,7 +249,7 @@ const { error } = await supabase.from('annonces').insert([{
 
                 {/* Formulaire de soumission */}
 <h2 id="poster" className="text-2xl font-heading font-semibold mt-16 mb-4">
-  Poster une nouvelle annonce
+  Publier une nouvelle annonce
 </h2>
         <div className="bg-white p-6 rounded-2xl shadow mb-12">
           {submitted ? (
