@@ -1,30 +1,31 @@
 // constants/annonceTypes.tsx
 
+import {
+  DollarSign,
+  Gift,
+  Search,
+  Repeat
+} from 'lucide-react';
 
-export const annonceTypeMap: Record<string, {
-  label: string;
-  icon: string;
-  color: string;
-}> = {
+export const annonceTypeMap: Record<
+  string,
+  { label: string; icon: JSX.Element }
+> = {
   vend: {
     label: 'VENTE',
-    icon: '💰',
-    color: 'text-yellow-600'
+    icon: <DollarSign className="w-4 h-4" />
   },
   donne: {
     label: 'DON',
-    icon: '🎁',
-    color: 'text-pink-600'
+    icon: <Gift className="w-4 h-4" />
   },
   recherche: {
     label: 'RECHERCHE',
-    icon: '🔍',
-    color: 'text-blue-600'
+    icon: <Search className="w-4 h-4" />
   },
   échange: {
     label: 'ÉCHANGE',
-    icon: '♻️',
-    color: 'text-green-600'
+    icon: <Repeat className="w-4 h-4" />
   }
 };
 
@@ -32,8 +33,8 @@ export const renderAnnonceType = (type: string) => {
   const entry = annonceTypeMap[type];
   if (!entry) return type?.toUpperCase();
   return (
-    <span className={`inline-flex items-center gap-1 font-semibold ${entry.color}`}>
-      <span>{entry.icon}</span>
+    <span className="inline-flex items-center gap-1 font-semibold text-neutral-800">
+      {entry.icon}
       <span>{entry.label}</span>
     </span>
   );
