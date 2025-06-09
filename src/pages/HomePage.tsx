@@ -85,7 +85,7 @@ return (
   <MeteoConseilsSection />
 </section>
 
-<div className="flex justify-center mt-10">
+<div className="flex justify-center">
   <hr className="w-1/2 border-t border-neutral-300" />
 </div>
 
@@ -115,7 +115,7 @@ return (
   </div>
 </section>
 
-<div className="flex justify-center py-8">
+<div className="flex justify-center">
   <hr className="w-1/2 border-t border-neutral-300" />
 </div>
 
@@ -170,7 +170,7 @@ return (
   </div>
 </section>
 
-<div className="flex justify-center pt-8">
+<div className="flex justify-center">
   <hr className="w-1/2 border-t border-neutral-300" />
 </div>
 
