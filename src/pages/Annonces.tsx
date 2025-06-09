@@ -275,22 +275,25 @@ className={`flex items-center gap-2 px-4 py-2 rounded transition ${
           {submitted ? (
             <p className="text-green-600 font-medium">Annonce envoyée, en attente de validation.</p>
           ) : (
-<form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="font-medium">Nom Prénom *</label>
-                <input type="text" name="nom" value={formData.nom} onChange={handleChange} className="w-full border px-3 py-2 rounded" required />
+<form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-x-8 md:gap-y-6">
+<div className="w-full">
+  <label className="block font-medium mb-1 text-sm text-gray-700">Nom Prénom *</label>
+  <input type="text" name="nom" className="w-full border px-3 py-2 rounded"  required />
               </div>
-              <div>
-                <label className="font-medium">Adresse Email</label>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} className="w-full border px-3 py-2 rounded" />
+
+<div className="w-full">
+  <label className="block font-medium mb-1 text-sm text-gray-700">Adresse Email</label>
+  <input type="email" name="email" className="w-full border px-3 py-2 rounded" />
               </div>
-              <div>
-                <label className="font-medium">Numéro de téléphone *</label>
-                <input type="tel" name="telephone" value={formData.telephone} onChange={handleChange} className="w-full border px-3 py-2 rounded" required />
+
+<div className="w-full">
+  <label className="block font-medium mb-1 text-sm text-gray-700">Numéro de téléphone *</label>
+  <input type="tel" name="telephone" className="w-full border px-3 py-2 rounded" required />
               </div>
-              <div>
-                <label className="font-medium">Type d'annonce *</label>
-                <select name="type" value={formData.type} onChange={handleChange} className="w-full border px-3 py-2 rounded" required>
+
+<div className="w-full">
+  <label className="block font-medium mb-1 text-sm text-gray-700">Type d'annonce *</label>
+  <select name="type" className="w-full border px-3 py-2 rounded" required>
                   <option value="">-- Choisir --</option>
                   <option value="recherche">Recherche</option>
                   <option value="vend">Vend</option>
@@ -302,20 +305,19 @@ className={`flex items-center gap-2 px-4 py-2 rounded transition ${
                 <label className="font-medium">Contenu de l'annonce</label>
                 <textarea name="contenu" value={formData.contenu} onChange={handleChange} className="w-full border px-3 py-2 rounded" rows={4} />
               </div>
-<div className="flex gap-8 items-start">
-<div className="flex flex-col">
-  <label className="font-medium">Photo 1</label>
-<input
-  ref={photo1Ref}
-  type="file"
-  name="photo1"
-  accept="image/*"
-  onChange={(e) =>
-    setFormData((prev) => ({ ...prev, photo1: e.target.files?.[0] ?? null }))
-  }
-/>
-
-
+<div className="flex flex-col md:flex-row gap-6 items-start w-full">
+<div className="w-full md:w-1/2">
+  <label className="block font-medium mb-1 text-sm text-gray-700">Photo 1</label>
+  <input
+    ref={photo1Ref}
+    type="file"
+    name="photo1"
+    accept="image/*"
+    onChange={(e) =>
+      setFormData((prev) => ({ ...prev, photo1: e.target.files?.[0] ?? null }))
+    }
+    className="block w-full text-sm text-gray-700 border rounded px-3 py-2"
+  />
   {formData.photo1 && (
     <div className="relative mt-2 w-32">
       <img
@@ -325,11 +327,11 @@ className={`flex items-center gap-2 px-4 py-2 rounded transition ${
       />
       <button
         type="button"
-onClick={() => {
-  setFormData((prev) => ({ ...prev, photo1: null }));
-  if (photo1Ref.current) photo1Ref.current.value = '';
-}}
-className="text-red-600 text-sm mt-1 inline-block whitespace-nowrap"
+        onClick={() => {
+          setFormData((prev) => ({ ...prev, photo1: null }));
+          if (photo1Ref.current) photo1Ref.current.value = '';
+        }}
+        className="text-red-600 text-xs mt-1 inline-block"
       >
         Supprimer l’image
       </button>
@@ -337,8 +339,9 @@ className="text-red-600 text-sm mt-1 inline-block whitespace-nowrap"
   )}
 </div>
 
-<div className="flex flex-col">
-  <label className="font-medium">Photo 2</label>
+
+<div className="w-full md:w-1/2">
+  <label className="block font-medium mb-1 text-sm text-gray-700">Photo 2</label>
   <input
     ref={photo2Ref}
     type="file"
@@ -347,8 +350,8 @@ className="text-red-600 text-sm mt-1 inline-block whitespace-nowrap"
     onChange={(e) =>
       setFormData((prev) => ({ ...prev, photo2: e.target.files?.[0] ?? null }))
     }
+    className="block w-full text-sm text-gray-700 border rounded px-3 py-2"
   />
-
   {formData.photo2 && (
     <div className="relative mt-2 w-32">
       <img
@@ -362,13 +365,14 @@ className="text-red-600 text-sm mt-1 inline-block whitespace-nowrap"
           setFormData((prev) => ({ ...prev, photo2: null }));
           if (photo2Ref.current) photo2Ref.current.value = '';
         }}
-        className="text-red-600 text-sm mt-1 inline-block whitespace-nowrap"
+        className="text-red-600 text-xs mt-1 inline-block"
       >
         Supprimer l’image
       </button>
     </div>
   )}
 </div>
+
 
 
 </div>
