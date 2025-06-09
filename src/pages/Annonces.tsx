@@ -275,7 +275,7 @@ className={`flex items-center gap-2 px-4 py-2 rounded transition ${
           {submitted ? (
             <p className="text-green-600 font-medium">Annonce envoyée, en attente de validation.</p>
           ) : (
-<form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-x-8 md:gap-y-6">
+<form onSubmit={handleSubmit} className="flex flex-col gap-4">
 <div className="w-full">
   <label className="block font-medium mb-1 text-sm text-gray-700">Nom Prénom *</label>
   <input type="text" name="nom" className="w-full border px-3 py-2 rounded"  required />
