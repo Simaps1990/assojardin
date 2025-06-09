@@ -86,8 +86,9 @@ return (
 </section>
 
 <div className="flex justify-center">
-  <hr className="w-1/2 border-t border-neutral-300 mb-5 mt-6" />
+<hr className="w-1/2 border-t border-neutral-300" />
 </div>
+
 
 
 {/* Latest Blog Post */}
@@ -175,7 +176,7 @@ return (
 <section className="py-0 m-14 bg-neutral-50">
   <div className="container-custom">
     <div className="flex justify-between items-center">
-<Link to="/annonces" className="text-3xl font-heading font-bold hover:underline mb-4">
+<Link to="/annonces" className="text-3xl font-heading font-bold hover:underline mb-2">
   Les petites annonces
 </Link>
 
