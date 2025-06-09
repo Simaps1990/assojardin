@@ -122,17 +122,18 @@ return () => {
 
       {/* Stats Cards */}
 <div className="flex flex-wrap gap-4 mb-8">
+
 <button
   onClick={() => window.location.href = '/admin/blog'}
-  className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-center"
+  className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
 >
-  <div className="flex flex-col items-center gap-2">
-    <p className="text-sm font-medium">Articles</p>
-    <div className="flex items-center gap-2">
-      <div className="bg-primary-100 p-2 rounded-full">
+  <div className="flex flex-col gap-2 items-start">
+    <p className="text-sm font-medium text-center w-full">Articles</p>
+    <div className="flex items-center">
+      <div className="bg-primary-100 p-2 rounded-full ml-1">
         <FileText className="text-primary-600" size={20} />
       </div>
-      <p className="text-xl font-bold">{blogPosts.length}</p>
+      <p className="text-xl font-bold ml-2">{blogPosts.length}</p>
     </div>
   </div>
 </button>
@@ -142,15 +143,15 @@ return () => {
 
 <button
   onClick={() => window.location.href = '/admin/events'}
-  className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-center"
+  className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
 >
-  <div className="flex flex-col items-center gap-2">
-    <p className="text-sm font-medium">Événements à venir</p>
-    <div className="flex items-center gap-2">
-      <div className="bg-accent-100 p-2 rounded-full">
+  <div className="flex flex-col gap-2 items-start">
+    <p className="text-sm font-medium text-center w-full">Événements à venir</p>
+    <div className="flex items-center">
+      <div className="bg-accent-100 p-2 rounded-full ml-1">
         <Calendar className="text-accent-600" size={20} />
       </div>
-      <p className="text-xl font-bold">{upcomingEvents.length}</p>
+      <p className="text-xl font-bold ml-2">{upcomingEvents.length}</p>
     </div>
   </div>
 </button>
@@ -159,32 +160,33 @@ return () => {
 
 <button
   onClick={() => window.location.href = '/admin/applications'}
-  className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-center"
+  className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
 >
-  <div className="flex flex-col items-center gap-2">
-    <p className="text-sm font-medium">Demandes de jardin</p>
-    <div className="flex items-center gap-2">
-      <div className="bg-secondary-100 p-2 rounded-full">
+  <div className="flex flex-col gap-2 items-start">
+    <p className="text-sm font-medium text-center w-full">Demandes de jardin</p>
+    <div className="flex items-center">
+      <div className="bg-secondary-100 p-2 rounded-full ml-1">
         <FileText className="text-secondary-600" size={20} />
       </div>
-      <p className="text-xl font-bold">{nonTraitees}</p>
+      <p className="text-xl font-bold ml-2">{nonTraitees}</p>
     </div>
   </div>
 </button>
+
 
 
 
 <button
   onClick={() => window.location.href = '/admin/annonces'}
-  className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-center"
+  className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
 >
-  <div className="flex flex-col items-center gap-2">
-    <p className="text-sm font-medium">Annonces</p>
-    <div className="flex items-center gap-2">
-      <div className="bg-yellow-100 p-2 rounded-full">
+  <div className="flex flex-col gap-2 items-start">
+    <p className="text-sm font-medium text-center w-full">Annonces</p>
+    <div className="flex items-center">
+      <div className="bg-yellow-100 p-2 rounded-full ml-1">
         <Megaphone className="text-yellow-600" size={20} />
       </div>
-      <p className="text-xl font-bold">{annoncesCount}</p>
+      <p className="text-xl font-bold ml-2">{annoncesCount}</p>
     </div>
   </div>
 </button>
@@ -192,19 +194,20 @@ return () => {
 
 
 
-<div className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-center">
-  <div className="flex flex-col items-center gap-2">
-    <p className="text-sm font-medium">Parcelles occupées</p>
-    <div className="flex items-center gap-2">
-      <div className="bg-green-100 p-2 rounded-full">
+<div className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left">
+  <div className="flex flex-col gap-2 items-start">
+    <p className="text-sm font-medium text-center w-full">Parcelles occupées</p>
+    <div className="flex items-center">
+      <div className="bg-green-100 p-2 rounded-full ml-1">
         <Users className="text-green-600" size={20} />
       </div>
-      <p className="text-xl font-bold">
+      <p className="text-xl font-bold ml-2">
         {parcellesOccupees ?? '--'} / {parcellesTotales ?? '--'}
       </p>
     </div>
   </div>
 </div>
+
 
 
       </div>
