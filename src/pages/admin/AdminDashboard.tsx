@@ -189,11 +189,18 @@ className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 trans
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10 mb-10">
         {/* Recent Blog Posts */}
         <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">Articles récents</h2>
+<div className="flex justify-between items-center mb-4">
+  <h2 className="text-xl font-semibold">Articles récents</h2>
+  {blogPosts.length > 3 && (
+    <button
+      onClick={() => window.location.href = '/admin/blog'}
+      className="text-primary-600 hover:text-primary-700 font-medium text-sm"
+    >
+      Voir tous les articles
+    </button>
+  )}
+</div>
 
-
-          </div>
 
           {recentPosts.length > 0 ? (
             <div className="space-y-4">
@@ -208,26 +215,23 @@ className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 trans
             <p className="text-neutral-500">Aucun article n'a été créé.</p>
           )}
 
-          {blogPosts.length > 3 && (
-            <div className="mt-4 text-center">
-<button
-  onClick={() => window.location.href = '/admin/blog'}
-  className="text-primary-600 hover:text-primary-700 font-medium text-sm"
->
-  Voir tous les articles
-</button>
 
-            </div>
-          )}
         </div>
 
         {/* Upcoming Events */}
         <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">Événements à venir</h2>
+<div className="flex justify-between items-center mb-4">
+  <h2 className="text-xl font-semibold">Événements à venir</h2>
+  {events.length > 3 && (
+    <button
+      onClick={() => window.location.href = '/admin/events'}
+      className="text-primary-600 hover:text-primary-700 font-medium text-sm"
+    >
+      Voir tous les événements
+    </button>
+  )}
+</div>
 
-
-          </div>
 
           {upcomingEvents.length > 0 ? (
             <div className="space-y-4">
@@ -245,17 +249,7 @@ className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 trans
             <p className="text-neutral-500">Aucun événement à venir n'est prévu.</p>
           )}
 
-          {events.length > 3 && (
-            <div className="mt-4 text-center">
-<button
-  onClick={() => window.location.href = '/admin/events'}
-  className="text-primary-600 hover:text-primary-700 font-medium text-sm"
->
-  Voir tous les événements
-</button>
 
-            </div>
-          )}
         </div>
       </div>
     </div>
