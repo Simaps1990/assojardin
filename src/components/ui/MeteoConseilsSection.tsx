@@ -112,9 +112,9 @@ const MeteoConseilsSection: React.FC = () => {
   const plantingList = MONTHLY_PLANTING[monthKey] || [];
 
   return (
-    <section className="py-12 bg-neutral-50">
+<section className="py-0 m-0 bg-neutral-50">
       <div className="container-custom">
-        <div className="grid md:grid-cols-2 gap-8">
+<div className="grid md:grid-cols-2 gap-8 mt-0 mb-0">
 
           {/* Plantation */}
           <div className="bg-white p-6 shadow-md rounded-2xl">
