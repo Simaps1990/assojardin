@@ -86,7 +86,7 @@ return (
 </section>
 
 <div className="flex justify-center">
-<hr className="w-1/2 border-t border-neutral-300 my-0" />
+<hr className="w-1/2 border-t border-neutral-300 my-4" />
 </div>
 
 {/* Latest Blog Post */}
@@ -113,7 +113,7 @@ return (
 </section>
 
 <div className="flex justify-center">
-<hr className="w-1/2 border-t border-neutral-300 my-0" />
+<hr className="w-1/2 border-t border-neutral-300 my-4" />
 </div>
 
 {/* Events Section */}
@@ -167,7 +167,7 @@ return (
 </section>
 
 <div className="flex justify-center">
-<hr className="w-1/2 border-t border-neutral-300 my-0" />
+<hr className="w-1/2 border-t border-neutral-300 my-4" />
 </div>
 
 {/* Dernière annonce validée */}
