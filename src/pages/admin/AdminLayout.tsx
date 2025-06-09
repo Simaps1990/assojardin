@@ -23,16 +23,22 @@ const AdminLayout: React.FC = () => {
   const { associationContent } = useContent();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [nonTraitees, setNonTraitees] = useState(0);
+  const [annoncesEnAttente, setAnnoncesEnAttente] = useState(0);
+
   const location = useLocation();
   const navigate = useNavigate();
 
 
 useEffect(() => {
-  const updateFromStorage = () => {
-    const data = JSON.parse(localStorage.getItem('applications') || '[]');
-    const nonTraiteesLoc = data.filter((d: any) => !d.processed).length;
-    setNonTraitees(nonTraiteesLoc);
-  };
+const updateFromStorage = () => {
+  const data = JSON.parse(localStorage.getItem('applications') || '[]');
+  const nonTraiteesLoc = data.filter((d: any) => !d.processed).length;
+  setNonTraitees(nonTraiteesLoc);
+
+  const annoncesCount = parseInt(localStorage.getItem('annoncesEnAttente') || '0', 10);
+  setAnnoncesEnAttente(annoncesCount);
+};
+
 
   updateFromStorage(); // 🔥 Lancer immédiatement dès le premier render
 
@@ -78,8 +84,18 @@ useEffect(() => {
     {
   path: '/admin/annonces',
   label: 'Annonces',
-  icon: <Megaphone size={20} />,
+  icon: (
+    <div className="relative w-5 h-5 flex items-center justify-center">
+      <Megaphone size={20} />
+      {annoncesEnAttente > 0 && (
+        <span className="absolute -top-2 left-3 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full leading-none">
+          {annoncesEnAttente}
+        </span>
+      )}
+    </div>
+  ),
 },
+
 
     {
       path: '/admin/settings',
