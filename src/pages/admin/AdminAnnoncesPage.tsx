@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../supabaseClient';
 import type { Annonce } from '../../types'; // ajuste le chemin si besoin
-import { renderAnnonceType } from '../constants/annonceTypes'; // ajuste le chemin si besoin
+import { renderAnnonceType } from '../../constants/annonceTypes'; // ajuste le chemin si besoin
 
 const AdminAnnoncesPage = () => {
   const [annonces, setAnnonces] = useState<Annonce[]>([]);
@@ -113,7 +113,8 @@ setEditingId(null);
                 <>
                   <div className="font-semibold">{annonce.nom}</div>
                   <div className="text-sm text-gray-600">{annonce.email} | {annonce.telephone}</div>
-                  <div className="text-sm">Type : {annonce.type}</div>
+                  <div className="text-sm">Type : {renderAnnonceType(annonce.type)}</div>
+
                   <div className="text-gray-800">{annonce.contenu}</div>
                 </>
               )}
