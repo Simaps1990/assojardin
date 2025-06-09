@@ -170,8 +170,8 @@ return (
   </div>
 </section>
 
-<div className="flex justify-center mt-8">
-  <hr className="w-1/2 border-t border-neutral-300 mt-18" />
+<div className="flex justify-center m-8">
+  <hr className="w-1/2 border-t border-neutral-300" />
 </div>
 
 
