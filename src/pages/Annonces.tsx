@@ -164,8 +164,11 @@ const { error } = await supabase.from('annonces').insert([{
       <div className="container-custom">
 <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
   <h1 className="font-heading font-bold text-4xl">Les petites annonces</h1>
-<div className="flex flex-wrap gap-2 mt-4">
-  {['recherche', 'vend', 'donne', 'échange'].map((type) => {
+<p className="text-neutral-600 text-lg mt-0 mb-2">
+  Retrouvez ici les annonces de particulier à particulier.
+</p>
+
+<div className="flex flex-wrap gap-2 mb-4">  {['recherche', 'vend', 'donne', 'échange'].map((type) => {
     const count = sortedAnnonces.filter(a => a.type === type).length;
     if (count === 0) return null;
 
@@ -186,8 +189,7 @@ const isSelected = selectedTypes.includes(type);
         onClick={() => toggleType(type)}
         className={`flex items-center gap-2 px-4 py-2 rounded transition ${isSelected ? colorMap[type] : grayStyle}`}
       >
-        {renderAnnonceType(type)}
-      </button>
+{renderAnnonceType(type, isSelected)}</button>
     );
   })}
 
