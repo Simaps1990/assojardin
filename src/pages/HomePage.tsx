@@ -85,14 +85,14 @@ return (
   <MeteoConseilsSection />
 </section>
 
-<div className="flex justify-center my-4">
+<div className="flex justify-center">
   <hr className="w-1/2 border-t border-neutral-300" />
 </div>
 
 {/* Latest Blog Post */}
 <section className="py-8 bg-neutral-50">
   <div className="container-custom">
-    <div className="flex justify-between items-center mb-2">
+    <div className="flex justify-between items-center">
       <Link to="/blog" className="text-3xl font-heading font-bold hover:underline">
         Dernier Article
       </Link>
@@ -112,14 +112,14 @@ return (
   </div>
 </section>
 
-<div className="flex justify-center my-4">
+<div className="flex justify-center">
   <hr className="w-1/2 border-t border-neutral-300" />
 </div>
 
 {/* Events Section */}
 <section className="py-8 bg-neutral-50">
   <div className="container-custom">
-    <div className="flex justify-between items-center mb-2">
+    <div className="flex justify-between items-center">
       <Link to="/events" className="text-3xl font-heading font-bold hover:underline">
         Nos événements
       </Link>
@@ -166,14 +166,14 @@ return (
   </div>
 </section>
 
-<div className="flex justify-center my-4">
+<div className="flex justify-center">
   <hr className="w-1/2 border-t border-neutral-300" />
 </div>
 
 {/* Dernière annonce validée */}
 <section className="py-8 bg-neutral-50">
   <div className="container-custom">
-    <div className="flex justify-between items-center mb-2">
+    <div className="flex justify-between items-center">
       <Link to="/annonces" className="text-3xl font-heading font-bold hover:underline">
         Les petites annonces
       </Link>
