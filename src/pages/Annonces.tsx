@@ -145,6 +145,9 @@ const { error } = await supabase.from('annonces').insert([{
   photo2: photo2Url,
   statut: 'en_attente'
 }]);
+const currentCount = Number(localStorage.getItem('annoncesEnAttente') || '1');
+localStorage.setItem('annoncesEnAttente', String(Math.max(currentCount - 1, 0)));
+window.dispatchEvent(new Event('storage'));
 
 
   if (error) {
@@ -155,9 +158,23 @@ const { error } = await supabase.from('annonces').insert([{
  
   await fetchAnnonces();
  setSubmitted(true);
- window.scrollTo({ top: 0, behavior: 'smooth' });
+document.getElementById('poster')?.scrollIntoView({ behavior: 'smooth' });
 
 };
+useEffect(() => {
+  setSubmitted(false);
+  setFormData({
+    nom: '',
+    email: '',
+    telephone: '',
+    type: '',
+    contenu: '',
+    photo1: null,
+    photo2: null
+  });
+  if (photo1Ref.current) photo1Ref.current.value = '';
+  if (photo2Ref.current) photo2Ref.current.value = '';
+}, [location.pathname]);
 
   return (
     <div className="pb-16">

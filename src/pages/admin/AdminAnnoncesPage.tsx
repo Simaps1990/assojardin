@@ -24,6 +24,7 @@ setEditingId(null);
     fetchAnnonces();
   };
 
+
   const fetchAnnonces = async () => {
     setLoading(true);
     const { data, error } = await supabase
@@ -41,10 +42,16 @@ setEditingId(null);
     fetchAnnonces();
   }, []);
 
-  const validerAnnonce = async (id: string) => {
-    await supabase.from('annonces').update({ statut: 'validé' }).eq('id', id);
-    fetchAnnonces();
-  };
+const validerAnnonce = async (id: string) => {
+  await supabase.from('annonces').update({ statut: 'validé' }).eq('id', id);
+
+  const currentCount = Number(localStorage.getItem('annoncesEnAttente') || '1');
+  localStorage.setItem('annoncesEnAttente', String(Math.max(currentCount - 1, 0)));
+  window.dispatchEvent(new Event('storage'));
+
+  fetchAnnonces();
+};
+
 
   const supprimerAnnonce = async (id: string) => {
     await supabase.from('annonces').delete().eq('id', id);
