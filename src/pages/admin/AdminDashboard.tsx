@@ -130,12 +130,13 @@ return () => {
   <div className="flex flex-col items-start justify-center gap-4">
     <div className="text-sm font-medium">Articles</div>
 
-    <div className="flex items-center">
-      <div className="bg-primary-100 p-[6px] rounded-full ml-1 flex items-center justify-center">
-        <FileText className="text-primary-600 w-5 h-5" />
-      </div>
-      <p className="text-xl font-bold ml-2 leading-none flex items-center h-5">{blogPosts.length}</p>
-    </div>
+<div className="flex items-center ml-1 h-6">
+  <div className="bg-primary-100 rounded-full flex items-center justify-center w-6 h-6">
+    <FileText className="text-primary-600 w-4 h-4" />
+  </div>
+  <p className="text-xl font-bold ml-2 leading-none h-6 flex items-center">{blogPosts.length}</p>
+</div>
+
   </div>
 </button>
 
