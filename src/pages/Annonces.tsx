@@ -44,6 +44,13 @@ console.log("📥 Cloudinary Response Status:", res.status);
 
 const AnnoncesPage: React.FC = () => {
 const { annonces, fetchAnnonces } = useContent();
+const sortedAnnonces = [...annonces]
+  .filter(a => a.statut === 'validé')
+  .sort((a, b) => {
+    const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+    const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+    return dateB - dateA;
+  });
 const location = useLocation();
 
 useEffect(() => {
@@ -78,6 +85,29 @@ const [formData, setFormData] = useState<{
     photo2: null,
   });
   const [submitted, setSubmitted] = useState(false);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+const toggleType = (type: string) => {
+  setSelectedTypes((prev) => {
+    // Premier clic => on isole le type cliqué
+    if (prev.length === 0) {
+      return [type];
+    }
+
+    // Si déjà sélectionné => on le retire
+    if (prev.includes(type)) {
+      const updated = prev.filter((t) => t !== type);
+      return updated;
+    }
+
+    // Sinon, on ajoute (filtrage cumulatif)
+    return [...prev, type];
+  });
+};
+
+const visibleAnnonces = sortedAnnonces.filter(
+  (a) => selectedTypes.length === 0 || selectedTypes.includes(a.type)
+);
+
 const photo1Ref = useRef<HTMLInputElement>(null);
 const photo2Ref = useRef<HTMLInputElement>(null);
 const [fullscreenImage, setFullscreenImage] = useState<{ current: string; next?: string } | null>(null);
@@ -129,29 +159,49 @@ const { error } = await supabase.from('annonces').insert([{
 
 };
 
-
-const sortedAnnonces = [...annonces]
-  .filter(a => a.statut === 'validé')
-  .sort((a, b) => {
-    const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
-    const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
-    return dateB - dateA;
-  });
-
-
-
-
   return (
     <div className="pb-16">
       <div className="container-custom">
 <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
   <h1 className="font-heading font-bold text-4xl">Les petites annonces</h1>
-  <a
-    href="#poster"
-    className="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 text-base text-center w-full md:w-auto"
-  >
-    Nouvelle annonce
-  </a>
+<div className="flex flex-wrap gap-2 mt-4">
+  {['recherche', 'vend', 'donne', 'échange'].map((type) => {
+    const count = sortedAnnonces.filter(a => a.type === type).length;
+    if (count === 0) return null;
+
+const isSelected = selectedTypes.includes(type);
+
+    const colorMap: Record<string, string> = {
+      recherche: 'bg-blue-500 text-white',
+      vend: 'bg-yellow-500 text-black',
+      donne: 'bg-green-500 text-white',
+      échange: 'bg-amber-700 text-white'
+    };
+
+    const grayStyle = 'bg-gray-200 text-gray-700';
+
+    return (
+      <button
+        key={type}
+        onClick={() => toggleType(type)}
+        className={`flex items-center gap-2 px-4 py-2 rounded transition ${isSelected ? colorMap[type] : grayStyle}`}
+      >
+        {renderAnnonceType(type)}
+      </button>
+    );
+  })}
+
+  {sortedAnnonces.length === 0 && (
+    <a
+      href="#poster"
+      className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-base text-center"
+    >
+      Nouvelle annonce
+    </a>
+  )}
+</div>
+
+
 </div>
 
 <p className="text-neutral-600 text-lg mt-0 mb-2">
@@ -163,7 +213,7 @@ const sortedAnnonces = [...annonces]
         {/* Liste des annonces */}
         {sortedAnnonces.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sortedAnnonces.map((post) => (
+{visibleAnnonces.map((post) => (
 <div key={post.id} id={`annonce-${post.id}`} className="border rounded-lg p-4 bg-white shadow">
 <p className="text-sm text-neutral-400 mb-1">
   {post.created_at ? new Date(post.created_at).toLocaleDateString() : 'Date inconnue'}
