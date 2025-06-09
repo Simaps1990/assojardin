@@ -153,9 +153,10 @@ const sortedAnnonces = [...annonces]
   </a>
 </div>
 
-<p className="text-neutral-600 text-lg mb-8">
+<p className="text-neutral-600 text-lg mt-0 mb-2">
   Retrouvez ici les annonces de particulier à particulier.
 </p>
+
 
 
         {/* Liste des annonces */}
