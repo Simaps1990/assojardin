@@ -121,35 +121,36 @@ return () => {
       <h1 className="text-3xl font-semibold mb-6">Tableau de bord</h1>
 
       {/* Stats Cards */}
-<div className="flex flex-wrap gap-4 mb-8"><button
+<div className="flex flex-wrap gap-4 mb-8">
+<button
   onClick={() => window.location.href = '/admin/blog'}
-className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
+  className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-center"
 >
-  <div className="flex items-center gap-4">
-    <div className="bg-primary-100 p-3 rounded-full flex items-center justify-center">
-      <FileText className="text-primary-600" size={24} />
+  <div className="flex flex-col items-center gap-2">
+    <p className="text-sm font-medium">Articles</p>
+    <div className="flex items-center gap-2">
+      <div className="bg-primary-100 p-2 rounded-full">
+        <FileText className="text-primary-600" size={20} />
+      </div>
+      <p className="text-xl font-bold">{blogPosts.length}</p>
     </div>
-    <div className="flex flex-col justify-center">
-      <p className="text-neutral-500 text-sm">Articles</p>
-      <p className="text-2xl">{blogPosts.length}</p>
-    </div>
-
   </div>
 </button>
 
 
 
+
 <button
   onClick={() => window.location.href = '/admin/events'}
-className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
+  className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-center"
 >
-  <div className="flex items-center gap-4">
-    <div className="bg-accent-100 p-3 rounded-full flex items-center justify-center">
-      <Calendar className="text-accent-600" size={24} />
-    </div>
-    <div className="flex flex-col justify-center">
-      <p className="text-neutral-500 text-sm">Événements à venir</p>
-      <p className="text-2xl">{upcomingEvents.length}</p>
+  <div className="flex flex-col items-center gap-2">
+    <p className="text-sm font-medium">Événements à venir</p>
+    <div className="flex items-center gap-2">
+      <div className="bg-accent-100 p-2 rounded-full">
+        <Calendar className="text-accent-600" size={20} />
+      </div>
+      <p className="text-xl font-bold">{upcomingEvents.length}</p>
     </div>
   </div>
 </button>
@@ -158,54 +159,53 @@ className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 trans
 
 <button
   onClick={() => window.location.href = '/admin/applications'}
-className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
+  className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-center"
 >
-  <div className="flex items-center gap-4">
-    <div className="bg-secondary-100 p-3 rounded-full flex items-center justify-center">
-      <FileText className="text-secondary-600" size={24} />
-    </div>
-    <div className="flex flex-col justify-center">
-      <p className="text-neutral-500 text-sm">Demandes de jardin</p>
-      <p className="text-2xl">{nonTraitees}</p>
+  <div className="flex flex-col items-center gap-2">
+    <p className="text-sm font-medium">Demandes de jardin</p>
+    <div className="flex items-center gap-2">
+      <div className="bg-secondary-100 p-2 rounded-full">
+        <FileText className="text-secondary-600" size={20} />
+      </div>
+      <p className="text-xl font-bold">{nonTraitees}</p>
     </div>
   </div>
 </button>
+
 
 
 <button
   onClick={() => window.location.href = '/admin/annonces'}
-className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
+  className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-center"
 >
-  <div className="flex items-center gap-4">
-    <div className="bg-yellow-100 p-3 rounded-full flex items-center justify-center">
-      <Megaphone className="text-yellow-600" size={24} />
-    </div>
-    <div className="flex flex-col justify-center">
-      <p className="text-neutral-500 text-sm">Annonces</p>
-      <p className="text-2xl">{annoncesCount}</p>
-
-
+  <div className="flex flex-col items-center gap-2">
+    <p className="text-sm font-medium">Annonces</p>
+    <div className="flex items-center gap-2">
+      <div className="bg-yellow-100 p-2 rounded-full">
+        <Megaphone className="text-yellow-600" size={20} />
+      </div>
+      <p className="text-xl font-bold">{annoncesCount}</p>
     </div>
   </div>
 </button>
 
 
 
-<div className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left">
 
-<div className="flex items-center gap-4">
-  <div className="bg-green-100 p-3 rounded-full flex items-center justify-center">
-    <Users className="text-green-600" size={24} />
-  </div>
-  <div className="flex flex-col justify-center">
-    <p className="text-neutral-500 text-sm">Parcelles occupées</p>
-    <p className="text-2xl">
-      {parcellesOccupees ?? '--'} / {parcellesTotales ?? '--'}
-    </p>
+<div className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-center">
+  <div className="flex flex-col items-center gap-2">
+    <p className="text-sm font-medium">Parcelles occupées</p>
+    <div className="flex items-center gap-2">
+      <div className="bg-green-100 p-2 rounded-full">
+        <Users className="text-green-600" size={20} />
+      </div>
+      <p className="text-xl font-bold">
+        {parcellesOccupees ?? '--'} / {parcellesTotales ?? '--'}
+      </p>
+    </div>
   </div>
 </div>
 
-</div>
 
       </div>
 
