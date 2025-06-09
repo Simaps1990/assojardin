@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
              <li className="flex items-start">
   <MapPin className="mr-2 mt-1 flex-shrink-0" size={18} />
   <a
-    href="https://g.co/kgs/S6Z55nS"
+    href="https://maps.app.goo.gl/1TX7D2YyT6tKcvZQ9"
     target="_blank"
     rel="noopener noreferrer"
     className="hover:text-primary-200 transition-colors"
