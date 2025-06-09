@@ -18,6 +18,7 @@ const { associationContent } = useContent();
 const [annoncesCount, setAnnoncesCount] = useState<number>(0);
 
 const [nonTraitees, setNonTraitees] = useState(0);
+
 const [parcellesOccupees, setParcellesOccupees] = useState<number | null>(null);
 const [parcellesTotales, setParcellesTotales] = useState<number | null>(null);
 
@@ -65,12 +66,31 @@ const fetchAnnoncesValidees = async () => {
 };
 
 fetchAnnoncesValidees();
+fetchAnnoncesNonValidees();
+
     setNonTraitees(count || 0);
   };
+const fetchAnnoncesNonValidees = async () => {
+  const { count, error } = await supabase
+    .from('annonces')
+    .select('*', { count: 'exact', head: true })
+    .eq('statut', 'en_attente');
+
+  if (!error) {
+    localStorage.setItem('annoncesEnAttente', String(count || 0));
+window.dispatchEvent(new Event('storage'));
+
+  }
+};
 
   fetchNonTraitees();
   const interval = setInterval(fetchNonTraitees, 30000);
-  return () => clearInterval(interval);
+
+return () => {
+  clearInterval(interval);
+  localStorage.removeItem('annoncesEnAttente');
+};
+
 
 }, [associationContent]);
 
@@ -113,6 +133,7 @@ className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 trans
       <p className="text-neutral-500 text-sm">Articles</p>
       <p className="text-2xl">{blogPosts.length}</p>
     </div>
+
   </div>
 </button>
 
@@ -162,6 +183,8 @@ className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 trans
     <div className="flex flex-col justify-center">
       <p className="text-neutral-500 text-sm">Annonces</p>
       <p className="text-2xl">{annoncesCount}</p>
+
+
     </div>
   </div>
 </button>
