@@ -186,8 +186,11 @@ const { error } = await supabase.from('annonces').insert([{
       <button
         key={type}
         onClick={() => toggleType(type)}
-        className={`flex items-center gap-2 px-4 py-2 rounded transition ${isSelected ? colorMap[type] : grayStyle}`}
-      >
+className={`flex items-center gap-2 px-4 py-2 rounded transition ${
+  isSelected
+    ? `${colorMap[type]} hover:text-white`
+    : `${grayStyle} hover:text-black`
+}`}      >
         {renderAnnonceType(type, isSelected)}
       </button>
     );
