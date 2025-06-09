@@ -175,7 +175,7 @@ return (
 <section className="py-0 m-14 bg-neutral-50">
   <div className="container-custom">
     <div className="flex justify-between items-center">
-      <Link to="/annonces" className="text-3xl font-heading font-bold hover:underline">
+<Link to="/annonces" className="text-3xl font-heading font-bold hover:underline mt-6">
         Les petites annonces
       </Link>
       <Link to="/annonces" className="flex items-center text-primary-600 hover:text-primary-700">
