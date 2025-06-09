@@ -12,7 +12,6 @@ const Footer: React.FC = () => {
     associationContent?.texteFooter ||
     "La Société des Jardins Ouvriers de Villeurbanne promeut le jardinage écologique et crée du lien social à travers la culture de parcelles individuelles et collectives.";
 
-  const contactAdresse = associationContent?.adresse || "123 Rue des Jardins, 69100 Villeurbanne, France";
   const contactTel = associationContent?.telephone || "04 78 12 34 56";
   const contactEmail = associationContent?.email || "sjovilleurbanne@gmail.com";
   const contactHoraire = associationContent?.horaires || "Permanences: Samedi 9h-12h";
@@ -41,10 +40,18 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-bold mb-4">Contact</h3>
             <ul className="space-y-3">
-              <li className="flex items-start">
-                <MapPin className="mr-2 mt-1 flex-shrink-0" size={18} />
-                <span>{contactAdresse}</span>
-              </li>
+             <li className="flex items-start">
+  <MapPin className="mr-2 mt-1 flex-shrink-0" size={18} />
+  <a
+    href="https://g.co/kgs/S6Z55nS"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="hover:text-primary-200 transition-colors"
+  >
+    6 rue du Pont des Planches, 69100 Villeurbanne
+  </a>
+</li>
+
               <li className="flex items-center">
                 <Phone className="mr-2 flex-shrink-0" size={18} />
                 <span>{contactTel}</span>
@@ -67,38 +74,16 @@ const Footer: React.FC = () => {
 
           <div>
             <h3 className="text-xl font-bold mb-4">Liens Rapides</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/" className="hover:text-primary-200 transition-colors">
-                  Accueil
-                </Link>
-              </li>
-              <li>
-                <Link to="/association" className="hover:text-primary-200 transition-colors">
-                  Notre Association
-                </Link>
-              </li>
-              <li>
-                <Link to="/blog" className="hover:text-primary-200 transition-colors">
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link to="/events" className="hover:text-primary-200 transition-colors">
-                  Événements
-                </Link>
-              </li>
-              <li>
-                <Link to="/apply" className="hover:text-primary-200 transition-colors">
-                  Postuler pour un jardin
-                </Link>
-              </li>
-              <li>
-                <Link to="/contact" className="hover:text-primary-200 transition-colors">
-                  Contact
-                </Link>
-              </li>
-            </ul>
+<ul className="space-y-2">
+  <li><Link to="/" className="hover:text-primary-200 transition-colors">Accueil</Link></li>
+  <li><Link to="/association" className="hover:text-primary-200 transition-colors">Notre Association</Link></li>
+  <li><Link to="/blog" className="hover:text-primary-200 transition-colors">Blog</Link></li>
+  <li><Link to="/events" className="hover:text-primary-200 transition-colors">Événements</Link></li>
+  <li><Link to="/annonces" className="hover:text-primary-200 transition-colors">Annonces</Link></li>
+  <li><Link to="/apply" className="hover:text-primary-200 transition-colors">Postuler pour un jardin</Link></li>
+  <li><Link to="/contact" className="hover:text-primary-200 transition-colors">Contact</Link></li>
+</ul>
+
           </div>
         </div>
 
