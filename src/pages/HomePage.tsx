@@ -81,16 +81,16 @@ return (
     )}
 
 {/* Section Météo + Plantation */}
-<section className="py-8 bg-neutral-50">
+<section className="py-0 m-0 bg-neutral-50">
   <MeteoConseilsSection />
 </section>
 
 <div className="flex justify-center">
-  <hr className="w-1/2 border-t border-neutral-300" />
+<hr className="w-1/2 border-t border-neutral-300 my-0" />
 </div>
 
 {/* Latest Blog Post */}
-<section className="py-8 bg-neutral-50">
+<section className="py-0 m-0 bg-neutral-50">
   <div className="container-custom">
     <div className="flex justify-between items-center">
       <Link to="/blog" className="text-3xl font-heading font-bold hover:underline">
@@ -113,11 +113,11 @@ return (
 </section>
 
 <div className="flex justify-center">
-  <hr className="w-1/2 border-t border-neutral-300" />
+<hr className="w-1/2 border-t border-neutral-300 my-0" />
 </div>
 
 {/* Events Section */}
-<section className="py-8 bg-neutral-50">
+<section className="py-0 m-0 bg-neutral-50">
   <div className="container-custom">
     <div className="flex justify-between items-center">
       <Link to="/events" className="text-3xl font-heading font-bold hover:underline">
@@ -167,11 +167,11 @@ return (
 </section>
 
 <div className="flex justify-center">
-  <hr className="w-1/2 border-t border-neutral-300" />
+<hr className="w-1/2 border-t border-neutral-300 my-0" />
 </div>
 
 {/* Dernière annonce validée */}
-<section className="py-8 bg-neutral-50">
+<section className="py-0 m-0 bg-neutral-50">
   <div className="container-custom">
     <div className="flex justify-between items-center">
       <Link to="/annonces" className="text-3xl font-heading font-bold hover:underline">
@@ -220,7 +220,7 @@ return (
 
 
     {/* Call to Action */}
-    <section className="py-8 bg-primary-700 text-white">
+    <section className="py-0 m-0 bg-primary-700 text-white">
       <div className="container-custom text-center">
         <h2 className="text-3xl font-heading font-bold mb-4">
           Rejoignez-nous dans cette aventure verte
