@@ -13,19 +13,19 @@ export const annonceTypeMap: Record<
 > = {
   vend: {
     label: 'VENTE',
-    icon: <DollarSign className="w-4 h-4" />
+    icon: <DollarSign className="w-4 h-4 text-yellow-500" />
   },
   donne: {
     label: 'DON',
-    icon: <Gift className="w-4 h-4" />
+    icon: <Gift className="w-4 h-4 text-green-600" />
   },
   recherche: {
     label: 'RECHERCHE',
-    icon: <Search className="w-4 h-4" />
+    icon: <Search className="w-4 h-4 text-sky-500" />
   },
   échange: {
     label: 'ÉCHANGE',
-    icon: <Repeat className="w-4 h-4" />
+    icon: <Repeat className="w-4 h-4 text-amber-900" />
   }
 };
 
