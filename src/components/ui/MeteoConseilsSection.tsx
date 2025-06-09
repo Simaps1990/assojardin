@@ -189,8 +189,8 @@ const MeteoConseilsSection: React.FC = () => {
 <li className="text-sm text-neutral-800">
   {allergyRisks.length === 1 && allergyRisks[0].includes('préoccupant') ? (
     <>
-<span className="text-neutral-800">Risques allergènes : </span>
-<span className="text-green-600">{allergyRisks[0]}</span>
+      <span className="text-neutral-800">Risques allergènes : </span>
+      <span className="text-green-600">{allergyRisks[0]}</span>
     </>
   ) : (
     <>
@@ -203,6 +203,7 @@ const MeteoConseilsSection: React.FC = () => {
     </>
   )}
 </li>
+
 
 
         </ul>
