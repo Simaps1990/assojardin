@@ -59,11 +59,11 @@ try {
 
   if (typeof aqi === 'number') {
     if (aqi <= 50) airQuality = 'Bonne';
-    else if (aqi <= 100) airQuality = 'Modérée';
-    else if (aqi <= 150) airQuality = 'Acceptable';
-    else if (aqi <= 200) airQuality = 'Mauvaise pour les personnes sensibles';
-    else if (aqi <= 300) airQuality = 'Mauvaise';
-    else airQuality = 'Très mauvaise';
+    else if (aqi <= 100) airQuality = 'Modérée.';
+    else if (aqi <= 150) airQuality = 'Acceptable.';
+    else if (aqi <= 200) airQuality = 'Mauvaise pour les personnes sensibles.';
+    else if (aqi <= 300) airQuality = 'Mauvaise.';
+    else airQuality = 'Très mauvaise.';
   }
 } catch (error) {
   console.warn('Qualité de l’air indisponible :', error);
@@ -82,7 +82,7 @@ const nowIndex = hours.findIndex((h: string) => {
 
         const allergens: { [key: string]: string } = {
           grass_pollen: 'de graminées',
-          birch_pollen: 'de bouleau',
+          birch_pollen: 'de pollen de bouleau',
           mugwort_pollen: 'd\'armoise',
           ragweed_pollen: 'd\'ambroisie',
         };
@@ -98,12 +98,12 @@ const allergyRisks = allergyRisksRaw
   .filter(({ value }) => value > 80)
   .map(({ label, value }) => {
     const niveau =
-      value > 200 ? 'très élevé' : 'élevé';
+      value > 200 ? 'très élevé.' : 'élevé.';
     return `Taux ${label.toLowerCase()} ${niveau}`;
   });
 
 if (allergyRisks.length === 0) {
-  allergyRisks.push('Rien de préoccupant actuellement');
+  allergyRisks.push('Rien de préoccupant actuellement.');
 }
 
 
@@ -120,7 +120,7 @@ if (allergyRisks.length === 0) {
         setError(null);
       } catch (err) {
         console.error('Erreur récupération données météo / qualité air / pollens:', err);
-        setError('Impossible de charger les données météo');
+        setError('Impossible de charger les données météo.');
         setWeather(null);
       } finally {
         setLoading(false);
