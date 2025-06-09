@@ -125,18 +125,20 @@ return () => {
 
 <button
   onClick={() => window.location.href = '/admin/blog'}
-  className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
+  className="w-[220px] bg-white rounded-lg shadow-sm px-6 py-5 hover:bg-neutral-50 transition-colors text-left"
 >
-  <div className="flex flex-col gap-2 items-start">
+  <div className="flex flex-col items-start justify-center gap-4">
     <div className="text-sm font-medium">Articles</div>
-    <div className="flex items-center h-5">
-      <div className="bg-primary-100 p-2 rounded-full ml-1 flex items-center justify-center">
-        <FileText className="text-primary-600" size={20} />
+
+    <div className="flex items-center">
+      <div className="bg-primary-100 p-[6px] rounded-full ml-1 flex items-center justify-center">
+        <FileText className="text-primary-600 w-5 h-5" />
       </div>
-      <p className="text-xl font-bold ml-2 leading-none">{blogPosts.length}</p>
+      <p className="text-xl font-bold ml-2 leading-none flex items-center h-5">{blogPosts.length}</p>
     </div>
   </div>
 </button>
+
 
 
 
