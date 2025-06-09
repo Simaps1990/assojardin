@@ -162,25 +162,24 @@ const { error } = await supabase.from('annonces').insert([{
   return (
     <div className="pb-16">
       <div className="container-custom">
-<div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
-  <h1 className="font-heading font-bold text-4xl">Les petites annonces</h1>
-<p className="text-neutral-600 text-lg mt-0 mb-2">
+<h1 className="font-heading font-bold text-4xl mb-2">Les petites annonces</h1>
+
+<p className="text-neutral-600 text-lg mb-4">
   Retrouvez ici les annonces de particulier à particulier.
 </p>
 
-<div className="flex flex-wrap gap-2 mb-4">  {['recherche', 'vend', 'donne', 'échange'].map((type) => {
+<div className="flex flex-wrap gap-2 mb-6">
+  {['recherche', 'vend', 'donne', 'échange'].map((type) => {
     const count = sortedAnnonces.filter(a => a.type === type).length;
     if (count === 0) return null;
 
-const isSelected = selectedTypes.includes(type);
-
+    const isSelected = selectedTypes.includes(type);
     const colorMap: Record<string, string> = {
       recherche: 'bg-blue-500 text-white',
-      vend: 'bg-yellow-500 text-black',
-      donne: 'bg-green-500 text-white',
-      échange: 'bg-amber-700 text-white'
+      vend: 'bg-yellow-500 text-white',
+      donne: 'bg-green-600 text-white',
+      échange: 'bg-amber-800 text-white'
     };
-
     const grayStyle = 'bg-gray-200 text-gray-700';
 
     return (
@@ -189,7 +188,8 @@ const isSelected = selectedTypes.includes(type);
         onClick={() => toggleType(type)}
         className={`flex items-center gap-2 px-4 py-2 rounded transition ${isSelected ? colorMap[type] : grayStyle}`}
       >
-{renderAnnonceType(type, isSelected)}</button>
+        {renderAnnonceType(type, isSelected)}
+      </button>
     );
   })}
 
@@ -201,9 +201,6 @@ const isSelected = selectedTypes.includes(type);
       Nouvelle annonce
     </a>
   )}
-</div>
-
-
 </div>
 
 <p className="text-neutral-600 text-lg mt-0 mb-2">
