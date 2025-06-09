@@ -117,13 +117,16 @@ const validerAnnonce = async (id: string) => {
                   />
                 </>
               ) : (
-                <>
-                  <div className="font-semibold">{annonce.nom}</div>
-                  <div className="text-sm text-gray-600">{annonce.email} | {annonce.telephone}</div>
-                  <div className="text-sm">Type : {renderAnnonceType(annonce.type)}</div>
+<>
+  <div className="text-base font-medium text-gray-900">{annonce.nom}</div>
+  <div className="text-base text-gray-600">{annonce.email} | {annonce.telephone}</div>
+  <div className="text-base flex items-center gap-2">
+    <span className="text-gray-700">Type :</span>
+    {renderAnnonceType(annonce.type)}
+  </div>
+  <div className="text-base text-gray-800">{annonce.contenu}</div>
+</>
 
-                  <div className="text-gray-800">{annonce.contenu}</div>
-                </>
               )}
 
               <div className="flex gap-4 pt-2">
