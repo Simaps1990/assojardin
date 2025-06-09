@@ -101,10 +101,9 @@ fetchAnnoncesValidees();
       <h1 className="text-3xl font-semibold mb-6">Tableau de bord</h1>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-<button
+<div className="flex flex-wrap gap-4 mb-8"><button
   onClick={() => window.location.href = '/admin/blog'}
-  className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors w-full text-left"
+className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
 >
   <div className="flex items-center gap-4">
     <div className="bg-primary-100 p-3 rounded-full flex items-center justify-center">
@@ -121,7 +120,7 @@ fetchAnnoncesValidees();
 
 <button
   onClick={() => window.location.href = '/admin/events'}
-  className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors w-full text-left"
+className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
 >
   <div className="flex items-center gap-4">
     <div className="bg-accent-100 p-3 rounded-full flex items-center justify-center">
@@ -138,7 +137,7 @@ fetchAnnoncesValidees();
 
 <button
   onClick={() => window.location.href = '/admin/applications'}
-  className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors w-full text-left"
+className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
 >
   <div className="flex items-center gap-4">
     <div className="bg-secondary-100 p-3 rounded-full flex items-center justify-center">
@@ -154,7 +153,7 @@ fetchAnnoncesValidees();
 
 <button
   onClick={() => window.location.href = '/admin/annonces'}
-  className="bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors w-full text-left"
+className="w-[220px] bg-white rounded-lg shadow-sm p-6 hover:bg-neutral-50 transition-colors text-left"
 >
   <div className="flex items-center gap-4">
     <div className="bg-yellow-100 p-3 rounded-full flex items-center justify-center">
