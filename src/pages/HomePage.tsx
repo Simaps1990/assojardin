@@ -227,7 +227,7 @@ return (
 
     {/* Call to Action */}
 <section className="pt-14 mt-14 m-0 bg-primary-700 text-white">
-  <div className="w-full text-center px-4 md:px-0">
+<div className="w-full text-center px-4 md:px-0 pb-14">
 
         <h2 className="text-3xl font-heading font-bold mb-4">
           Rejoignez-nous dans cette aventure verte
