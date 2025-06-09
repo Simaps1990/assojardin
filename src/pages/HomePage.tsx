@@ -83,9 +83,10 @@ return (
 {/* Section Météo + Plantation */}
 <MeteoConseilsSection />
 
-<div className="flex justify-center my-6">
-      <hr className="w-1/2 border-t border-neutral-300" />
-    </div>
+<div className="flex justify-center my-16">
+  <hr className="w-1/2 border-t border-neutral-300" />
+</div>
+
 
     {/* Latest Blog Post */}
 <section className="pt-9 pb-16 bg-neutral-50">
@@ -118,7 +119,7 @@ return (
       </div>
     </section>
 
-    <div className="flex justify-center my-1">
+<div className="flex justify-center my-16">
       <hr className="w-1/2 border-t border-neutral-300" />
     </div>
 
