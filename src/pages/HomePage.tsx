@@ -220,8 +220,9 @@ return (
 
 
     {/* Call to Action */}
-    <section className="py-0 m-6 bg-primary-700 text-white">
-      <div className="container-custom text-center">
+<section className="py-0 m-0 bg-primary-700 text-white">
+  <div className="w-full text-center px-4 md:px-0">
+
         <h2 className="text-3xl font-heading font-bold mb-4">
           Rejoignez-nous dans cette aventure verte
         </h2>
