@@ -143,12 +143,70 @@ const sortedAnnonces = [...annonces]
   return (
     <div className="pb-16">
       <div className="container-custom">
-        <h1 className="font-heading font-bold text-4xl mb-2">Les petites annonces</h1>
-        <p className="text-neutral-600 text-lg mb-8">
-          Retrouvez ici les annonces de particulier à particulier.
-        </p>
+<div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
+  <h1 className="font-heading font-bold text-4xl">Les petites annonces</h1>
+  <a
+    href="#poster"
+    className="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 text-base text-center w-full md:w-auto"
+  >
+    Nouvelle annonce
+  </a>
+</div>
 
-        {/* Formulaire de soumission */}
+<p className="text-neutral-600 text-lg mb-8">
+  Retrouvez ici les annonces de particulier à particulier.
+</p>
+
+
+        {/* Liste des annonces */}
+        {sortedAnnonces.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {sortedAnnonces.map((post) => (
+<div key={post.id} id={`annonce-${post.id}`} className="border rounded-lg p-4 bg-white shadow">
+<p className="text-sm text-neutral-400 mb-1">
+  {post.created_at ? new Date(post.created_at).toLocaleDateString() : 'Date inconnue'}
+</p>
+<h3 className="text-lg font-semibold mb-2">{post.type?.toUpperCase()}</h3>
+                <p className="text-neutral-700 whitespace-pre-line">{post.contenu}</p>
+<p className="text-sm text-neutral-500 italic mt-2">
+  {post.nom} • {post.telephone} {post.email && `• ${post.email}`}
+</p>
+{(post.photo1 || post.photo2) && (
+  <div className="flex gap-3 mt-3">
+    {post.photo1 && (
+      <img
+        src={post.photo1}
+        alt="photo1"
+        className="w-32 h-32 object-cover rounded cursor-pointer"
+        onClick={() =>
+          setFullscreenImage({ current: post.photo1 || '', next: post.photo2 || undefined })
+        }
+      />
+    )}
+    {post.photo2 && (
+      <img
+        src={post.photo2}
+        alt="photo2"
+        className="w-32 h-32 object-cover rounded cursor-pointer"
+        onClick={() =>
+          setFullscreenImage({ current: post.photo2 || '', next: post.photo1 || undefined })
+        }
+      />
+    )}
+  </div>
+)}            
+
+</div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-neutral-500 text-center">Aucune annonce pour le moment.</p>
+        )}
+
+                {/* Formulaire de soumission */}
+<h2 id="poster" className="text-2xl font-heading font-semibold mt-16 mb-4">
+  Poster une nouvelle annonce
+</h2>
         <div className="bg-white p-6 rounded-2xl shadow mb-12">
           {submitted ? (
             <p className="text-green-600 font-medium">Annonce envoyée, en attente de validation.</p>
@@ -265,50 +323,6 @@ className="text-red-600 text-sm mt-1 inline-block whitespace-nowrap"
           )}
         </div>
 
-        {/* Liste des annonces */}
-        {sortedAnnonces.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sortedAnnonces.map((post) => (
-<div key={post.id} id={`annonce-${post.id}`} className="border rounded-lg p-4 bg-white shadow">
-<p className="text-sm text-neutral-400 mb-1">
-  {post.created_at ? new Date(post.created_at).toLocaleDateString() : 'Date inconnue'}
-</p>
-<h3 className="text-lg font-semibold mb-2">{post.type?.toUpperCase()}</h3>
-                <p className="text-neutral-700 whitespace-pre-line">{post.contenu}</p>
-<p className="text-sm text-neutral-500 italic mt-2">
-  {post.nom} • {post.telephone} {post.email && `• ${post.email}`}
-</p>
-{(post.photo1 || post.photo2) && (
-  <div className="flex gap-3 mt-3">
-    {post.photo1 && (
-      <img
-        src={post.photo1}
-        alt="photo1"
-        className="w-32 h-32 object-cover rounded cursor-pointer"
-        onClick={() =>
-          setFullscreenImage({ current: post.photo1 || '', next: post.photo2 || undefined })
-        }
-      />
-    )}
-    {post.photo2 && (
-      <img
-        src={post.photo2}
-        alt="photo2"
-        className="w-32 h-32 object-cover rounded cursor-pointer"
-        onClick={() =>
-          setFullscreenImage({ current: post.photo2 || '', next: post.photo1 || undefined })
-        }
-      />
-    )}
-  </div>
-)}            
-
-</div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-neutral-500 text-center">Aucune annonce pour le moment.</p>
-        )}
       </div>
       {fullscreenImage && (
   <div
