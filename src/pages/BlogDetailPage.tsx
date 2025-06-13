@@ -10,6 +10,7 @@ const BlogDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const { blogPosts } = useContent();
   const [post, setPost] = useState<BlogPost | null>(null);
+const [fullscreenImage, setFullscreenImage] = useState<{ current: string; next?: string } | null>(null);
 
   useEffect(() => {
     if (id) {
@@ -75,17 +76,24 @@ const BlogDetailPage: React.FC = () => {
       post.imagesannexes.length === 2 ? 'grid-cols-2' : 'grid-cols-3'
     }`}
   >
-    {post.imagesannexes.map((img, i) =>
-      img ? (
-        <div key={i} className="w-full flex justify-center">
-          <img
-            src={img}
-            alt={`Image annexe ${i + 1}`}
-            className="max-h-[500px] w-auto object-contain rounded"
-          />
-        </div>
-      ) : null
-    )}
+{post.imagesannexes.map((img, i) =>
+  img ? (
+    <div key={i} className="w-full flex justify-center">
+      <img
+        src={img}
+        alt={`Image annexe ${i + 1}`}
+        onClick={() =>
+          setFullscreenImage({
+            current: img,
+next: post.imagesannexes?.[(i + 1) % post.imagesannexes.length]
+          })
+        }
+        className="cursor-pointer max-h-[500px] w-auto object-contain rounded hover:opacity-80 transition"
+      />
+    </div>
+  ) : null
+)}
+
   </div>
 )}
 
@@ -93,8 +101,58 @@ const BlogDetailPage: React.FC = () => {
           </div>
         </article>
       </div>
+   
+
+
+{fullscreenImage && (
+  <div
+    className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+    onClick={() => setFullscreenImage(null)}
+  >
+    <div className="relative" onClick={(e) => e.stopPropagation()}>
+      <img
+        src={fullscreenImage.current}
+        className="max-h-[80vh] max-w-[90vw] rounded shadow-lg"
+      />
+      {fullscreenImage.next && (
+        <button
+          onClick={() =>
+            setFullscreenImage({
+              current: fullscreenImage.next || "",
+              next: fullscreenImage.current || ""
+            })
+          }
+          className="absolute top-1/2 left-2 transform -translate-y-1/2 text-white text-2xl bg-black/50 px-2 rounded"
+        >
+          ←
+        </button>
+      )}
+      {fullscreenImage.next && (
+        <button
+          onClick={() =>
+            setFullscreenImage({
+              current: fullscreenImage.next || "",
+              next: fullscreenImage.current || ""
+            })
+          }
+          className="absolute top-1/2 right-2 transform -translate-y-1/2 text-white text-2xl bg-black/50 px-2 rounded"
+        >
+          →
+        </button>
+      )}
+      <button
+        onClick={() => setFullscreenImage(null)}
+        className="absolute top-2 right-2 text-white text-xl bg-black/60 px-2 rounded"
+      >
+        ✕
+      </button>
     </div>
-  );
+  </div>
+)}
+
+</div>
+)
+;
 };
 
 export default BlogDetailPage;
