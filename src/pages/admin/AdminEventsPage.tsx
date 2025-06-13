@@ -126,10 +126,9 @@ console.log('DEBUG - Champs transmis à Supabase :', {
   content: contentRef.current?.innerHTML,
 image: imageToSave,
 });
-const finalImage = coverUrl || imagesannexesUrls[0] || '';
-setCoverUrl(finalImage); // sécurise la cover au cas où non modifiée
-const sanitizedAnnexes = imagesannexesUrls.map((url) =>
-  url && !url.startsWith('blob:') ? url : null
+const finalImage = coverUrl || '';
+const sanitizedAnnexes = imagesannexesUrls.map((url, i) =>
+  i === 0 && url === finalImage ? null : url && !url.startsWith('blob:') ? url : null
 );
 
 const newEvent: Omit<Event, 'id' | 'isPast'> = {
@@ -219,6 +218,10 @@ if (fileInputRef.current) {
   };
 
   const handleCancelEdit = () => {
+    setCoverUrl(null);
+setImagesannexesUrls([null, null, null]);
+if (fileInputRef.current) fileInputRef.current.value = '';
+
     setTitle('');
     setDescription('');
     setLocation('');
@@ -466,6 +469,21 @@ onChange={async (e) => {
               Annuler
             </button>
           )}
+          {editingEventId && (
+  <button
+    onClick={() => {
+      const event = events.find(e => e.id === editingEventId);
+      if (event) {
+        setEventToDelete(event);
+        setShowConfirm(true);
+      }
+    }}
+    className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+  >
+    Supprimer
+  </button>
+)}
+
         </div>
       </div>
 
