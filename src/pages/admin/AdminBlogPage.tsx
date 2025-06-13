@@ -221,6 +221,14 @@ const simulatedFiles: (File | null)[] = urlsWithNulls.map((url) =>
 );
 
 setImagesannexesUrls(urlsWithNulls);
+// Crée des faux fichiers virtuels pour afficher les noms existants
+const dummyFiles: (File | null)[] = urlsWithNulls.map((url) => {
+  if (!url) return null;
+  const filename = url.split('/').pop() || '';
+  return new File([], filename);
+});
+setImagesannexesFiles(dummyFiles);
+
 setImagesannexesFiles(simulatedFiles);
 
 
@@ -353,11 +361,10 @@ console.log("Posts en state :", posts);
   accept="image/*"
   onChange={handleImageChange}
 />
-{image?.name && (
-  <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">{image.name}</p>
+{image?.name && <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">{image.name}</p>}
+{!image?.name && uploadedImageUrl && (
+  <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">{uploadedImageUrl.split('/').pop()}</p>
 )}
-
-
 
 
 
@@ -392,11 +399,12 @@ console.log("Posts en state :", posts);
       accept="image/*"
       onChange={(e) => handleImageAnnexeChange(index, e)}
     />
-{imagesannexesFiles[index]?.name && (
+{imagesannexesFiles[index]?.name && imagesannexesUrls[index] && (
   <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">
     {imagesannexesFiles[index]?.name}
   </p>
 )}
+
 
 
 
