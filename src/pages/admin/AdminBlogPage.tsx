@@ -334,9 +334,10 @@ console.log("Posts en state :", posts);
         <div className="space-y-2 mt-4">
           <label className="block font-medium">Photo de couverture</label>
           <input id="blog-image" type="file" accept="image/*" onChange={handleImageChange} />
-          {image && (
+{previewUrl && image?.name && (
   <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">{image.name}</p>
 )}
+
 
           {previewUrl && (
             <div className="mt-2">
@@ -369,11 +370,12 @@ console.log("Posts en state :", posts);
       accept="image/*"
       onChange={(e) => handleImageAnnexeChange(index, e)}
     />
-{imagesannexesFiles[index] && (
+{imgUrl && imagesannexesFiles[index]?.name && (
   <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">
     {imagesannexesFiles[index]?.name}
   </p>
 )}
+
 
     {imgUrl && (
       <div className="mt-2 relative">
