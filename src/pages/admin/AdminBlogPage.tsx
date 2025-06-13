@@ -216,11 +216,12 @@ for (let i = 0; i < 3; i++) {
     while (urlsWithNulls.length < 3) {
       urlsWithNulls.push(null);
     }
-const simulatedFiles: (File | null)[] = urlsWithNulls.map((url) =>
-  url ? new File([""], url.split('/').pop() || 'image_annexe.jpg') : null
+setImagesannexesFiles(
+  urlsWithNulls.map((url) =>
+    url ? new File([], url.split('/').pop() || 'image_annexe.jpg') : null
+  )
 );
 
-setImagesannexesUrls(urlsWithNulls);
 // Crée des faux fichiers virtuels pour afficher les noms existants
 const dummyFiles: (File | null)[] = urlsWithNulls.map((url) => {
   if (!url) return null;
@@ -229,7 +230,6 @@ const dummyFiles: (File | null)[] = urlsWithNulls.map((url) => {
 });
 setImagesannexesFiles(dummyFiles);
 
-setImagesannexesFiles(simulatedFiles);
 
 
     setImage(null);
