@@ -347,9 +347,7 @@ console.log("Posts en state :", posts);
   accept="image/*"
   onChange={handleImageChange}
 />
-{image?.name && (
-  <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">{image.name}</p>
-)}
+
 
 
 
