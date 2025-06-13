@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { BlogPost } from '../../types';
 import { useContent } from '../../context/ContentContext';
-import { supabase } from '../../supabaseClient';
 
 const AdminBlogPage = () => {
-  const {
-    blogPosts,
-    addBlogPost,
-    updateBlogPost,
-    fetchBlogPosts,
-  } = useContent();
+
+const {
+  blogPosts,
+  addBlogPost,
+  updateBlogPost,
+  fetchBlogPosts,
+  deleteBlogPost // 👈 AJOUTE ICI
+} = useContent();
 console.log("🧪 blogPosts dans AdminBlogPage :", blogPosts);
 
   const [imagesannexesFiles, setImagesannexesFiles] = useState<(File | null)[]>([null, null, null]);
@@ -22,14 +23,17 @@ console.log("🧪 blogPosts dans AdminBlogPage :", blogPosts);
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
   const [postToDelete, setPostToDelete] = useState<BlogPost | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
+const [posts, setPosts] = useState<BlogPost[]>([]);
+useEffect(() => {
+  fetchBlogPosts();
+}, []);
 
-  const [posts, setPosts] = useState<BlogPost[]>([]);
+useEffect(() => {
+  setPosts(blogPosts);
+}, [blogPosts]);
+
 
   const contentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setPosts(blogPosts);
-  }, [blogPosts]);
 
   const getImageGridClass = (images: (string | null)[]) => {
     const validCount = images.filter(img => img).length;
@@ -398,7 +402,7 @@ console.log("Posts en state :", posts);
           {editingPost ? 'Mettre à jour' : 'Publier'}
         </button>
 {editingPost && (
-  <>
+  <div className="flex flex-wrap gap-3">
     <button
       onClick={() => {
         setTitle('');
@@ -412,6 +416,10 @@ console.log("Posts en state :", posts);
         if (contentRef.current) contentRef.current.innerHTML = '';
         const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
         if (fileInput) fileInput.value = '';
+        for (let i = 0; i < 3; i++) {
+          const input = document.getElementById(`annex-image-${i}`) as HTMLInputElement | null;
+          if (input) input.value = '';
+        }
         window.scrollTo(0, 0);
       }}
       className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
@@ -428,8 +436,9 @@ console.log("Posts en state :", posts);
     >
       Supprimer
     </button>
-  </>
+  </div>
 )}
+
 {showConfirm && postToDelete && (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div className="bg-white p-6 rounded shadow-md max-w-md w-full text-center">
@@ -442,32 +451,34 @@ console.log("Posts en state :", posts);
       <div className="flex justify-center gap-4">
         <button
           onClick={async () => {
+
 const isEditingDeleted = editingPost?.id === postToDelete.id;
+await deleteBlogPost(postToDelete.id);
+await fetchBlogPosts(); 
+if (isEditingDeleted) {
+  setTitle('');
+  setImage(null);
+  setPreviewUrl(null);
+  setUploadedImageUrl(null);
+  setImagesannexesFiles([null, null, null]);
+  setImagesannexesUrls([null, null, null]);
+  setEditingPost(null);
+  setError('');
 
-            const { error } = await supabase.from('blogposts').delete().eq('id', postToDelete.id);
-            if (error) {
-              console.error('Erreur suppression article :', error);
-            } else {
-await fetchBlogPosts(); // ✅ maintenant elle vient du contexte
-              setPostToDelete(null);
-              setShowConfirm(false);
+  if (contentRef.current) contentRef.current.innerHTML = '';
 
-              if (isEditingDeleted) {
-                setTitle('');
-                setImage(null);
-                setPreviewUrl(null);
-                setUploadedImageUrl(null);
-                setImagesannexesFiles([null, null, null]);
-                setImagesannexesUrls([null, null, null]);
-                setEditingPost(null);
-                setError('');
-                if (contentRef.current) contentRef.current.innerHTML = '';
-                const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
-                if (fileInput) fileInput.value = '';
-              }
+  const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
+  if (fileInput) fileInput.value = '';
 
-              window.scrollTo(0, 0);
-            }
+  for (let i = 0; i < 3; i++) {
+    const input = document.getElementById(`annex-image-${i}`) as HTMLInputElement | null;
+    if (input) input.value = '';
+  }
+}
+
+
+window.scrollTo(0, 0);
+
           }}
           className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
         >
@@ -478,10 +489,7 @@ await fetchBlogPosts(); // ✅ maintenant elle vient du contexte
             setPostToDelete(null);
             setShowConfirm(false);
           }}
-          className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
-        >
-          Annuler
-        </button>
+          className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">Annuler</button>
       </div>
     </div>
   </div>
@@ -496,7 +504,7 @@ await fetchBlogPosts(); // ✅ maintenant elle vient du contexte
           <p className="text-neutral-500 mt-2">Aucun billet publié.</p>
         ) : (
           posts.map(post => (
-            <div key={post.id} className="bg-white p-4 rounded shadow-sm space-y-2">
+<div key={post.id} className="bg-white p-4 rounded shadow-sm space-y-2 mt-6">
               <h3 className="text-lg font-semibold text-gray-800">{post.title}</h3>
               {post.image && <img src={post.image} alt="illustration" className="h-32 object-cover rounded" />}
               <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: post.content }} />
@@ -514,23 +522,24 @@ await fetchBlogPosts(); // ✅ maintenant elle vient du contexte
                 )}
               </div>
 
-              <div className="flex gap-4 pt-2">
-                <button
-                  onClick={() => handleEdit(post)}
-                  className="text-blue-600 text-sm hover:underline"
-                >
-                  Modifier
-                </button>
-                <button
-                  onClick={() => {
-                    setPostToDelete(post);
-                    setShowConfirm(true);
-                  }}
-                  className="text-red-600 text-sm hover:underline"
-                >
-                  Supprimer
-                </button>
-              </div>
+<div className="flex gap-4 pt-2">
+  <button
+    onClick={() => handleEdit(post)}
+    className="text-blue-600 text-sm hover:underline"
+  >
+    Modifier
+  </button>
+  <button
+    onClick={async () => {
+      await deleteBlogPost(post.id);
+      await fetchBlogPosts();
+    }}
+    className="text-red-600 text-sm hover:underline"
+  >
+    Supprimer
+  </button>
+</div>
+
             </div>
           ))
         )}
