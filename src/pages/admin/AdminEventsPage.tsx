@@ -37,23 +37,8 @@ useEffect(() => {
 }, [imagesannexesFiles]);
 
 useEffect(() => {
-  if (coverUrl) {
-    const newUrls = [...imagesannexesUrls];
-    if (newUrls[0] !== coverUrl) {
-      newUrls[0] = coverUrl;
-      setImagesannexesUrls(newUrls);
-    }
-  }
-}, [coverUrl]);
-
-
-
-
-useEffect(() => {
   refreshGlobalEvents();
 }, []);
-
-
 
 
 const handleImagesannexesChange = async (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -127,9 +112,10 @@ console.log('DEBUG - Champs transmis à Supabase :', {
 image: imageToSave,
 });
 const finalImage = coverUrl || '';
-const sanitizedAnnexes = imagesannexesUrls.map((url, i) =>
-  i === 0 && url === finalImage ? null : url && !url.startsWith('blob:') ? url : null
+const sanitizedAnnexes = imagesannexesUrls.map((url) =>
+  url && !url.startsWith('blob:') ? url : null
 );
+
 
 const newEvent: Omit<Event, 'id' | 'isPast'> = {
   title,
