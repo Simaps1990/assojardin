@@ -385,11 +385,7 @@ console.log("Posts en state :", posts);
       accept="image/*"
       onChange={(e) => handleImageAnnexeChange(index, e)}
     />
-{imagesannexesFiles[index]?.name && imagesannexesUrls[index] && (
-  <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">
-    {imagesannexesFiles[index]?.name}
-  </p>
-)}
+
 
 
 
