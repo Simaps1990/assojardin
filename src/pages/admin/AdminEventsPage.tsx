@@ -140,8 +140,8 @@ const updatedEvent: Event = {
 setEvents((prev) =>
   prev.map((e) => (e.id === editingEventId ? updatedEvent : e))
 );
+// ne rien faire ici — garde setEditingEventId pour après
 
-setEditingEventId(null);
 
   } else {
 const { data: inserted, error: insertError } = await supabase
@@ -173,20 +173,23 @@ if (saved) {
 
 
 
-    setTitle('');
-    setDescription('');
-    setLocation('');
-    setStart('');
-    setEnddate('');
+   // Nettoyage complet du formulaire après ajout ou modification
+setTitle('');
+setDescription('');
+setLocation('');
+setStart('');
+setEnddate('');
+setCoverUrl(null);
 setImagesannexesFiles([null, null, null]);
 setImagesannexesUrls([null, null, null]);
+setEditingEventId(null);
+setError('');
 
-    if (contentRef.current) contentRef.current.innerHTML = '';
-    setError('');
-if (fileInputRef.current) {
-  fileInputRef.current.value = '';
-}
-    window.scrollTo(0, 0); // Scroll haut après ajout ou modif
+if (contentRef.current) contentRef.current.innerHTML = '';
+if (fileInputRef.current) fileInputRef.current.value = '';
+
+window.scrollTo(0, 0);
+
     
     await refreshGlobalEvents();
 
@@ -559,7 +562,6 @@ if (error) {
     setCoverUrl(null);
     setImagesannexesFiles([null, null, null]);
     setImagesannexesUrls([null, null, null]);
-    setEditingEventId(null);
     if (contentRef.current) contentRef.current.innerHTML = '';
     if (fileInputRef.current) fileInputRef.current.value = '';
   }
