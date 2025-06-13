@@ -220,12 +220,8 @@ for (let i = 0; i < 3; i++) {
 
 
 // Crée des faux fichiers virtuels pour afficher les noms existants
-const dummyFiles: (File | null)[] = urlsWithNulls.map((url) => {
-  if (!url) return null;
-  const filename = url.split('/').pop() || '';
-  return new File([], filename);
-});
-setImagesannexesFiles(dummyFiles);
+setImagesannexesFiles([null, null, null]);
+
 
     setImage(null);
 
