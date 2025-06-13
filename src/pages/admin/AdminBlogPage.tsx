@@ -205,6 +205,7 @@ for (let i = 0; i < 3; i++) {
     setTitle(post.title);
     setEditingPost(post);
     setUploadedImageUrl(post.image);
+
     setPreviewUrl(post.image);
     if (contentRef.current) {
       contentRef.current.innerHTML = post.content;
@@ -216,11 +217,7 @@ for (let i = 0; i < 3; i++) {
     while (urlsWithNulls.length < 3) {
       urlsWithNulls.push(null);
     }
-setImagesannexesFiles(
-  urlsWithNulls.map((url) =>
-    url ? new File([], url.split('/').pop() || 'image_annexe.jpg') : null
-  )
-);
+
 
 // Crée des faux fichiers virtuels pour afficher les noms existants
 const dummyFiles: (File | null)[] = urlsWithNulls.map((url) => {
@@ -230,14 +227,7 @@ const dummyFiles: (File | null)[] = urlsWithNulls.map((url) => {
 });
 setImagesannexesFiles(dummyFiles);
 
-
-
     setImage(null);
-    if (post.image) {
-  const fakeName = post.image.split('/').pop() || 'image_couverture.jpg';
-  const file = new File([""], fakeName);
-  setImage(file);
-}
 
     window.scrollTo(0, 0);
   };
