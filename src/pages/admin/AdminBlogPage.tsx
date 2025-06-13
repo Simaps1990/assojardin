@@ -187,6 +187,11 @@ const annexUrls: (string | null)[] = imagesannexesUrls.map((oldUrl, i) =>
   setPreviewUrl(null);
   setUploadedImageUrl(null);
   setImagesannexesFiles([null, null, null]);
+// Réinitialise les inputs annexes pour éviter l'affichage persistant des noms
+for (let i = 0; i < 3; i++) {
+  const input = document.getElementById(`annex-image-${i}`) as HTMLInputElement | null;
+  if (input) input.value = '';
+}
   setImagesannexesUrls([null, null, null]);
   if (contentRef.current) contentRef.current.innerHTML = '';
   setError('');
@@ -339,9 +344,10 @@ console.log("Posts en state :", posts);
   accept="image/*"
   onChange={handleImageChange}
 />
-{image && previewUrl && (
+{image?.name && (
   <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">{image.name}</p>
 )}
+
 
 
 
@@ -550,10 +556,11 @@ window.scrollTo(0, 0);
     Modifier
   </button>
   <button
-    onClick={async () => {
-      await deleteBlogPost(post.id);
-      await fetchBlogPosts();
-    }}
+onClick={() => {
+  setPostToDelete(post);
+  setShowConfirm(true);
+}}
+
     className="text-red-600 text-sm hover:underline"
   >
     Supprimer
