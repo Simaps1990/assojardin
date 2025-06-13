@@ -334,6 +334,10 @@ console.log("Posts en state :", posts);
         <div className="space-y-2 mt-4">
           <label className="block font-medium">Photo de couverture</label>
           <input id="blog-image" type="file" accept="image/*" onChange={handleImageChange} />
+          {image && (
+  <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">{image.name}</p>
+)}
+
           {previewUrl && (
             <div className="mt-2">
               <img src={previewUrl} alt="Aperçu" className="h-32 object-cover rounded" />
@@ -365,6 +369,11 @@ console.log("Posts en state :", posts);
       accept="image/*"
       onChange={(e) => handleImageAnnexeChange(index, e)}
     />
+{imagesannexesFiles[index] && (
+  <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">
+    {imagesannexesFiles[index]?.name}
+  </p>
+)}
 
     {imgUrl && (
       <div className="mt-2 relative">
@@ -395,12 +404,49 @@ console.log("Posts en state :", posts);
           </div>
         </div>
 
-        <button
-          onClick={handleSubmit}
-          className="bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700"
-        >
-          {editingPost ? 'Mettre à jour' : 'Publier'}
-        </button>
+<div className="flex flex-wrap gap-2 mt-4">
+  <button
+    onClick={handleSubmit}
+    className="bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700"
+  >
+    {editingPost ? 'Mettre à jour' : 'Publier'}
+  </button>
+
+  {editingPost && (
+    <>
+      <button
+        onClick={() => {
+          setTitle('');
+          setImage(null);
+          setPreviewUrl(null);
+          setUploadedImageUrl(null);
+          setImagesannexesFiles([null, null, null]);
+          setImagesannexesUrls([null, null, null]);
+          setEditingPost(null);
+          setError('');
+          if (contentRef.current) contentRef.current.innerHTML = '';
+          const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
+          if (fileInput) fileInput.value = '';
+          window.scrollTo(0, 0);
+        }}
+        className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+      >
+        Annuler
+      </button>
+
+      <button
+        onClick={() => {
+          setPostToDelete(editingPost);
+          setShowConfirm(true);
+        }}
+        className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+      >
+        Supprimer
+      </button>
+    </>
+  )}
+</div>
+
 {editingPost && (
   <div className="flex flex-wrap gap-3">
     <button
