@@ -10,6 +10,7 @@ const EventDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const { events } = useContent();
   const [event, setEvent] = useState<Event | null>(null);
+const [fullscreenImage, setFullscreenImage] = useState<{ current: string; next?: string } | null>(null);
 
   useEffect(() => {
     if (id) {
@@ -91,17 +92,27 @@ const annexesSansCover = event.imagesannexes?.filter(img => img && img !== event
         : 'grid-cols-3'
     }`}
   >
-    {annexesSansCover.map((img, i) => (
-      <div key={i} className="w-full flex justify-center">
-<img
-  src={img || undefined}
-  alt={`Image annexe ${i + 1}`}
-  className="max-h-[500px] w-auto object-contain rounded"
-/>
-      </div>
-    ))}
+    {annexesSansCover.map((img, i) =>
+      img ? (
+        <div key={i} className="w-full flex justify-center">
+          <img
+src={img ?? undefined}
+            alt={`Image annexe ${i + 1}`}
+            onClick={() =>
+setFullscreenImage({
+  current: img,
+  next: annexesSansCover[(i + 1) % annexesSansCover.length] || undefined,
+})
+
+            }
+            className="cursor-pointer max-h-[500px] w-auto object-contain rounded hover:opacity-80 transition"
+          />
+        </div>
+      ) : null
+    )}
   </div>
 )}
+
 
 
             {!event.isPast && (
@@ -118,7 +129,54 @@ const annexesSansCover = event.imagesannexes?.filter(img => img && img !== event
           </div>
         </div>
       </div>
+          {fullscreenImage && (
+  <div
+    className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+    onClick={() => setFullscreenImage(null)}
+  >
+    <div className="relative" onClick={(e) => e.stopPropagation()}>
+      <img
+        src={fullscreenImage.current}
+        className="max-h-[80vh] max-w-[90vw] rounded shadow-lg"
+      />
+      {fullscreenImage.next && (
+        <button
+          onClick={() =>
+            setFullscreenImage({
+              current: fullscreenImage.next || "",
+              next: fullscreenImage.current || "",
+            })
+          }
+          className="absolute top-1/2 left-2 transform -translate-y-1/2 text-white text-2xl bg-black/50 px-2 rounded"
+        >
+          ←
+        </button>
+      )}
+      {fullscreenImage.next && (
+        <button
+          onClick={() =>
+            setFullscreenImage({
+              current: fullscreenImage.next || "",
+              next: fullscreenImage.current || "",
+            })
+          }
+          className="absolute top-1/2 right-2 transform -translate-y-1/2 text-white text-2xl bg-black/50 px-2 rounded"
+        >
+          →
+        </button>
+      )}
+      <button
+        onClick={() => setFullscreenImage(null)}
+        className="absolute top-2 right-2 text-white text-xl bg-black/60 px-2 rounded"
+      >
+        ✕
+      </button>
     </div>
+  </div>
+)}
+    </div>
+
+
   );
 };
 
