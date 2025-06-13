@@ -550,14 +550,33 @@ setImagesannexesUrls([
         <button
           onClick={async () => {
             const { error } = await supabase.from('events').delete().eq('id', eventToDelete.id);
-            if (error) {
-              console.error('Erreur suppression événement :', error);
-            } else {
-              await refreshGlobalEvents();
-              setEventToDelete(null);
-              setShowConfirm(false);
-              window.scrollTo(0, 0);
-            }
+if (error) {
+  console.error('Erreur suppression événement :', error);
+} else {
+  const isEditingDeleted = editingEventId === eventToDelete.id;
+
+  await refreshGlobalEvents();
+  setEventToDelete(null);
+  setShowConfirm(false);
+
+  if (isEditingDeleted) {
+    // Réinitialise tous les champs du formulaire
+    setTitle('');
+    setDescription('');
+    setLocation('');
+    setStart('');
+    setEnddate('');
+    setCoverUrl(null);
+    setImagesannexesFiles([null, null, null]);
+    setImagesannexesUrls([null, null, null]);
+    setEditingEventId(null);
+    if (contentRef.current) contentRef.current.innerHTML = '';
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  }
+
+  window.scrollTo(0, 0);
+}
+
           }}
           className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
         >
