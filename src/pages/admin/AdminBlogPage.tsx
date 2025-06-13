@@ -238,9 +238,14 @@ if (post.image) {
   const file = new File([blob], filename, { type: blob.type });
   setImage(file);
   setUploadedImageUrl(post.image); // utile si jamais supprimé plus tard
+
   const objectUrl = URL.createObjectURL(file);
   setPreviewUrl(objectUrl);
+
+  const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
+  if (fileInput) fileInput.value = '';
 }
+
 
 
 
@@ -371,9 +376,11 @@ console.log("Posts en state :", posts);
     accept="image/*"
     onChange={handleImageChange}
   />
-{image && !previewUrl && image.name && (
+{previewUrl && image?.name && (
   <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">{image.name}</p>
 )}
+
+
 
 
 
