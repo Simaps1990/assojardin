@@ -190,7 +190,9 @@ if (fileInputRef.current) fileInputRef.current.value = '';
 
 window.scrollTo(0, 0);
 
-    
+    const coverInput = document.getElementById('event-cover') as HTMLInputElement | null;
+if (coverInput) coverInput.value = '';
+
     await refreshGlobalEvents();
 
   };
@@ -383,12 +385,10 @@ onChange={async (e) => {
       <button
         type="button"
         onClick={() => {
-          const newFiles = [...imagesannexesFiles];
-          const newUrls = [...imagesannexesUrls];
-          newFiles[0] = null;
-          newUrls[0] = null;
-          setImagesannexesFiles(newFiles);
-          setImagesannexesUrls(newUrls);
+setCoverUrl(null);
+const coverInput = document.getElementById('event-cover') as HTMLInputElement | null;
+if (coverInput) coverInput.value = '';
+
         }}
         className="text-red-600 text-sm hover:underline mt-2"
       >
