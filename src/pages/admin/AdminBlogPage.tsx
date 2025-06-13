@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { BlogPost } from '../../types';
 import { useContent } from '../../context/ContentContext';
+import { supabase } from '../../supabaseClient';
+
 const AdminBlogPage = () => {
   const {
     blogPosts,
     addBlogPost,
     updateBlogPost,
-    deleteBlogPost,
+    fetchBlogPosts,
   } = useContent();
 console.log("🧪 blogPosts dans AdminBlogPage :", blogPosts);
 
@@ -53,20 +55,25 @@ console.log("🧪 blogPosts dans AdminBlogPage :", blogPosts);
 
   const uploadAnnexImages = async (): Promise<string[]> => {
     const urls: string[] = [];
-    for (const file of imagesannexesFiles) {
-      if (file) {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'site_global_uploads');
-        const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
-          method: 'POST',
-          body: formData,
-        });
+for (let i = 0; i < imagesannexesFiles.length; i++) {
+  const file = imagesannexesFiles[i];
+  if (file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'site_global_uploads');
+    const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
+      method: 'POST',
+      body: formData,
+    });
 
-        const data = await res.json();
-        if (data.secure_url) urls.push(data.secure_url);
-      }
+    const data = await res.json();
+    if (data.secure_url) {
+      // on conserve l'index exact
+      urls[i] = data.secure_url;
     }
+  }
+}
+
     return urls;
   };
 
@@ -135,14 +142,10 @@ const handleSubmit = async () => {
   }
 
   // Fusion propre des URLs : on remplace uniquement les indexes où on a uploadé une nouvelle image
-  const annexUrls: (string | null)[] = [null, null, null];
-  for (let i = 0; i < 3; i++) {
-    if (newUploadedUrls[i]) {
-      annexUrls[i] = newUploadedUrls[i];
-    } else {
-      annexUrls[i] = imagesannexesUrls[i];
-    }
-  }
+const annexUrls: (string | null)[] = imagesannexesUrls.map((oldUrl, i) =>
+  newUploadedUrls[i] ?? oldUrl
+);
+
 
   const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
   if (fileInput) {
@@ -394,6 +397,97 @@ console.log("Posts en state :", posts);
         >
           {editingPost ? 'Mettre à jour' : 'Publier'}
         </button>
+{editingPost && (
+  <>
+    <button
+      onClick={() => {
+        setTitle('');
+        setImage(null);
+        setPreviewUrl(null);
+        setUploadedImageUrl(null);
+        setImagesannexesFiles([null, null, null]);
+        setImagesannexesUrls([null, null, null]);
+        setEditingPost(null);
+        setError('');
+        if (contentRef.current) contentRef.current.innerHTML = '';
+        const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
+        if (fileInput) fileInput.value = '';
+        window.scrollTo(0, 0);
+      }}
+      className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+    >
+      Annuler
+    </button>
+
+    <button
+      onClick={() => {
+        setPostToDelete(editingPost);
+        setShowConfirm(true);
+      }}
+      className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+    >
+      Supprimer
+    </button>
+  </>
+)}
+{showConfirm && postToDelete && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white p-6 rounded shadow-md max-w-md w-full text-center">
+      <h3 className="text-lg font-semibold text-gray-800 mb-4">
+        Confirmer la suppression
+      </h3>
+      <p className="text-gray-600 mb-6">
+        Êtes-vous sûr de vouloir supprimer l’article "<strong>{postToDelete.title}</strong>" ? Cette action est irréversible.
+      </p>
+      <div className="flex justify-center gap-4">
+        <button
+          onClick={async () => {
+const isEditingDeleted = editingPost?.id === postToDelete.id;
+
+            const { error } = await supabase.from('blogposts').delete().eq('id', postToDelete.id);
+            if (error) {
+              console.error('Erreur suppression article :', error);
+            } else {
+await fetchBlogPosts(); // ✅ maintenant elle vient du contexte
+              setPostToDelete(null);
+              setShowConfirm(false);
+
+              if (isEditingDeleted) {
+                setTitle('');
+                setImage(null);
+                setPreviewUrl(null);
+                setUploadedImageUrl(null);
+                setImagesannexesFiles([null, null, null]);
+                setImagesannexesUrls([null, null, null]);
+                setEditingPost(null);
+                setError('');
+                if (contentRef.current) contentRef.current.innerHTML = '';
+                const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
+                if (fileInput) fileInput.value = '';
+              }
+
+              window.scrollTo(0, 0);
+            }
+          }}
+          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+        >
+          Supprimer
+        </button>
+        <button
+          onClick={() => {
+            setPostToDelete(null);
+            setShowConfirm(false);
+          }}
+          className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+        >
+          Annuler
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
       </div>
 
       <div className="space-y-4">
@@ -442,37 +536,6 @@ console.log("Posts en state :", posts);
         )}
       </div>
 
-      {showConfirm && postToDelete && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-md max-w-sm w-full text-center">
-            <p className="text-lg font-semibold mb-4">
-              Êtes-vous sûr de vouloir supprimer cet article ?
-            </p>
-            <div className="flex justify-center gap-4">
-              <button
-                onClick={async () => {
-                  await deleteBlogPost(postToDelete.id);
-                  setPostToDelete(null);
-                  setShowConfirm(false);
-                  window.scrollTo(0, 0);
-                }}
-                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-              >
-                Confirmer
-              </button>
-              <button
-                onClick={() => {
-                  setPostToDelete(null);
-                  setShowConfirm(false);
-                }}
-                className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
-              >
-                Annuler
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
