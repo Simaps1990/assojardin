@@ -216,12 +216,21 @@ for (let i = 0; i < 3; i++) {
     while (urlsWithNulls.length < 3) {
       urlsWithNulls.push(null);
     }
-    setImagesannexesUrls(urlsWithNulls);
+const simulatedFiles: (File | null)[] = urlsWithNulls.map((url) =>
+  url ? new File([""], url.split('/').pop() || 'image_annexe.jpg') : null
+);
 
-    // On remet les fichiers annexes à null (inputs prêts à recevoir un nouveau fichier)
-    setImagesannexesFiles([null, null, null]);
+setImagesannexesUrls(urlsWithNulls);
+setImagesannexesFiles(simulatedFiles);
+
 
     setImage(null);
+    if (post.image) {
+  const fakeName = post.image.split('/').pop() || 'image_couverture.jpg';
+  const file = new File([""], fakeName);
+  setImage(file);
+}
+
     window.scrollTo(0, 0);
   };
 
@@ -504,6 +513,7 @@ if (isEditingDeleted) {
 
 
 window.scrollTo(0, 0);
+setShowConfirm(false); // 👈 AJOUT IMMÉDIATEMENT
 
           }}
           className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
