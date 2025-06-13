@@ -12,13 +12,13 @@ const { events, setEvents, fetchEvents: refreshGlobalEvents } = useContent();
   const [location, setLocation] = useState('');
   const [start, setStart] = useState('');
   const [enddate, setEnddate] = useState('');
-const [imagesannexesFiles, setImagesannexesFiles] = useState<(File | null)[]>([null, null, null]);
-const [imagesannexesUrls, setImagesannexesUrls] = useState<(string | null)[]>([null, null, null]);
   const [error, setError] = useState('');
   const [editingEventId, setEditingEventId] = useState<string | null>(null);
   const [eventToDelete, setEventToDelete] = useState<Event | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
-const [uploadedCoverUrl, setUploadedCoverUrl] = useState<string | null>(null);
+const [coverUrl, setCoverUrl] = useState<string | null>(null);
+const [imagesannexesFiles, setImagesannexesFiles] = useState<(File | null)[]>([null, null, null]);
+const [imagesannexesUrls, setImagesannexesUrls] = useState<(string | null)[]>([null, null, null]);
 
 const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -37,14 +37,14 @@ useEffect(() => {
 }, [imagesannexesFiles]);
 
 useEffect(() => {
-  if (uploadedCoverUrl) {
+  if (coverUrl) {
     const newUrls = [...imagesannexesUrls];
-    if (newUrls[0] !== uploadedCoverUrl) {
-      newUrls[0] = uploadedCoverUrl;
+    if (newUrls[0] !== coverUrl) {
+      newUrls[0] = coverUrl;
       setImagesannexesUrls(newUrls);
     }
   }
-}, [uploadedCoverUrl]);
+}, [coverUrl]);
 
 
 
@@ -106,7 +106,7 @@ const handleImagesannexesChange = async (e: React.ChangeEvent<HTMLInputElement>,
 
 
 const handleAddEvent = async () => {
-setUploadedCoverUrl(null);
+setCoverUrl(null);
 
     if (!title || !start || !enddate || !contentRef.current) return;
 
@@ -115,9 +115,8 @@ setUploadedCoverUrl(null);
       return;
     }
 
-const imageToSave = imagesannexesUrls[0]?.startsWith('blob:')
-  ? uploadedCoverUrl ?? ''
-  : imagesannexesUrls[0] ?? uploadedCoverUrl ?? '';
+const imageToSave = coverUrl ?? '';
+
 console.log('DEBUG - Champs transmis à Supabase :', {
   title,
   description,
@@ -127,8 +126,8 @@ console.log('DEBUG - Champs transmis à Supabase :', {
   content: contentRef.current?.innerHTML,
 image: imageToSave,
 });
-const finalImage = uploadedCoverUrl || imagesannexesUrls[0] || '';
-setUploadedCoverUrl(finalImage); // sécurise la cover au cas où non modifiée
+const finalImage = coverUrl || imagesannexesUrls[0] || '';
+setCoverUrl(finalImage); // sécurise la cover au cas où non modifiée
 const sanitizedAnnexes = imagesannexesUrls.map((url) =>
   url && !url.startsWith('blob:') ? url : null
 );
@@ -374,14 +373,8 @@ onChange={async (e) => {
   if (!file) return;
 
   const objectUrl = URL.createObjectURL(file);
-  const newFiles = [...imagesannexesFiles];
-  const newUrls = [...imagesannexesUrls];
-  newFiles[0] = file;
-  newUrls[0] = objectUrl;
-  setImagesannexesFiles(newFiles);
-  setImagesannexesUrls(newUrls);
+  setCoverUrl(objectUrl);
 
-  // Upload Cloudinary (couverture)
   const formData = new FormData();
   formData.append('file', file);
   formData.append('upload_preset', 'site_global_uploads');
@@ -393,12 +386,13 @@ onChange={async (e) => {
     });
     const data = await res.json();
     if (data.secure_url) {
-      setUploadedCoverUrl(data.secure_url);
+      setCoverUrl(data.secure_url);
     }
   } catch (err) {
     console.error('Erreur upload image Cloudinary (couverture)', err);
   }
 }}
+
 
   />
   {imagesannexesUrls[0] && (
@@ -504,14 +498,13 @@ setStart(e.start ? e.start.slice(0, 16) : '');
 setEnddate(e.enddate ? e.enddate.slice(0, 16) : '');
 
                     if (contentRef.current) contentRef.current.innerHTML = e.content;
-const cover = e.image ?? e.imagesannexes?.[0] ?? null;
+setCoverUrl(e.image ?? null);
 setImagesannexesUrls([
-  cover,
+  e.imagesannexes?.[0] ?? null,
   e.imagesannexes?.[1] ?? null,
   e.imagesannexes?.[2] ?? null,
 ]);
-setImagesannexesFiles([null, null, null]);
-setUploadedCoverUrl(cover);
+
 
 
 
