@@ -339,14 +339,11 @@ console.log("Posts en state :", posts);
   accept="image/*"
   onChange={handleImageChange}
 />
-{image && (
-  <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">
-    {image.name}
-  </p>
-)}
-{previewUrl && image?.name && (
+{image && previewUrl && (
   <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">{image.name}</p>
 )}
+
+
 
 
           {previewUrl && (
@@ -380,11 +377,12 @@ console.log("Posts en state :", posts);
       accept="image/*"
       onChange={(e) => handleImageAnnexeChange(index, e)}
     />
-{imgUrl && imagesannexesFiles[index]?.name && (
+{imagesannexesFiles[index]?.name && (
   <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">
     {imagesannexesFiles[index]?.name}
   </p>
 )}
+
 
 
     {imgUrl && (
