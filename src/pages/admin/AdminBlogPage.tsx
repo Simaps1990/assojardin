@@ -93,9 +93,10 @@ for (let i = 0; i < imagesannexesFiles.length; i++) {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setImage(file);
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
+const objectUrl = URL.createObjectURL(file);
+setImage(file);
+setPreviewUrl(objectUrl);
+
     try {
       const formData = new FormData();
       formData.append('file', file);
@@ -188,10 +189,13 @@ const annexUrls: (string | null)[] = imagesannexesUrls.map((oldUrl, i) =>
   setUploadedImageUrl(null);
   setImagesannexesFiles([null, null, null]);
 // Réinitialise les inputs annexes pour éviter l'affichage persistant des noms
-for (let i = 0; i < 3; i++) {
-  const input = document.getElementById(`annex-image-${i}`) as HTMLInputElement | null;
-  if (input) input.value = '';
-}
+setTimeout(() => {
+  for (let i = 0; i < 3; i++) {
+    const input = document.getElementById(`annex-image-${i}`) as HTMLInputElement | null;
+    if (input) input.value = '';
+  }
+}, 0);
+
   setImagesannexesUrls([null, null, null]);
   if (contentRef.current) contentRef.current.innerHTML = '';
   setError('');
@@ -220,10 +224,31 @@ for (let i = 0; i < 3; i++) {
 
 
 // Crée des faux fichiers virtuels pour afficher les noms existants
-setImagesannexesFiles([null, null, null]);
+const dummyFiles: (File | null)[] = await Promise.all(urlsWithNulls.map(async (url) => {
+  if (!url) return null;
+  const filename = url.split('/').pop() || '';
+  const blob = await fetch(url).then(res => res.blob());
+  return new File([blob], filename, { type: blob.type });
+}));
+setImagesannexesFiles(dummyFiles);
+
+if (post.image) {
+  const filename = post.image.split('/').pop() || '';
+  const blob = await fetch(post.image).then(res => res.blob());
+  const file = new File([blob], filename, { type: blob.type });
+  setImage(file);
+  setUploadedImageUrl(post.image); // utile si jamais supprimé plus tard
+  const objectUrl = URL.createObjectURL(file);
+  setPreviewUrl(objectUrl);
+}
 
 
-    setImage(null);
+
+
+
+setImagesannexesUrls(urlsWithNulls);
+
+
 
     window.scrollTo(0, 0);
   };
@@ -339,38 +364,40 @@ console.log("Posts en state :", posts);
           style={{ whiteSpace: 'pre-wrap' }}
         />
 
-        <div className="space-y-2 mt-4">
-          <label className="block font-medium">Photo de couverture</label>
-<input
-  id="blog-image"
-  type="file"
-  accept="image/*"
-  onChange={handleImageChange}
-/>
+<div className="space-y-2 mt-4">
+  <label className="block font-medium">Photo de couverture</label>
+  <input id="blog-image"
+    type="file"
+    accept="image/*"
+    onChange={handleImageChange}
+  />
+{image && !previewUrl && image.name && (
+  <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">{image.name}</p>
+)}
 
 
 
+  {previewUrl && (
+    <div className="mt-2">
+      <img src={previewUrl} alt="Aperçu" className="h-32 object-cover rounded" />
+      <button
+        type="button"
+        onClick={() => {
+          setImage(null);
+          setPreviewUrl(null);
+          setUploadedImageUrl(null);
+          const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
+          if (fileInput) fileInput.value = '';
+        }}
+        className="text-red-600 text-sm hover:underline mt-2"
+      >
+        Supprimer l’image
+      </button>
+    </div>
+  )}
+</div>
 
 
-          {previewUrl && (
-            <div className="mt-2">
-              <img src={previewUrl} alt="Aperçu" className="h-32 object-cover rounded" />
-              <button
-                type="button"
-                onClick={() => {
-                  setImage(null);
-                  setPreviewUrl(null);
-                  setUploadedImageUrl(null);
-                  const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
-                  if (fileInput) fileInput.value = '';
-                }}
-                className="text-red-600 text-sm hover:underline mt-2"
-              >
-                Supprimer l’image
-              </button>
-            </div>
-          )}
-        </div>
 
         <div className="space-y-2 mt-4">
           <label className="block font-medium">Photos de contenu (jusqu’à 3)</label>
@@ -383,9 +410,9 @@ console.log("Posts en state :", posts);
       accept="image/*"
       onChange={(e) => handleImageAnnexeChange(index, e)}
     />
-
-
-
+{imagesannexesFiles[index]?.name && (
+  <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">{imagesannexesFiles[index]?.name}</p>
+)}
 
 
     {imgUrl && (
@@ -403,6 +430,9 @@ console.log("Posts en state :", posts);
             const newUrls = [...imagesannexesUrls];
             newUrls[index] = null;
             setImagesannexesUrls(newUrls);
+            const input = document.getElementById(`annex-image-${index}`) as HTMLInputElement | null;
+if (input) input.value = '';
+
           }}
           className="absolute top-1 right-1 bg-red-600 text-white px-2 py-1 rounded text-xs"
           type="button"
@@ -473,37 +503,38 @@ console.log("Posts en state :", posts);
       </p>
       <div className="flex justify-center gap-4">
         <button
-          onClick={async () => {
+onClick={async () => {
+  const isEditingDeleted = editingPost?.id === postToDelete.id;
+  await deleteBlogPost(postToDelete.id);
+  await fetchBlogPosts();
 
-const isEditingDeleted = editingPost?.id === postToDelete.id;
-await deleteBlogPost(postToDelete.id);
-await fetchBlogPosts(); 
-if (isEditingDeleted) {
-  setTitle('');
-  setImage(null);
-  setPreviewUrl(null);
-  setUploadedImageUrl(null);
-  setImagesannexesFiles([null, null, null]);
-  setImagesannexesUrls([null, null, null]);
-  setEditingPost(null);
-  setError('');
+  setPostToDelete(null);
+  setShowConfirm(false);
 
-  if (contentRef.current) contentRef.current.innerHTML = '';
+  if (isEditingDeleted) {
+    setTitle('');
+    setImage(null);
+    setPreviewUrl(null);
+    setUploadedImageUrl(null);
+    setImagesannexesFiles([null, null, null]);
+    setImagesannexesUrls([null, null, null]);
+    setEditingPost(null);
+    setError('');
 
-  const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
-  if (fileInput) fileInput.value = '';
+    if (contentRef.current) contentRef.current.innerHTML = '';
 
-  for (let i = 0; i < 3; i++) {
-    const input = document.getElementById(`annex-image-${i}`) as HTMLInputElement | null;
-    if (input) input.value = '';
+    const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
+    if (fileInput) fileInput.value = '';
+
+    for (let i = 0; i < 3; i++) {
+      const input = document.getElementById(`annex-image-${i}`) as HTMLInputElement | null;
+      if (input) input.value = '';
+    }
   }
-}
 
+  window.scrollTo(0, 0);
+}}
 
-window.scrollTo(0, 0);
-setShowConfirm(false); // 👈 AJOUT IMMÉDIATEMENT
-
-          }}
           className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
         >
           Supprimer
@@ -563,6 +594,7 @@ onClick={() => {
   >
     Supprimer
   </button>
+
 </div>
 
             </div>
