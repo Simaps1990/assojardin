@@ -205,7 +205,7 @@ setTimeout(() => {
 
 
 
-  const handleEdit = (post: BlogPost & { imagesannexes?: (string | null)[] }) => {
+const handleEdit = async (post: BlogPost & { imagesannexes?: (string | null)[] }) => {
     setTitle(post.title);
     setEditingPost(post);
     setUploadedImageUrl(post.image);
@@ -224,6 +224,7 @@ setTimeout(() => {
 
 
 // Crée des faux fichiers virtuels pour afficher les noms existants
+// Crée des faux fichiers virtuels et regénère les aperçus
 const dummyFiles: (File | null)[] = await Promise.all(urlsWithNulls.map(async (url) => {
   if (!url) return null;
   const filename = url.split('/').pop() || '';
@@ -231,6 +232,10 @@ const dummyFiles: (File | null)[] = await Promise.all(urlsWithNulls.map(async (u
   return new File([blob], filename, { type: blob.type });
 }));
 setImagesannexesFiles(dummyFiles);
+
+// Réinjecte les aperçus à partir des URLs
+setImagesannexesUrls(urlsWithNulls);
+
 
 if (post.image) {
   const filename = post.image.split('/').pop() || '';
