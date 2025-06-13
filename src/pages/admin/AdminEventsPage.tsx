@@ -24,17 +24,6 @@ const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const contentRef = useRef<HTMLDivElement>(null);
 
-useEffect(() => {
-  const file = imagesannexesFiles[0];
-  if (file) {
-    const objectUrl = URL.createObjectURL(file);
-    const newUrls = [...imagesannexesUrls];
-    newUrls[0] = objectUrl;
-    setImagesannexesUrls(newUrls);
-
-    return () => URL.revokeObjectURL(objectUrl);
-  }
-}, [imagesannexesFiles]);
 
 useEffect(() => {
   refreshGlobalEvents();
@@ -384,9 +373,10 @@ onChange={async (e) => {
 
 
   />
-  {imagesannexesUrls[0] && (
-    <div className="mt-2">
-      <img src={imagesannexesUrls[0]!} alt="Aperçu" className="h-32 object-cover rounded" />
+{coverUrl && (
+  <div className="mt-2">
+    <img src={coverUrl} alt="Aperçu" className="h-32 object-cover rounded" />
+
       <button
         type="button"
         onClick={() => {
