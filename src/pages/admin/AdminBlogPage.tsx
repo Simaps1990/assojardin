@@ -333,7 +333,17 @@ console.log("Posts en state :", posts);
 
         <div className="space-y-2 mt-4">
           <label className="block font-medium">Photo de couverture</label>
-          <input id="blog-image" type="file" accept="image/*" onChange={handleImageChange} />
+<input
+  id="blog-image"
+  type="file"
+  accept="image/*"
+  onChange={handleImageChange}
+/>
+{image && (
+  <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">
+    {image.name}
+  </p>
+)}
 {previewUrl && image?.name && (
   <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">{image.name}</p>
 )}
@@ -449,43 +459,7 @@ console.log("Posts en state :", posts);
   )}
 </div>
 
-{editingPost && (
-  <div className="flex flex-wrap gap-3">
-    <button
-      onClick={() => {
-        setTitle('');
-        setImage(null);
-        setPreviewUrl(null);
-        setUploadedImageUrl(null);
-        setImagesannexesFiles([null, null, null]);
-        setImagesannexesUrls([null, null, null]);
-        setEditingPost(null);
-        setError('');
-        if (contentRef.current) contentRef.current.innerHTML = '';
-        const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
-        if (fileInput) fileInput.value = '';
-        for (let i = 0; i < 3; i++) {
-          const input = document.getElementById(`annex-image-${i}`) as HTMLInputElement | null;
-          if (input) input.value = '';
-        }
-        window.scrollTo(0, 0);
-      }}
-      className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
-    >
-      Annuler
-    </button>
 
-    <button
-      onClick={() => {
-        setPostToDelete(editingPost);
-        setShowConfirm(true);
-      }}
-      className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-    >
-      Supprimer
-    </button>
-  </div>
-)}
 
 {showConfirm && postToDelete && (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
