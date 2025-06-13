@@ -59,6 +59,7 @@ interface ContentContextType {
   addAnnonce: (a: Omit<Annonce, 'id' | 'date' | 'isValidated'>) => void;
   updateAnnonce: (id: string, a: Partial<Annonce>) => void;
   deleteAnnonce: (id: string) => void;
+fetchBlogPosts: () => Promise<void>;
 
 
 updateAssociationContent: (content: Partial<AssociationContentType>) => Promise<AssociationContentType | undefined>;
@@ -160,6 +161,7 @@ const [associationContent, setAssociationContent] = useState<AssociationContentT
 
 
 
+
 const [applications, setApplications] = useState<Application[]>([]);
 const [nonTraiteesApplications, setNonTraiteesApplications] = useState<number>(0);
 
@@ -184,25 +186,6 @@ useEffect(() => {
 }, []);
 
 useEffect(() => {
-  const fetchBlogPosts = async () => {
-    const { data, error } = await supabase
-      .from('blogPosts')
-      .select('*')
-      .order('created_at', { ascending: false }); // ✅ ordre basé sur le champ "date"
-
-    if (error) {
-      console.error('❌ Erreur de chargement des articles Supabase:', error.message);
-      return;
-    }
-
-    if (!data || data.length === 0) {
-      console.warn('⚠️ Aucun article de blog reçu.');
-    }
-
-    console.log('✅ Blog posts chargés :', data);
-    setBlogPosts(data || []);
-  };
-
   fetchBlogPosts();
 }, []);
 
@@ -469,7 +452,24 @@ const updateAssociationContent = async (
   localStorage.setItem('sjov_associationContent', JSON.stringify(mapped));
   return mapped;
 };
+  const fetchBlogPosts = async () => {
+    const { data, error } = await supabase
+      .from('blogPosts')
+      .select('*')
+      .order('created_at', { ascending: false }); // ✅ ordre basé sur le champ "date"
 
+    if (error) {
+      console.error('❌ Erreur de chargement des articles Supabase:', error.message);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      console.warn('⚠️ Aucun article de blog reçu.');
+    }
+
+    console.log('✅ Blog posts chargés :', data);
+    setBlogPosts(data || []);
+  };
 
  const fetchEvents = async () => {
   const { data, error } = await supabase
@@ -550,6 +550,7 @@ console.log("Annonces récupérées depuis le contexte :", annonces);
         events,
         setEvents,
 fetchEvents,
+fetchBlogPosts,
 
         applicationFormFields,
         associationContent,
