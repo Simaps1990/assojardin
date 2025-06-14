@@ -344,87 +344,61 @@ const sortedEvents = [...events].sort((a, b) => {
 
         <div ref={contentRef} className="w-full min-h-[120px] border rounded px-3 py-2 focus:outline-none" contentEditable style={{ whiteSpace: 'pre-wrap' }} />
 
- {/* Image de couverture */}
+{/* Image de couverture */}
 <div className="space-y-2 mt-4">
   <label className="block font-medium">Photo de couverture</label>
- 
-<div className="flex flex-col gap-2">
-<input
-  id="event-cover"
-  type="file"
-  accept="image/*"
-  className={coverUrl ? 'file:text-transparent' : ''}
-  onChange={async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
 
-    const objectUrl = URL.createObjectURL(file);
-    setCoverUrl(objectUrl);
+  <div className="flex flex-col gap-2">
+    <input
+      id="event-cover"
+      type="file"
+      accept="image/*"
+      className={coverUrl ? 'file:text-transparent' : ''}
+      onChange={async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
 
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', 'site_global_uploads');
+        const objectUrl = URL.createObjectURL(file);
+        setCoverUrl(objectUrl);
 
-    try {
-      const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await res.json();
-      if (data.secure_url) {
-        setCoverUrl(data.secure_url);
-      }
-    } catch (err) {
-      console.error('Erreur upload image Cloudinary (couverture)', err);
-    }
-  }}
-/>
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'site_global_uploads');
 
-
-  <label
-    htmlFor="event-cover"
-    className="inline-flex items-center justify-center w-fit px-4 py-2 bg-gray-200 text-gray-800 rounded cursor-pointer hover:bg-gray-300"
-  >
-    📷 {coverUrl ? 'Modifier l’image' : 'Choisir une image'}
-  </label>
-
-  {coverUrl && (
-    <div className="mt-2">
-      <img src={coverUrl} alt="Aperçu" className="h-32 object-cover rounded" />
-      <button
-        type="button"
-        onClick={() => {
-          setCoverUrl(null);
-          const coverInput = document.getElementById('event-cover') as HTMLInputElement | null;
-          if (coverInput) coverInput.value = '';
-        }}
-        className="text-red-600 text-sm hover:underline mt-2"
-      >
-        Supprimer l’image
-      </button>
-    </div>
-  )}
-</div>
-
-
-{coverUrl && (
-  <div className="mt-2">
-    <img src={coverUrl} alt="Aperçu" className="h-32 object-cover rounded" />
-    <button
-      type="button"
-      onClick={() => {
-        setCoverUrl(null);
-        const coverInput = document.getElementById('event-cover') as HTMLInputElement | null;
-        if (coverInput) coverInput.value = '';
+        try {
+          const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
+            method: 'POST',
+            body: formData,
+          });
+          const data = await res.json();
+          if (data.secure_url) {
+            setCoverUrl(data.secure_url);
+          }
+        } catch (err) {
+          console.error('Erreur upload image Cloudinary (couverture)', err);
+        }
       }}
-      className="text-red-600 text-sm hover:underline mt-2"
-    >
-      Supprimer l’image
-    </button>
-  </div>
-)}
+    />
 
+    {coverUrl && (
+      <div className="mt-2">
+        <img src={coverUrl} alt="Aperçu" className="h-32 object-cover rounded" />
+        <button
+          type="button"
+          onClick={() => {
+            setCoverUrl(null);
+            const coverInput = document.getElementById('event-cover') as HTMLInputElement | null;
+            if (coverInput) coverInput.value = '';
+          }}
+          className="text-red-600 text-sm hover:underline mt-2"
+        >
+          Supprimer l’image
+        </button>
+      </div>
+    )}
+  </div>
 </div>
+
 
 {/* Images de contenu */}
 <div className="space-y-2 mt-4">
