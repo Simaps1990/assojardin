@@ -102,7 +102,7 @@ return (
       </Link>
     </div>
     {latestPost ? (
-      <Link to={`/blog/${latestPost.id}`} className="block">
+<Link to={`/blog/${latestPost.id}`} className="block mb-6 md:mb-8">
         <BlogCard post={latestPost} isFeature={true} />
       </Link>
     ) : (
