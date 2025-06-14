@@ -166,9 +166,7 @@ return (
   </div>
 </section>
 
-<div className="flex justify-center">
-  <hr className="w-1/2 border-t border-neutral-300" />
-</div>
+
 
 
 {/* Dernière annonce validée */}
