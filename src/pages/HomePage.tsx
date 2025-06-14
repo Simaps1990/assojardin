@@ -220,7 +220,7 @@ return (
 
 
     {/* Call to Action */}
-<section className="pt-16 px-4 md:px-0 bg-primary-700 text-white">
+<section className="pt-16 pb-16 px-4 md:px-0 bg-primary-700 text-white">
   <div className="w-full text-center px-4 md:px-0">
 
 
