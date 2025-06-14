@@ -379,29 +379,23 @@ console.log("Posts en state :", posts);
 <div className="space-y-2 mt-4">
   <label className="block font-medium">Photo de couverture</label>
 
-<div className="flex items-center gap-2">
-  <div className="flex-1 border rounded px-3 py-2 flex items-center justify-between">
-    <div className="flex items-center gap-2 truncate">
-      <span className="text-gray-500">📷</span>
-      <span className="text-sm text-gray-700 truncate">
-        {image?.name || 'Aucun fichier choisi'}
-      </span>
-    </div>
-    <label
-      htmlFor="blog-image"
-      className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 cursor-pointer"
-    >
-      Parcourir
-    </label>
-  </div>
-  <input
-    id="blog-image"
-    type="file"
-    accept="image/*"
-    onChange={handleImageChange}
-    className="hidden"
-  />
-</div>
+<label
+  htmlFor="blog-image"
+  className="w-full border rounded px-3 py-2 flex items-center gap-2 cursor-pointer"
+>
+  <span className="text-gray-500">📷</span>
+  <span className="text-sm text-gray-700 truncate flex-1">
+    {image?.name || 'Choisir un fichier'}
+  </span>
+</label>
+<input
+  id="blog-image"
+  type="file"
+  accept="image/*"
+  onChange={handleImageChange}
+  className="hidden"
+/>
+
 
 
 
@@ -442,13 +436,16 @@ console.log("Posts en state :", posts);
   onChange={(e) => handleImageAnnexeChange(index, e)}
 />
 
-<button
-  type="button"
+<div
   onClick={() => inputRefs.current[index]?.click()}
-  className="border rounded px-3 py-2"
+  className="border rounded px-3 py-2 flex items-center gap-2 cursor-pointer w-full"
 >
-  {imagesannexesFiles[index]?.name || 'Choisir un fichier'}
-</button>
+  <span>📷</span>
+  <span className="truncate">
+    {imagesannexesFiles[index]?.name || 'Choisir un fichier'}
+  </span>
+</div>
+
 
 
 
