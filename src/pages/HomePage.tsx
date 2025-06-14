@@ -94,7 +94,7 @@ return (
 <section className="pt-16 px-4 md:px-6 bg-neutral-50">
   <div className="container-custom">
     <div className="flex justify-between items-center">
-<Link to="/blog" className="text-3xl font-heading font-bold hover:underline mb-3">
+<Link to="/blog" className="text-3xl font-heading font-bold mb-3">
         Dernier Article
       </Link>
       <Link to="/blog" className="flex items-center text-primary-600 hover:text-primary-700">
@@ -120,7 +120,7 @@ return (
 <section className="pt-16 px-4 md:px-6 bg-neutral-50">
   <div className="container-custom">
     <div className="flex justify-between items-center">
-      <Link to="/events" className="text-3xl font-heading font-bold hover:underline">
+      <Link to="/events" className="text-3xl font-heading font-bold">
         Nos événements
       </Link>
       <Link to="/events" className="flex items-center text-primary-600 hover:text-primary-700">
@@ -131,7 +131,7 @@ return (
     <div className="grid md:grid-cols-2 gap-12">
       {/* Next Event */}
       <div>
-        <Link to="/events" className="text-xl font-heading font-semibold mb-3 hover:underline block">
+        <Link to="/events" className="text-xl font-heading font-semibold mb-3 block">
           Prochain événement
         </Link>
         {nextEvent ? (
@@ -149,7 +149,7 @@ return (
 
       {/* Latest Past Event */}
       <div>
-        <Link to="/events" className="text-xl font-heading font-semibold mb-3 hover:underline block">
+        <Link to="/events" className="text-xl font-heading font-semibold mb-3 block">
           Événement passé
         </Link>
         {latestPastEvent ? (
@@ -173,7 +173,7 @@ return (
 <section className="pt-16 pb-16 px-4 md:px-6 bg-neutral-50">
   <div className="container-custom">
     <div className="flex justify-between items-center">
-<Link to="/annonces" className="text-3xl font-heading font-bold hover:underline mb-6">
+<Link to="/annonces" className="text-3xl font-heading font-bold mb-6">
   Les petites annonces
 </Link>
 
