@@ -57,7 +57,7 @@ return (
       >
         <div className="absolute inset-0 bg-black bg-opacity-40"></div>
 <div className="container-custom relative z-10 text-white">
-  <div className="max-w-4xl mt-24 animate-fade-in">
+  <div className="max-w-4xl mt-26 animate-fade-in">
 
             {titreAccueil && (
               <h1 className="text-4xl md:text-5xl font-bold mb-4">{titreAccueil}</h1>
