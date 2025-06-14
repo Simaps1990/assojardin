@@ -188,16 +188,20 @@ const MeteoConseilsSection: React.FC = () => {
           <li>Qualité de l’air : <span className="text-green-600">{airQuality}</span></li>
 <li className="text-sm text-neutral-800 list-disc list-inside">
   <span className="text-neutral-800">Risques allergènes : </span>
-  {allergyRisks.map((risk, idx) => (
-    <span
-      key={idx}
-      className={`${
-        risk.includes('très élevé') ? 'text-red-600' : 'text-orange-500'
-      }${idx < allergyRisks.length - 1 ? ' mr-2' : ''}`}
-    >
-      {risk}
-    </span>
-  ))}
+
+{allergyRisks.map((risk, idx) => (
+  <span
+    key={idx}
+    className={`${
+      risk.includes('Rien de préoccupant') ? 'text-green-600'
+      : risk.includes('très élevé') ? 'text-red-600'
+      : 'text-orange-500'
+    }${idx < allergyRisks.length - 1 ? ' mr-2' : ''}`}
+  >
+    {risk}
+  </span>
+))}
+
 </li>
 
 
