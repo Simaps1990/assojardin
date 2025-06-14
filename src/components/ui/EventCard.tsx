@@ -11,7 +11,10 @@ interface EventCardProps {
 
 const EventCard: React.FC<EventCardProps> = ({ event, isFeature = false }) => {
   return (
-    <article className={`card group transition-all duration-300 ${event.isPast ? 'opacity-80' : ''}`}>
+<Link
+  to={`/events/${event.id}`}
+  className={`card group transition-all duration-300 block ${event.isPast ? 'opacity-80' : ''}`}
+>
       <div className="relative overflow-hidden h-48">
         <img
           src={event.image ?? '/placeholder.jpg'}
@@ -50,12 +53,10 @@ const EventCard: React.FC<EventCardProps> = ({ event, isFeature = false }) => {
         </div>
 
         <h3 className="font-heading font-semibold text-xl mb-2">
-          <Link
-            to={`/events/${event.id}`}
-            className="text-neutral-800 hover:text-primary-600 transition-colors duration-200"
-          >
-            {event.title}
-          </Link>
+<span className="text-neutral-800 group-hover:text-primary-600 transition-colors duration-200">
+  {event.title}
+</span>
+
         </h3>
 
 <p className="text-neutral-600 mb-2">
@@ -66,13 +67,9 @@ const EventCard: React.FC<EventCardProps> = ({ event, isFeature = false }) => {
               }`}
         </p>
 
-        <div className="flex justify-end">
-          <Link to={`/events/${event.id}`} className="btn-outline inline-flex items-center text-sm">
-            En savoir plus
-          </Link>
-        </div>
+
       </div>
-    </article>
+    </Link>
   );
 };
 
