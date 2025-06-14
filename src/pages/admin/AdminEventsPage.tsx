@@ -6,6 +6,7 @@ import { useContent } from '../../context/ContentContext';
 const AdminEventsPage: React.FC = () => {
 
 const { events, setEvents, fetchEvents: refreshGlobalEvents } = useContent();
+const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -348,103 +349,103 @@ const sortedEvents = [...events].sort((a, b) => {
 <div className="space-y-2 mt-4">
   <label className="block font-medium">Photo de couverture</label>
 
-  <div className="flex flex-col gap-2">
-    <input
-      id="event-cover"
-      type="file"
-      accept="image/*"
-      className={coverUrl ? 'file:text-transparent' : ''}
-      onChange={async (e) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
+  <input
+    id="event-cover"
+    type="file"
+    accept="image/*"
+    onChange={async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
 
-        const objectUrl = URL.createObjectURL(file);
-        setCoverUrl(objectUrl);
+      const objectUrl = URL.createObjectURL(file);
+      setCoverUrl(objectUrl);
 
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'site_global_uploads');
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'site_global_uploads');
 
-        try {
-          const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
-            method: 'POST',
-            body: formData,
-          });
-          const data = await res.json();
-          if (data.secure_url) {
-            setCoverUrl(data.secure_url);
-          }
-        } catch (err) {
-          console.error('Erreur upload image Cloudinary (couverture)', err);
+      try {
+        const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await res.json();
+        if (data.secure_url) {
+          setCoverUrl(data.secure_url);
         }
-      }}
-    />
+      } catch (err) {
+        console.error('Erreur upload image Cloudinary (couverture)', err);
+      }
+    }}
+    className={`w-full ${coverUrl ? 'text-transparent' : ''}`}
+  />
 
-    {coverUrl && (
-      <div className="mt-2">
-        <img src={coverUrl} alt="Aperçu" className="h-32 object-cover rounded" />
-        <button
-          type="button"
-          onClick={() => {
-            setCoverUrl(null);
-            const coverInput = document.getElementById('event-cover') as HTMLInputElement | null;
-            if (coverInput) coverInput.value = '';
-          }}
-          className="text-red-600 text-sm hover:underline mt-2"
-        >
-          Supprimer l’image
-        </button>
-      </div>
-    )}
-  </div>
+  {coverUrl && (
+    <div className="mt-2">
+      <img src={coverUrl} alt="Aperçu" className="h-32 object-cover rounded" />
+      <button
+        type="button"
+        onClick={() => {
+          setCoverUrl(null);
+          const coverInput = document.getElementById('event-cover') as HTMLInputElement | null;
+          if (coverInput) coverInput.value = '';
+        }}
+        className="text-red-600 text-sm hover:underline mt-2"
+      >
+        Supprimer l’image
+      </button>
+    </div>
+  )}
 </div>
+
 
 
 {/* Images de contenu */}
 <div className="space-y-2 mt-4">
   <label className="block font-medium">Photos de contenu (jusqu’à 3)</label>
   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-{[0, 1, 2].map((index) => (
+    {[0, 1, 2].map((index) => (
       <div key={index}>
+        <input
+          ref={(el) => (inputRefs.current[index] = el)}
+          id={`annex-image-${index}`}
+          type="file"
+          accept="image/*"
+          onChange={(e) => handleImagesannexesChange(e, index)}
+          className={`w-full ${imagesannexesUrls[index] ? 'text-transparent' : ''}`}
+        />
 
-{!imagesannexesUrls[index] && (
-<input
-  type="file"
-  accept="image/*"
-  onChange={(e) => handleImagesannexesChange(e, index)}
-  style={imagesannexesUrls[index] ? { color: 'transparent' } : {}}
-/>
+        {imagesannexesUrls[index] && (
+          <div className="mt-2 relative">
+            <img
+              src={imagesannexesUrls[index]!}
+              alt={`Aperçu image ${index + 1}`}
+              className="w-full h-32 object-cover rounded"
+            />
+            <button
+              onClick={() => {
+                const newFiles = [...imagesannexesFiles];
+                const newUrls = [...imagesannexesUrls];
+                newFiles[index] = null;
+                newUrls[index] = null;
+                setImagesannexesFiles(newFiles);
+                setImagesannexesUrls(newUrls);
 
-)}
-
-{imagesannexesUrls[index] && (
-  <div className="mt-2 relative">
-    <img
-      src={imagesannexesUrls[index]!}
-      alt={`Aperçu image ${index + 1}`}
-      className="w-full h-32 object-cover rounded"
-    />
-    <button
-      onClick={() => {
-        const newFiles = [...imagesannexesFiles];
-        const newUrls = [...imagesannexesUrls];
-        newFiles[index] = null;
-        newUrls[index] = null;
-        setImagesannexesFiles(newFiles);
-        setImagesannexesUrls(newUrls);
-      }}
-      className="absolute top-1 right-1 bg-red-600 text-white px-2 py-1 rounded text-xs"
-      type="button"
-    >
-      Supprimer
-    </button>
-  </div>
-)}
-
+                const input = document.getElementById(`annex-image-${index}`) as HTMLInputElement | null;
+                if (input) input.value = '';
+              }}
+              className="absolute top-1 right-1 bg-red-600 text-white px-2 py-1 rounded text-xs"
+              type="button"
+            >
+              Supprimer
+            </button>
+          </div>
+        )}
       </div>
     ))}
   </div>
 </div>
+
 
 
 
