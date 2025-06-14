@@ -24,6 +24,8 @@ console.log("🧪 blogPosts dans AdminBlogPage :", blogPosts);
   const [postToDelete, setPostToDelete] = useState<BlogPost | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
 const [posts, setPosts] = useState<BlogPost[]>([]);
+const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
 useEffect(() => {
   fetchBlogPosts();
 }, []);
@@ -416,15 +418,23 @@ console.log("Posts en state :", posts);
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
            {imagesannexesUrls.map((imgUrl, index) => (
   <div key={index}>
-    <input
-      id={`annex-image-${index}`} 
-      type="file"
-      accept="image/*"
-      onChange={(e) => handleImageAnnexeChange(index, e)}
-    />
-{imagesannexesFiles[index]?.name && (
-  <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">{imagesannexesFiles[index]?.name}</p>
-)}
+<input
+  ref={(el) => (inputRefs.current[index] = el)}
+  id={`annex-image-${index}`}
+  type="file"
+  accept="image/*"
+  className="hidden"
+  onChange={(e) => handleImageAnnexeChange(index, e)}
+/>
+
+<button
+  type="button"
+  onClick={() => inputRefs.current[index]?.click()}
+  className="border rounded px-3 py-2"
+>
+  {imagesannexesFiles[index]?.name || 'Choisir un fichier'}
+</button>
+
 
 
     {imgUrl && (
