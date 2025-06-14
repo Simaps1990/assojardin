@@ -349,36 +349,37 @@ const sortedEvents = [...events].sort((a, b) => {
   <label className="block font-medium">Photo de couverture</label>
  
 <div className="flex flex-col gap-2">
-  <input
-    id="event-cover"
-    type="file"
-    accept="image/*"
-    className="hidden"
-    onChange={async (e) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
+<input
+  id="event-cover"
+  type="file"
+  accept="image/*"
+  className={coverUrl ? 'file:text-transparent' : ''}
+  onChange={async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-      const objectUrl = URL.createObjectURL(file);
-      setCoverUrl(objectUrl);
+    const objectUrl = URL.createObjectURL(file);
+    setCoverUrl(objectUrl);
 
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'site_global_uploads');
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'site_global_uploads');
 
-      try {
-        const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
-          method: 'POST',
-          body: formData,
-        });
-        const data = await res.json();
-        if (data.secure_url) {
-          setCoverUrl(data.secure_url);
-        }
-      } catch (err) {
-        console.error('Erreur upload image Cloudinary (couverture)', err);
+    try {
+      const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.secure_url) {
+        setCoverUrl(data.secure_url);
       }
-    }}
-  />
+    } catch (err) {
+      console.error('Erreur upload image Cloudinary (couverture)', err);
+    }
+  }}
+/>
+
 
   <label
     htmlFor="event-cover"
