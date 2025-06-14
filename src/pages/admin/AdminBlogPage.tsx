@@ -378,16 +378,30 @@ console.log("Posts en state :", posts);
 
 <div className="space-y-2 mt-4">
   <label className="block font-medium">Photo de couverture</label>
-  <input id="blog-image"
+
+<div className="flex items-center gap-2">
+  <div className="flex-1 border rounded px-3 py-2 flex items-center justify-between">
+    <div className="flex items-center gap-2 truncate">
+      <span className="text-gray-500">📷</span>
+      <span className="text-sm text-gray-700 truncate">
+        {image?.name || 'Aucun fichier choisi'}
+      </span>
+    </div>
+    <label
+      htmlFor="blog-image"
+      className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 cursor-pointer"
+    >
+      Parcourir
+    </label>
+  </div>
+  <input
+    id="blog-image"
     type="file"
     accept="image/*"
     onChange={handleImageChange}
+    className="hidden"
   />
-{previewUrl && image?.name && (
-  <p className="text-sm text-gray-600 mt-1 truncate max-w-xs">{image.name}</p>
-)}
-
-
+</div>
 
 
 
@@ -410,6 +424,7 @@ console.log("Posts en state :", posts);
     </div>
   )}
 </div>
+
 
 
 
