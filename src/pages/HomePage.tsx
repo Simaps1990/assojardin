@@ -81,7 +81,7 @@ return (
     )}
 
 {/* Section Météo + Plantation */}
-<section className="py-0 px-4 md:px-14 bg-neutral-50">
+<section className="py-14 px-4 md:px-14 bg-neutral-50">
   <MeteoConseilsSection />
 </section>
 
@@ -91,7 +91,7 @@ return (
 
 
 {/* Latest Blog Post */}
-<section className="py-0 px-4 md:px-14 bg-neutral-50">
+<section className="py-14 px-4 md:px-14 bg-neutral-50">
   <div className="container-custom">
     <div className="flex justify-between items-center">
       <Link to="/blog" className="text-3xl font-heading font-bold hover:underline">
@@ -117,7 +117,7 @@ return (
 
 
 {/* Events Section */}
-<section className="py-0 m-14 pt-1 bg-neutral-50">
+<section className="py-14 px-4 md:px-14 bg-neutral-50">
   <div className="container-custom">
     <div className="flex justify-between items-center">
       <Link to="/events" className="text-3xl font-heading font-bold hover:underline">
@@ -170,7 +170,7 @@ return (
 
 
 {/* Dernière annonce validée */}
-<section className="py-0 m-16 bg-neutral-50">
+<section className="py-14 px-4 md:px-14 bg-neutral-50">
   <div className="container-custom">
     <div className="flex justify-between items-center">
 <Link to="/annonces" className="text-3xl font-heading font-bold hover:underline mb-2">
@@ -220,7 +220,7 @@ return (
 
 
     {/* Call to Action */}
-<section className="pt-14 mt-14 m-0 bg-primary-700 text-white">
+<section className="py-14 px-4 md:px-0 bg-primary-700 text-white">
 <div className="w-full text-center px-4 md:px-0 pb-14">
 
         <h2 className="text-3xl font-heading font-bold mb-4">
