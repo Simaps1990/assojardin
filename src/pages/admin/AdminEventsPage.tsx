@@ -347,55 +347,56 @@ const sortedEvents = [...events].sort((a, b) => {
  {/* Image de couverture */}
 <div className="space-y-2 mt-4">
   <label className="block font-medium">Photo de couverture</label>
+ 
+{!coverUrl && (
   <input
     id="event-cover"
     type="file"
     accept="image/*"
-onChange={async (e) => {
-  const file = e.target.files?.[0];
-  if (!file) return;
+    onChange={async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
 
-  const objectUrl = URL.createObjectURL(file);
-  setCoverUrl(objectUrl);
+      const objectUrl = URL.createObjectURL(file);
+      setCoverUrl(objectUrl);
 
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', 'site_global_uploads');
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'site_global_uploads');
 
-  try {
-    const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
-      method: 'POST',
-      body: formData,
-    });
-    const data = await res.json();
-    if (data.secure_url) {
-      setCoverUrl(data.secure_url);
-    }
-  } catch (err) {
-    console.error('Erreur upload image Cloudinary (couverture)', err);
-  }
-}}
-
-
+      try {
+        const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await res.json();
+        if (data.secure_url) {
+          setCoverUrl(data.secure_url);
+        }
+      } catch (err) {
+        console.error('Erreur upload image Cloudinary (couverture)', err);
+      }
+    }}
   />
+)}
+
 {coverUrl && (
   <div className="mt-2">
     <img src={coverUrl} alt="Aperçu" className="h-32 object-cover rounded" />
+    <button
+      type="button"
+      onClick={() => {
+        setCoverUrl(null);
+        const coverInput = document.getElementById('event-cover') as HTMLInputElement | null;
+        if (coverInput) coverInput.value = '';
+      }}
+      className="text-red-600 text-sm hover:underline mt-2"
+    >
+      Supprimer l’image
+    </button>
+  </div>
+)}
 
-      <button
-        type="button"
-        onClick={() => {
-setCoverUrl(null);
-const coverInput = document.getElementById('event-cover') as HTMLInputElement | null;
-if (coverInput) coverInput.value = '';
-
-        }}
-        className="text-red-600 text-sm hover:underline mt-2"
-      >
-        Supprimer l’image
-      </button>
-    </div>
-  )}
 </div>
 
 {/* Images de contenu */}
@@ -404,34 +405,39 @@ if (coverInput) coverInput.value = '';
   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 {[0, 1, 2].map((index) => (
       <div key={index}>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => handleImagesannexesChange(e, index)}
-        />
-        {imagesannexesUrls[index] && (
-          <div className="mt-2 relative">
-            <img
-              src={imagesannexesUrls[index]!}
-              alt={`Aperçu image ${index + 1}`}
-              className="w-full h-32 object-cover rounded"
-            />
-            <button
-              onClick={() => {
-                const newFiles = [...imagesannexesFiles];
-                const newUrls = [...imagesannexesUrls];
-                newFiles[index] = null;
-                newUrls[index] = null;
-                setImagesannexesFiles(newFiles);
-                setImagesannexesUrls(newUrls);
-              }}
-              className="absolute top-1 right-1 bg-red-600 text-white px-2 py-1 rounded text-xs"
-              type="button"
-            >
-              Supprimer
-            </button>
-          </div>
-        )}
+
+{!imagesannexesUrls[index] && (
+  <input
+    type="file"
+    accept="image/*"
+    onChange={(e) => handleImagesannexesChange(e, index)}
+  />
+)}
+
+{imagesannexesUrls[index] && (
+  <div className="mt-2 relative">
+    <img
+      src={imagesannexesUrls[index]!}
+      alt={`Aperçu image ${index + 1}`}
+      className="w-full h-32 object-cover rounded"
+    />
+    <button
+      onClick={() => {
+        const newFiles = [...imagesannexesFiles];
+        const newUrls = [...imagesannexesUrls];
+        newFiles[index] = null;
+        newUrls[index] = null;
+        setImagesannexesFiles(newFiles);
+        setImagesannexesUrls(newUrls);
+      }}
+      className="absolute top-1 right-1 bg-red-600 text-white px-2 py-1 rounded text-xs"
+      type="button"
+    >
+      Supprimer
+    </button>
+  </div>
+)}
+
       </div>
     ))}
   </div>
