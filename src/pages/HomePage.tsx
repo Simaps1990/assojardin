@@ -91,7 +91,7 @@ return (
 
 
 {/* Latest Blog Post */}
-<section className="pt-8 pb-8 px-4 md:px-6 bg-neutral-50">
+<section className="pt-8 pb-14 px-4 md:px-6 bg-neutral-50">
   <div className="container-custom">
     <div className="flex justify-between items-center">
       <Link to="/blog" className="text-3xl font-heading font-bold hover:underline">
