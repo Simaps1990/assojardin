@@ -384,8 +384,9 @@ console.log("Posts en state :", posts);
   type="file"
   accept="image/*"
   onChange={handleImageChange}
-  className="w-full"
+  className={`w-full ${previewUrl ? 'text-transparent' : ''}`}
 />
+
 
 
 
@@ -424,18 +425,11 @@ console.log("Posts en state :", posts);
   id={`annex-image-${index}`}
   type="file"
   accept="image/*"
-  className="hidden"
   onChange={(e) => handleImageAnnexeChange(index, e)}
+  className={`hidden ${imagesannexesUrls[index] ? 'text-transparent' : ''}`}
 />
 
-<input
-  ref={(el) => (inputRefs.current[index] = el)}
-  id={`annex-image-${index}`}
-  type="file"
-  accept="image/*"
-  onChange={(e) => handleImageAnnexeChange(index, e)}
-  className="w-full"
-/>
+
 
 
 
