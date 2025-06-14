@@ -193,14 +193,15 @@ const MeteoConseilsSection: React.FC = () => {
   <span
     key={idx}
     className={`${
-      risk.includes('Rien de préoccupant') ? 'text-green-600'
-      : risk.includes('très élevé') ? 'text-red-600'
-      : 'text-orange-500'
+      risk.toLowerCase().includes('rien de préoccupant') ? 'text-green-600' :
+      risk.includes('très élevé') ? 'text-red-600' :
+      'text-orange-500'
     }${idx < allergyRisks.length - 1 ? ' mr-2' : ''}`}
   >
     {risk}
   </span>
 ))}
+
 
 </li>
 
