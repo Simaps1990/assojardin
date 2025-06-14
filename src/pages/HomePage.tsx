@@ -97,7 +97,7 @@ return (
 <Link to="/blog" className="text-3xl font-heading font-bold hover:underline mb-3">
         Dernier Article
       </Link>
-      <Link to="/blog" className="flex items-center text-primary-600 hover:text-primary-700">
+      <Link to="/blog" className="text-primary-600 hover:text-primary-700 no-underline hover:no-underline transition-colors">
         Tous nos articles de Blog <ChevronRight size={16} />
       </Link>
     </div>
@@ -123,7 +123,7 @@ return (
       <Link to="/events" className="text-3xl font-heading font-bold hover:underline">
         Nos événements
       </Link>
-      <Link to="/events" className="flex items-center text-primary-600 hover:text-primary-700">
+      <Link to="/events" className="text-primary-600 hover:text-primary-700 no-underline hover:no-underline transition-colors">
         Tous les événements <ChevronRight size={16} />
       </Link>
     </div>
@@ -177,7 +177,7 @@ return (
   Les petites annonces
 </Link>
 
-      <Link to="/annonces" className="flex items-center text-primary-600 hover:text-primary-700">
+      <Link to="/annonces" className="text-primary-600 hover:text-primary-700 no-underline hover:no-underline transition-colors">
         Voir toutes les annonces <ChevronRight size={16} />
       </Link>
     </div>
