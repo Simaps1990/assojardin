@@ -425,7 +425,7 @@ console.log("Posts en state :", posts);
   id={`annex-image-${index}`}
   type="file"
   accept="image/*"
-  className="hidden"
+className={`w-full ${imagesannexesUrls[index] ? 'text-transparent' : ''}`}
   onChange={(e) => handleImageAnnexeChange(index, e)}
 />
 
