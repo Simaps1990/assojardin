@@ -348,11 +348,12 @@ const sortedEvents = [...events].sort((a, b) => {
 <div className="space-y-2 mt-4">
   <label className="block font-medium">Photo de couverture</label>
  
-{!coverUrl && (
+<div className="flex flex-col gap-2">
   <input
     id="event-cover"
     type="file"
     accept="image/*"
+    className="hidden"
     onChange={async (e) => {
       const file = e.target.files?.[0];
       if (!file) return;
@@ -378,7 +379,32 @@ const sortedEvents = [...events].sort((a, b) => {
       }
     }}
   />
-)}
+
+  <label
+    htmlFor="event-cover"
+    className="inline-flex items-center justify-center w-fit px-4 py-2 bg-gray-200 text-gray-800 rounded cursor-pointer hover:bg-gray-300"
+  >
+    📷 {coverUrl ? 'Modifier l’image' : 'Choisir une image'}
+  </label>
+
+  {coverUrl && (
+    <div className="mt-2">
+      <img src={coverUrl} alt="Aperçu" className="h-32 object-cover rounded" />
+      <button
+        type="button"
+        onClick={() => {
+          setCoverUrl(null);
+          const coverInput = document.getElementById('event-cover') as HTMLInputElement | null;
+          if (coverInput) coverInput.value = '';
+        }}
+        className="text-red-600 text-sm hover:underline mt-2"
+      >
+        Supprimer l’image
+      </button>
+    </div>
+  )}
+</div>
+
 
 {coverUrl && (
   <div className="mt-2">
