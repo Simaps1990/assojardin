@@ -49,8 +49,8 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, isFeature = false }) => {
 </div>
 
 
-          <h3 className="font-heading font-semibold text-xl mb-4">
-            <Link
+<h3 className="font-heading font-semibold text-xl mb-2">
+              <Link
               to={`/blog/${post.id}`}
               className="text-neutral-800 hover:text-primary-600"
             >

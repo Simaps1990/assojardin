@@ -58,8 +58,8 @@ const EventCard: React.FC<EventCardProps> = ({ event, isFeature = false }) => {
           </Link>
         </h3>
 
-        <p className="text-neutral-600 mb-4">
-          {isFeature
+<p className="text-neutral-600 mb-2">
+            {isFeature
             ? event.description ?? ''
             : `${event.description?.substring(0, 100) ?? ''}${
                 event.description && event.description.length > 100 ? '...' : ''
