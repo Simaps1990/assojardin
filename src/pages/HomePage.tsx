@@ -173,7 +173,7 @@ return (
 <section className="pt-8 pb-8 px-4 md:px-6 bg-neutral-50">
   <div className="container-custom">
     <div className="flex justify-between items-center">
-<Link to="/annonces" className="text-3xl font-heading font-bold hover:underline mb-2">
+<Link to="/annonces" className="text-3xl font-heading font-bold hover:underline mb-6">
   Les petites annonces
 </Link>
 
