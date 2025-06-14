@@ -94,7 +94,7 @@ return (
 <section className="pt-8 pb-14 px-4 md:px-6 bg-neutral-50">
   <div className="container-custom">
     <div className="flex justify-between items-center">
-      <Link to="/blog" className="text-3xl font-heading font-bold hover:underline">
+<Link to="/blog" className="text-3xl font-heading font-bold hover:underline mb-6">
         Dernier Article
       </Link>
       <Link to="/blog" className="flex items-center text-primary-600 hover:text-primary-700">
@@ -102,7 +102,7 @@ return (
       </Link>
     </div>
     {latestPost ? (
-<Link to={`/blog/${latestPost.id}`} className="block mb-6 md:mb-8">
+      <Link to={`/blog/${latestPost.id}`} className="block">
         <BlogCard post={latestPost} isFeature={true} />
       </Link>
     ) : (
