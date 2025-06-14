@@ -408,11 +408,13 @@ const sortedEvents = [...events].sort((a, b) => {
       <div key={index}>
 
 {!imagesannexesUrls[index] && (
-  <input
-    type="file"
-    accept="image/*"
-    onChange={(e) => handleImagesannexesChange(e, index)}
-  />
+<input
+  type="file"
+  accept="image/*"
+  onChange={(e) => handleImagesannexesChange(e, index)}
+  style={imagesannexesUrls[index] ? { color: 'transparent' } : {}}
+/>
+
 )}
 
 {imagesannexesUrls[index] && (
