@@ -1,7 +1,7 @@
 import * as React from 'react';
 import SuccessModal from '../../components/SuccessModal.tsx';
-
 import { supabase } from '../../supabaseClient';
+import { useNotifications } from '../../context/NotificationsContext';
 
 type Demande = {
   id: string;
@@ -28,6 +28,7 @@ const [demandes, setDemandes] = React.useState<Demande[]>([]);
 const [successMessage, setSuccessMessage] = React.useState<string | null>(null);
 const [showConfirmModal, setShowConfirmModal] = React.useState(false);
 const [demandeASupprimer, setDemandeASupprimer] = React.useState<Demande | null>(null);
+const { updateNonTraitees } = useNotifications();
 
 
 React.useEffect(() => {
@@ -61,7 +62,9 @@ const toggleProcessed = async (demande: Demande) => {
 setDemandes((prev) => {
   const updated = prev.map((d) => (d.id === demande.id ? { ...d, processed: !demande.processed } : d));
   localStorage.setItem('applications', JSON.stringify(updated));
-  window.dispatchEvent(new Event('storage'));
+  // Mettre à jour le compteur de notifications
+  const nonTraiteesCount = updated.filter(d => !d.processed).length;
+  updateNonTraitees(nonTraiteesCount);
   return updated;
 });
 
@@ -200,7 +203,9 @@ setDemandes((prev) => {
               setDemandes((prev) => {
                 const updated = prev.filter(d => d.id !== demandeASupprimer.id);
                 localStorage.setItem('applications', JSON.stringify(updated));
-                window.dispatchEvent(new Event('storage'));
+                // Mettre à jour le compteur de notifications
+                const nonTraiteesCount = updated.filter(d => !d.processed).length;
+                updateNonTraitees(nonTraiteesCount);
                 return updated;
               });
               setSuccessMessage(`Demande de ${demandeASupprimer.nom} supprimée avec succès.`);

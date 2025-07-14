@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../../supabaseClient';
 import type { Annonce } from '../../types'; // ajuste le chemin si besoin
 import { renderAnnonceType } from '../../constants/annonceTypes'; // ajuste le chemin si besoin
+import { useNotifications } from '../../context/NotificationsContext';
 
 const AdminAnnoncesPage = () => {
   const [annonces, setAnnonces] = useState<Annonce[]>([]);
@@ -9,7 +10,8 @@ const AdminAnnoncesPage = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editedAnnonce, setEditedAnnonce] = useState<Partial<Annonce>>({});
   const [confirmId, setConfirmId] = useState<string | null>(null);
-const [confirmImageDelete, setConfirmImageDelete] = useState<{ id: string; field: 'photo1' | 'photo2' } | null>(null);
+  const [confirmImageDelete, setConfirmImageDelete] = useState<{ id: string; field: 'photo1' | 'photo2' } | null>(null);
+  const { updateAnnoncesEnAttente } = useNotifications();
 
   const startEdit = (annonce: Annonce) => {
     setEditingId(annonce.id);
@@ -44,10 +46,15 @@ setEditingId(null);
 
 const validerAnnonce = async (id: string) => {
   await supabase.from('annonces').update({ statut: 'validé' }).eq('id', id);
-
-  const currentCount = Number(localStorage.getItem('annoncesEnAttente') || '1');
-  localStorage.setItem('annoncesEnAttente', String(Math.max(currentCount - 1, 0)));
-  window.dispatchEvent(new Event('storage'));
+  
+  // Récupérer le nombre actuel d'annonces en attente depuis Supabase
+  const { count } = await supabase
+    .from('annonces')
+    .select('*', { count: 'exact', head: true })
+    .eq('statut', 'en_attente');
+  
+  // Mettre à jour le compteur de notifications
+  updateAnnoncesEnAttente(count || 0);
 
   fetchAnnonces();
 };

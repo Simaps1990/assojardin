@@ -483,24 +483,11 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
       return;
     }
 
-    // Afficher les données brutes pour déboguer
-    console.log('🔍 Données brutes des articles:', data);
-    
-    // Vérifier les champs d'image pour chaque article
-    data.forEach((post, index) => {
-      console.log(`🖼️ Article ${index + 1} - Titre: ${post.title}`);
-      console.log(`   Image principale: ${post.image || 'MANQUANTE'}`);
-      console.log(`   Images annexes: ${JSON.stringify(post.imagesannexes || [])}`);
-    });
-
-    // Normaliser les données pour s'assurer que tous les champs sont correctement formatés
+    // Normaliser les données pour s'assurer que imagesannexes est toujours un tableau
     const normalizedData = data.map(post => ({
       ...post,
-      // S'assurer que l'image principale est une chaîne non vide
-      image: post.image || '',
-      // S'assurer que imagesannexes est toujours un tableau valide
       imagesannexes: Array.isArray(post.imagesannexes) 
-        ? post.imagesannexes.filter((url: any) => url !== null && url !== undefined && url !== '') 
+        ? post.imagesannexes.filter((url: any) => url !== null && url !== undefined) 
         : []
     }));
 

@@ -4,7 +4,7 @@ export interface BlogPost {
   content: string;
   excerpt: string;
   image: string;
-  imagesannexes?: string[];
+  imagesannexes: string[]; // Tableau de strings sans null/undefined
   date: string; // date de publication
   author: string;
   created_at?: string; // rendu facultatif si jamais absent dans certaines lignes

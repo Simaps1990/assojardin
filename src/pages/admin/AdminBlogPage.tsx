@@ -9,16 +9,25 @@ const {
   addBlogPost,
   updateBlogPost,
   fetchBlogPosts,
-  deleteBlogPost // 👈 AJOUTE ICI
+  deleteBlogPost // 
 } = useContent();
-console.log("🧪 blogPosts dans AdminBlogPage :", blogPosts);
+console.log(" blogPosts dans AdminBlogPage :", blogPosts);
 
   const [imagesannexesFiles, setImagesannexesFiles] = useState<(File | null)[]>([null, null, null]);
   const [imagesannexesUrls, setImagesannexesUrls] = useState<(string | null)[]>([null, null, null]);
   const [title, setTitle] = useState('');
+  
+  // Gestion de l'upload de l'image de couverture
   const [image, setImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('');
+  
+  // Variable globale pour stocker l'URL de l'image uploadée (persiste entre les rendus)
+  // Cette variable sera utilisée dans handleImageChange et handleSubmit
+  if (typeof window !== 'undefined' && !(window as any).lastUploadedCoverImage) {
+    (window as any).lastUploadedCoverImage = '';
+  }
+
   const [error, setError] = useState('');
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
   const [postToDelete, setPostToDelete] = useState<BlogPost | null>(null);
@@ -49,6 +58,18 @@ useEffect(() => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Vérifier la taille du fichier (max 10MB)
+    const maxSize = 10 * 1024 * 1024; // 10MB en octets
+    if (file.size > maxSize) {
+      setError(`L'image ${index+1} est trop volumineuse (max 10MB). Veuillez la compresser.`);
+      // Réinitialiser l'input
+      const input = document.getElementById(`annex-image-${index}`) as HTMLInputElement | null;
+      if (input) input.value = '';
+      return;
+    }
+
+    setError(''); // Réinitialiser les erreurs précédentes
+    
     const newFiles = [...imagesannexesFiles];
     newFiles[index] = file;
     setImagesannexesFiles(newFiles);
@@ -57,30 +78,63 @@ useEffect(() => {
     const newUrls = [...imagesannexesUrls];
     newUrls[index] = objectUrl;
     setImagesannexesUrls(newUrls);
+    
+    console.log(`Image annexe ${index+1} sélectionnée: ${file.name} (${(file.size/1024/1024).toFixed(2)}MB)`);
   };
 
   const uploadAnnexImages = async (): Promise<string[]> => {
     const urls: string[] = [];
-for (let i = 0; i < imagesannexesFiles.length; i++) {
-  const file = imagesannexesFiles[i];
-  if (file) {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', 'site_global_uploads');
-    const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
-      method: 'POST',
-      body: formData,
-    });
-
-    const data = await res.json();
-    if (data.secure_url) {
-      // on conserve l'index exact
-      urls[i] = data.secure_url;
+    const maxRetries = 2; // Nombre de tentatives en cas d'échec
+    
+    for (let i = 0; i < imagesannexesFiles.length; i++) {
+      const file = imagesannexesFiles[i];
+      if (file) {
+        let retryCount = 0;
+        let success = false;
+        
+        while (retryCount <= maxRetries && !success) {
+          try {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', 'site_global_uploads');
+            
+            console.log(`Tentative d'upload de l'image ${i+1}/${imagesannexesFiles.length} (essai ${retryCount+1}/${maxRetries+1})`);
+            
+            const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
+              method: 'POST',
+              body: formData,
+            });
+            
+            if (!res.ok) {
+              throw new Error(`Erreur HTTP: ${res.status}`);
+            }
+            
+            const data = await res.json();
+            if (data.secure_url) {
+              urls[i] = data.secure_url;
+              success = true;
+              console.log(`✅ Image ${i+1} uploadée avec succès: ${data.secure_url}`);
+            } else {
+              throw new Error('URL sécurisée non reçue de Cloudinary');
+            }
+          } catch (err) {
+            retryCount++;
+            console.error(`❌ Erreur upload image ${i+1} (tentative ${retryCount}/${maxRetries+1}):`, err);
+            
+            if (retryCount > maxRetries) {
+              console.error(`Abandon de l'upload pour l'image ${i+1} après ${maxRetries+1} tentatives`);
+              setError(`Erreur lors de l'upload de l'image ${i+1}. Veuillez réessayer.`);
+            } else {
+              // Attendre avant de réessayer (backoff exponentiel)
+              await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+            }
+          }
+        }
+      }
     }
-  }
-}
-
-    return urls;
+    
+    // Filtrer les undefined pour avoir un tableau propre
+    return urls.filter(url => url !== undefined) as string[];
   };
 
   useEffect(() => {
@@ -91,31 +145,80 @@ for (let i = 0; i < imagesannexesFiles.length; i++) {
     }
   }, [image]);
 
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  // Variable globale pour stocker l'URL de l'image de couverture en dehors du composant
+// pour éviter qu'elle ne soit réinitialisée à chaque rendu
+if (typeof window !== 'undefined') {
+  if (!(window as any).lastUploadedImageUrl) {
+    (window as any).lastUploadedImageUrl = '';
+  }
+}
 
-const objectUrl = URL.createObjectURL(file);
-setImage(file);
-setPreviewUrl(objectUrl);
+const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  
+  setError(''); // Réinitialiser les erreurs précédentes
+  setImage(file);
+  setPreviewUrl(URL.createObjectURL(file));
+  
+  // Désactiver le bouton de soumission pendant l'upload
+  const submitButton = document.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+  if (submitButton) submitButton.disabled = true;
+  
+  // Afficher un message d'attente
+  setError('Upload en cours... Veuillez patienter.');
+    
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'site_global_uploads');
 
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'site_global_uploads');
-
-      const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await res.json();
-      if (data.secure_url) {
-        setUploadedImageUrl(data.secure_url);
-      }
-    } catch (err) {
-      console.error('Erreur upload image', err);
+    console.log("Début de l'upload de l'image de couverture...");
+    
+    const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!res.ok) {
+      throw new Error(`Erreur HTTP: ${res.status}`);
     }
-  };
+    
+    const data = await res.json();
+    if (data.secure_url) {
+      // Mettre à jour l'URL uploadée et s'assurer qu'elle est bien enregistrée
+      const secureUrl = data.secure_url;
+      
+      // Stocker l'URL dans la variable globale sur window
+      (window as any).lastUploadedCoverImage = secureUrl;
+      
+      // Mettre à jour l'état React
+      setUploadedImageUrl(secureUrl);
+      console.log("✅ Image de couverture uploadée avec succès:", secureUrl);
+      
+      // Effacer le message d'erreur/attente
+      setError('');
+      
+      // Réactiver le bouton de soumission
+      if (submitButton) submitButton.disabled = false;
+    } else {
+      throw new Error('URL sécurisée non reçue de Cloudinary');
+    }
+  } catch (err) {
+    console.error('❌ Erreur upload image de couverture:', err);
+    setError("Erreur lors de l'upload de l'image de couverture. Veuillez réessayer.");
+    // Réinitialiser l'état pour permettre une nouvelle tentative
+    setImage(null);
+    setPreviewUrl(null);
+    setUploadedImageUrl('');
+    (window as any).lastUploadedCoverImage = '';
+    const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
+    if (fileInput) fileInput.value = '';
+    
+    // Réactiver le bouton de soumission en cas d'erreur
+    if (submitButton) submitButton.disabled = false;
+  }
+};
 
   const handleToolbarClick = (command: string, value?: string) => {
     document.execCommand(command, false, value);
@@ -140,68 +243,144 @@ const handleSubmit = async () => {
     setError("Le titre et le contenu sont requis.");
     return;
   }
+  
+  // Désactiver le bouton de soumission pendant la vérification
+  const submitButton = document.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+  if (submitButton) submitButton.disabled = true;
 
-  try {
-    newUploadedUrls = await uploadAnnexImages();
-  } catch (err) {
-    setError('Erreur lors de la sauvegarde des images annexes.');
+  // Vérifier que l'image de couverture est présente
+  // Utiliser la variable globale sur window comme source fiable
+  let finalImageUrl = uploadedImageUrl || (window as any).lastUploadedCoverImage || '';
+  console.log("Vérification de l'image de couverture:", {
+    uploadedImageUrl,
+    windowImageUrl: (window as any).lastUploadedCoverImage,
+    finalImageUrl,
+    previewUrl
+  });
+
+  // Si nous avons une prévisualisation mais pas d'URL finale, c'est que l'upload est peut-être en cours
+  // Attendre un peu et réessayer
+  if (!finalImageUrl && previewUrl) {
+    setError("Finalisation de l'upload... Veuillez patienter.");
+    
+    // Attendre 2 secondes et vérifier à nouveau
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Vérifier à nouveau après le délai
+    finalImageUrl = uploadedImageUrl || (window as any).lastUploadedCoverImage || '';
+    console.log("Nouvelle vérification après délai:", {
+      uploadedImageUrl,
+      windowImageUrl: (window as any).lastUploadedCoverImage,
+      finalImageUrl
+    });
+  }
+
+  // Réactiver le bouton de soumission
+  if (submitButton) submitButton.disabled = false;
+
+  if (!finalImageUrl) {
+    if (previewUrl) {
+      setError("L'image est en cours de traitement. Veuillez réessayer dans quelques secondes.");
+    } else {
+      setError("La photo de couverture est requise.");
+    }
     return;
   }
 
-  // Fusion propre des URLs : on remplace uniquement les indexes où on a uploadé une nouvelle image
-const annexUrls: (string | null)[] = imagesannexesUrls.map((oldUrl, i) =>
-  newUploadedUrls[i] ?? oldUrl
-);
+  try {
+    setError(''); // Réinitialiser les erreurs précédentes
+    console.log("Début de l'upload des images annexes...");
+    newUploadedUrls = await uploadAnnexImages();
+    console.log("Images annexes uploadées avec succès:", newUploadedUrls);
+  } catch (err) {
+    console.error("Erreur lors de l'upload des images annexes:", err);
+    setError('Erreur lors de la sauvegarde des images annexes. Veuillez réessayer.');
+    return;
+  }
 
+  // Nouvelle approche pour la fusion des URLs:
+  // 1. On crée un tableau avec les anciennes URLs non-null
+  // 2. On ajoute les nouvelles URLs uploadées
+  // 3. On filtre pour éliminer les doublons et les valeurs null
+  
+  const existingUrls = imagesannexesUrls.filter(url => url !== null) as string[];
+  const allUrls = [...existingUrls, ...newUploadedUrls];
+  
+  // Éliminer les doublons tout en préservant l'ordre
+  const uniqueUrls: string[] = [];
+  allUrls.forEach(url => {
+    if (url && !uniqueUrls.includes(url)) {
+      uniqueUrls.push(url);
+    }
+  });
+  
+  console.log("URLs finales des images annexes:", uniqueUrls);
 
   const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
   if (fileInput) {
     fileInput.value = '';
   }
 
+  // S'assurer que l'image n'est jamais null pour satisfaire le typage
+  const finalImage = finalImageUrl as string; // On a déjà vérifié qu'il n'est pas null plus haut
+  
   const payload = {
     title,
     content: contentRef.current?.innerHTML ?? '',
-    image: uploadedImageUrl ?? '',  // photo couverture
-    imagesannexes: annexUrls.filter((url): url is string => url !== null), // enlever les nulls
+    image: finalImage,  // photo couverture avec l'URL garantie
+    imagesannexes: uniqueUrls, // tableau propre sans nulls
     excerpt: '',
     author: 'Admin',
     date: new Date().toISOString(),
   };
 
-  console.log("URL image uploadée :", uploadedImageUrl);
+  console.log("URL image uploadée :", finalImage);
   console.log("Payload envoyé :", payload);
 
   try {
     if (editingPost) {
       await updateBlogPost(editingPost.id, payload);
+      console.log("✅ Article mis à jour avec succès:", payload.title);
     } else {
       await addBlogPost(payload);
+      console.log("✅ Nouvel article créé avec succès:", payload.title);
     }
+    
+    // Explicitement récupérer les articles mis à jour depuis la base de données
+    await fetchBlogPosts();
+    console.log("📋 Liste des articles rafraîchie");
+    
+    // reset après succès
+    setTitle('');
+    setImage(null);
+    setPreviewUrl(null);
+    setUploadedImageUrl('');
+    // Nettoyer aussi la variable globale sur window
+    (window as any).lastUploadedCoverImage = '';
+    setImagesannexesFiles([null, null, null]);
+    
+    // Réinitialise les inputs annexes pour éviter l'affichage persistant des noms
+    setTimeout(() => {
+      for (let i = 0; i < 3; i++) {
+        const input = document.getElementById(`annex-image-${i}`) as HTMLInputElement | null;
+        if (input) input.value = '';
+      }
+    }, 0);
+
+    setImagesannexesUrls([null, null, null]);
+    if (contentRef.current) contentRef.current.innerHTML = '';
+    setError('');
+    
+    // Quitter le mode édition et forcer la mise à jour de l'UI
+    setEditingPost(null);
+    
+    // Faire défiler vers le haut pour voir la liste mise à jour
+    window.scrollTo(0, 0);
+    
   } catch (err) {
     console.error('Erreur lors de la création ou mise à jour :', err);
-    setError('Une erreur est survenue pendant l’enregistrement.');
-    return;
+    setError('Une erreur est survenue pendant l\'enregistrement.');
   }
-
-  // reset
-  setTitle('');
-  setImage(null);
-  setPreviewUrl(null);
-  setUploadedImageUrl(null);
-  setImagesannexesFiles([null, null, null]);
-// Réinitialise les inputs annexes pour éviter l'affichage persistant des noms
-setTimeout(() => {
-  for (let i = 0; i < 3; i++) {
-    const input = document.getElementById(`annex-image-${i}`) as HTMLInputElement | null;
-    if (input) input.value = '';
-  }
-}, 0);
-
-  setImagesannexesUrls([null, null, null]);
-  if (contentRef.current) contentRef.current.innerHTML = '';
-  setError('');
-  window.scrollTo(0, 0);
 };
 
 
@@ -400,7 +579,7 @@ console.log("Posts en state :", posts);
         onClick={() => {
           setImage(null);
           setPreviewUrl(null);
-          setUploadedImageUrl(null);
+          setUploadedImageUrl('');
           const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
           if (fileInput) fileInput.value = '';
         }}
@@ -482,7 +661,7 @@ if (input) input.value = '';
           setTitle('');
           setImage(null);
           setPreviewUrl(null);
-          setUploadedImageUrl(null);
+          setUploadedImageUrl('');
           setImagesannexesFiles([null, null, null]);
           setImagesannexesUrls([null, null, null]);
           setEditingPost(null);
@@ -535,7 +714,7 @@ onClick={async () => {
     setTitle('');
     setImage(null);
     setPreviewUrl(null);
-    setUploadedImageUrl(null);
+    setUploadedImageUrl('');
     setImagesannexesFiles([null, null, null]);
     setImagesannexesUrls([null, null, null]);
     setEditingPost(null);

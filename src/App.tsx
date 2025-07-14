@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ContentProvider } from './context/ContentContext';
+import { NotificationsProvider } from './context/NotificationsContext';
 
 // Layouts
 import Header from './components/layout/Header';
@@ -60,7 +61,8 @@ function App() {
   return (
     <AuthProvider>
       <ContentProvider>
-        <Router>
+        <NotificationsProvider>
+          <Router>
           <ScrollToTop />
           <Routes>
 
@@ -97,7 +99,8 @@ function App() {
             {/* Catch-all */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-        </Router>
+          </Router>
+        </NotificationsProvider>
       </ContentProvider>
     </AuthProvider>
   );

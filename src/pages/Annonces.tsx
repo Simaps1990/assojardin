@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useContent } from '../context/ContentContext';
 import { supabase } from '../supabaseClient';
 import { useEffect } from 'react';
+import { useNotifications } from '../context/NotificationsContext';
 import { useLocation } from 'react-router-dom';
 import { renderAnnonceType } from '../constants/annonceTypes'; // ajuste le chemin si besoin
 
@@ -44,6 +45,7 @@ console.log("📥 Cloudinary Response Status:", res.status);
 
 const AnnoncesPage: React.FC = () => {
 const { annonces, fetchAnnonces } = useContent();
+const { updateAnnoncesEnAttente } = useNotifications();
 const sortedAnnonces = [...annonces]
   .filter(a => a.statut === 'validé')
   .sort((a, b) => {
@@ -145,9 +147,15 @@ const { error } = await supabase.from('annonces').insert([{
   photo2: photo2Url,
   statut: 'en_attente'
 }]);
-const currentCount = Number(localStorage.getItem('annoncesEnAttente') || '1');
-localStorage.setItem('annoncesEnAttente', String(Math.max(currentCount - 1, 0)));
-window.dispatchEvent(new Event('storage'));
+
+// Récupérer le nombre actuel d'annonces en attente depuis Supabase
+const { count } = await supabase
+  .from('annonces')
+  .select('*', { count: 'exact', head: true })
+  .eq('statut', 'en_attente');
+
+// Mettre à jour le compteur de notifications
+updateAnnoncesEnAttente(count || 0);
 
 
   if (error) {

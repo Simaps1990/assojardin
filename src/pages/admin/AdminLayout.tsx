@@ -14,37 +14,21 @@ import {
 } from 'lucide-react';
 
 import { useAuth } from '../../context/AuthContext';
-//import { supabase } from '../../supabaseClient';
 import { useContent } from '../../context/ContentContext';
+import { useNotifications } from '../../context/NotificationsContext';
 
 
 const AdminLayout: React.FC = () => {
   const { user, logout } = useAuth();
   const { associationContent } = useContent();
+  const { nonTraitees, annoncesEnAttente } = useNotifications();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [nonTraitees, setNonTraitees] = useState(0);
-  const [annoncesEnAttente, setAnnoncesEnAttente] = useState(0);
 
   const location = useLocation();
   const navigate = useNavigate();
 
 
-useEffect(() => {
-const updateFromStorage = () => {
-  const data = JSON.parse(localStorage.getItem('applications') || '[]');
-  const nonTraiteesLoc = data.filter((d: any) => !d.processed).length;
-  setNonTraitees(nonTraiteesLoc);
 
-  const annoncesCount = parseInt(localStorage.getItem('annoncesEnAttente') || '0', 10);
-  setAnnoncesEnAttente(annoncesCount);
-};
-
-
-  updateFromStorage(); // 🔥 Lancer immédiatement dès le premier render
-
-  window.addEventListener('storage', updateFromStorage);
-  return () => window.removeEventListener('storage', updateFromStorage);
-}, []);
 
 
   if (!user) {

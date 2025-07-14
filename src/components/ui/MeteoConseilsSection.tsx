@@ -57,52 +57,52 @@ const MONTHLY_PLANTING: Record<string, { name: string; link?: string }[]> = {
     { name: 'Artichaut', link: 'https://youtu.be/0q3UY_CMR-w' }
   ],
   Juillet: [
-    { name: 'Maïs', link: 'https://youtu.be/maïs' },
-    { name: 'Navet', link: 'https://youtu.be/navet' },
-    { name: 'Oignon', link: 'https://youtu.be/oignon' },
-    { name: 'Radis', link: 'https://youtu.be/radis' },
-    { name: 'Blette', link: 'https://youtu.be/blette' },
-    { name: 'Haricot vert', link: 'https://youtu.be/haricotvert' }
+    { name: 'Maïs', link: 'https://youtu.be/maLNUn_wM_U?si=jd-7z3nvhXlGMmJH' },
+    { name: 'Navet', link: 'https://youtu.be/v5I7YnOHm54?si=Q5nnkc8jKYktwbXy' },
+    { name: 'Oignon', link: 'https://youtu.be/VlIDD9EN8mk?si=LH4PpcaYOgiZh4Ct' },
+    { name: 'Radis', link: 'https://youtu.be/LvqYvGfhKmM?si=mSdt3TTpWm6EditG' },
+    { name: 'Blette', link: 'https://youtu.be/LaVBWFXkqtI?si=vVNlVHZHkoiZSOmx' },
+    { name: 'Haricot vert', link: 'https://youtu.be/DZ2dn9QawWg?si=dOuSyaaJb6x7I--z' }
   ],
   Août: [
-    { name: 'Chou', link: 'https://youtu.be/chou' },
-    { name: 'Poireau', link: 'https://youtu.be/poireau' },
-    { name: 'Concombre', link: 'https://youtu.be/concombre' },
-    { name: 'Courgette', link: 'https://youtu.be/courgette' },
-    { name: 'Tomate', link: 'https://youtu.be/tomate' },
-    { name: 'Laitue', link: 'https://youtu.be/laitue' }
+    { name: 'Chou', link: 'https://youtu.be/q_FyPyqITxQ?si=7CkdqH5KxEoWrbpY' },
+    { name: 'Poireau', link: 'https://youtu.be/OXmTi38XKnc?si=4My16ZjDVvALr7J2' },
+    { name: 'Concombre', link: 'https://youtu.be/6kiJw_hwb4I?si=MsmdHhstDMvrAqE0' },
+    { name: 'Courgette', link: 'https://youtu.be/MuFOH6Rtm1Y?si=sgAzlh4YcYSVjqR4' },
+    { name: 'Tomate', link: 'https://youtu.be/vLDHtC6zZmw?si=bDm-49nB6t8VFuGP' },
+    { name: 'Laitue', link: 'https://youtu.be/QeZ9u1d4Snw?si=U5mtFwFVs2l7_hIT' }
   ],
   Septembre: [
-    { name: 'Chou-fleur', link: 'https://youtu.be/choufleur' },
-    { name: 'Navet', link: 'https://youtu.be/navet' },
-    { name: 'Radis', link: 'https://youtu.be/radis' },
-    { name: 'Carotte', link: 'https://youtu.be/carotte' },
-    { name: 'Épinard', link: 'https://youtu.be/epinard' },
-    { name: 'Céleri', link: 'https://youtu.be/celeri' }
+    { name: 'Chou-fleur', link: 'https://youtu.be/By_hwI8mg94?si=-tY-NtshbIwF1ic7' },
+    { name: 'Navet', link: 'https://youtu.be/v5I7YnOHm54?si=Q5nnkc8jKYktwbXy' },
+    { name: 'Radis', link: 'https://youtu.be/LvqYvGfhKmM?si=mSdt3TTpWm6EditG' },
+    { name: 'Carotte', link: 'https://youtu.be/qJ5yvOmGQuI?si=Gyhc-5BcMHpiVXYn' },
+    { name: 'Épinard', link: 'https://youtu.be/g1QH_jb-yTU?si=TPctxZIQkAsULG-D' },
+    { name: 'Céleri', link: 'https://youtu.be/jesIKZpY9vM?si=0lhhKcnk6XOLxZfz' }
   ],
   Octobre: [
-    { name: 'Chou', link: 'https://youtu.be/chou' },
-    { name: 'Poireau', link: 'https://youtu.be/poireau' },
-    { name: 'Carotte', link: 'https://youtu.be/carotte' },
-    { name: 'Mâche', link: 'https://youtu.be/mache' },
-    { name: 'Oignon', link: 'https://youtu.be/oignon' },
-    { name: 'Courge', link: 'https://youtu.be/courge' }
+    { name: 'Chou', link: 'https://youtu.be/q_FyPyqITxQ?si=7CkdqH5KxEoWrbpY' },
+    { name: 'Poireau', link: 'https://youtu.be/OXmTi38XKnc?si=4My16ZjDVvALr7J2' },
+    { name: 'Carotte', link: 'https://youtu.be/qJ5yvOmGQuI?si=Gyhc-5BcMHpiVXYn' },
+    { name: 'Mâche', link: 'https://youtu.be/Xd6oM_dywHk?si=xaGWi0zCU0B6IxOg' },
+    { name: 'Oignon', link: 'https://youtu.be/VlIDD9EN8mk?si=LH4PpcaYOgiZh4Ct' },
+    { name: 'Courge', link: 'https://youtu.be/MuFOH6Rtm1Y?si=sgAzlh4YcYSVjqR4' }
   ],
   Novembre: [
-    { name: 'Fève', link: 'https://youtu.be/feve' },
-    { name: 'Pois', link: 'https://youtu.be/pois' },
-    { name: 'Ail', link: 'https://youtu.be/ail' },
-    { name: 'Oignon', link: 'https://youtu.be/oignon' },
-    { name: 'Échalote', link: 'https://youtu.be/echalote' },
-    { name: 'Laitue', link: 'https://youtu.be/laitue' }
+    { name: 'Fève', link: 'https://youtu.be/1MAdGyuFao8?si=TPctxZIQkAsULG-D' },
+    { name: 'Pois', link: 'https://youtu.be/l7bSOZl8G0o?si=TPctxZIQkAsULG-D' },
+    { name: 'Ail', link: 'https://youtu.be/VlIDD9EN8mk?si=LH4PpcaYOgiZh4Ct' },
+    { name: 'Oignon', link: 'https://youtu.be/VlIDD9EN8mk?si=LH4PpcaYOgiZh4Ct' },
+    { name: 'Échalote', link: 'https://youtu.be/VlIDD9EN8mk?si=LH4PpcaYOgiZh4Ct' },
+    { name: 'Laitue', link: 'https://youtu.be/QeZ9u1d4Snw?si=U5mtFwFVs2l7_hIT' }
   ],
   Décembre: [
-    { name: 'Ail', link: 'https://youtu.be/ail' },
-    { name: 'Échalote', link: 'https://youtu.be/echalote' },
-    { name: 'Oignon blanc', link: 'https://youtu.be/oignonblanc' },
-    { name: 'Repos du jardin', link: 'https://youtu.be/repos' },
-    { name: 'Préparer le sol', link: 'https://youtu.be/sol' },
-    { name: 'Paillage', link: 'https://youtu.be/paillage' }
+    { name: 'Ail', link: 'https://youtu.be/VlIDD9EN8mk?si=LH4PpcaYOgiZh4Ct' },
+    { name: 'Échalote', link: 'https://youtu.be/VlIDD9EN8mk?si=LH4PpcaYOgiZh4Ct' },
+    { name: 'Oignon blanc', link: 'https://youtu.be/VlIDD9EN8mk?si=LH4PpcaYOgiZh4Ct' },
+    { name: 'Repos du jardin', link: 'https://youtu.be/_3E_V0iHZUQ?si=4ZzwVMWLkLXx0dhd' },
+    { name: 'Préparer le sol', link: 'https://youtu.be/DoAXrbao2dA?si=WDMl5RyVgc2W-Wwg' },
+    { name: 'Paillage', link: 'https://youtu.be/lmQI137mVWw?si=JGSCiBohCND8SJ8r' }
   ]
 };
 

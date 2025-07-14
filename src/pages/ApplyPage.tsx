@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
+import { useNotifications } from '../context/NotificationsContext';
 
 const ApplyPage: React.FC = () => {
   const [formData, setFormData] = useState({
     nom: '',
     adresse: '',
-    telephonePortable: '',
-    telephoneFixe: '',
+    telephoneportable: '',
+    telephonefixe: '',
     email: '',
-    tailleJardin: '',
+    taillejardin: '',
     experience: '',
-    budgetConnu: '',
-    tempsDisponible: '',
-    inspectionConnu: '',
-    engagementCharte: '',
-    engagementReglement: '',
+    budgetconnu: '',
+    tempsdisponible: '',
+    inspectionconnu: '',
+    engagementcharte: '',
+    engagementreglement: '',
     motivations: '',
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const { updateNonTraitees } = useNotifications();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -27,69 +29,79 @@ const ApplyPage: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  // Vérification des champs obligatoires (sauf téléphone fixe)
-  const champsObligatoires = Object.entries(formData).filter(
-    ([key]) => key !== 'telephoneFixe'
-  );
-
-  for (const [_, value] of champsObligatoires) {
-    if (value.trim() === '') {
-      alert('Veuillez remplir tous les champs obligatoires.');
+    // Définir les champs obligatoires
+    const champsObligatoiresNoms = [
+      'nom', 'adresse', 'telephoneportable', 'email', 
+      'taillejardin', 'experience', 'budgetconnu', 
+      'tempsdisponible', 'inspectionconnu', 
+      'engagementcharte', 'engagementreglement', 'motivations'
+    ];
+    
+    // Afficher les valeurs actuelles pour débogage
+    console.log('Valeurs du formulaire:', formData);
+    
+    // Vérifier si tous les champs obligatoires sont remplis
+    const champsManquants = [];
+    for (const champ of champsObligatoiresNoms) {
+      const valeur = formData[champ as keyof typeof formData];
+      if (!valeur || valeur.trim() === '') {
+        champsManquants.push(champ);
+      }
+    }
+    
+    if (champsManquants.length > 0) {
+      console.log('Champs manquants:', champsManquants);
+      alert('Veuillez remplir tous les champs obligatoires: ' + champsManquants.join(', '));
       return;
     }
-  }
 
-  const { error } = await supabase.from('applications').insert([
-    {
-      nom: formData.nom,
-      adresse: formData.adresse,
-      telephoneportable: formData.telephonePortable,
-      telephonefixe: formData.telephoneFixe,
-      email: formData.email,
-      taillejardin: formData.tailleJardin,
-      experience: formData.experience,
-      budgetconnu: formData.budgetConnu,
-      tempsdisponible: formData.tempsDisponible,
-      inspectionconnu: formData.inspectionConnu,
-      engagementcharte: formData.engagementCharte,
-      engagementreglement: formData.engagementReglement,
-      motivations: formData.motivations,
-    },
-  ]);
+    const { error } = await supabase.from('applications').insert([
+      {
+        ...formData,
+        processed: false,
+      },
+    ]);
 
-  if (error) {
-    console.error('Erreur lors de l’envoi vers Supabase :', error.message);
-    alert("Une erreur s'est produite. Merci de réessayer.");
-    return;
-  }
+    if (error) {
+      console.error("Erreur lors de l'envoi vers Supabase :", error.message);
+      alert("Une erreur s'est produite. Merci de réessayer.");
+      return;
+    }
 
-  setSubmitted(true);
+    // Récupérer le nombre actuel de demandes non traitées depuis Supabase
+    const { data } = await supabase
+      .from('applications')
+      .select('*')
+      .eq('processed', false);
 
-  setFormData({
-    nom: '',
-    adresse: '',
-    telephonePortable: '',
-    telephoneFixe: '',
-    email: '',
-    tailleJardin: '',
-    experience: '',
-    budgetConnu: '',
-    tempsDisponible: '',
-    inspectionConnu: '',
-    engagementCharte: '',
-    engagementReglement: '',
-    motivations: '',
-  });
-};
+    // Mettre à jour le compteur de notifications
+    updateNonTraitees(data?.length || 0);
 
+    setSubmitted(true);
+
+    setFormData({
+      nom: '',
+      adresse: '',
+      telephoneportable: '',
+      telephonefixe: '',
+      email: '',
+      taillejardin: '',
+      experience: '',
+      budgetconnu: '',
+      tempsdisponible: '',
+      inspectionconnu: '',
+      engagementcharte: '',
+      engagementreglement: '',
+      motivations: '',
+    });
+  };
 
   if (submitted) {
     return (
-<div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mb-10">
-
+      <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mb-10">
         <h1 className="text-2xl font-semibold text-green-800 mb-4">Demande envoyée</h1>
         <p>Merci pour votre candidature. Nous vous contacterons prochainement.</p>
       </div>
@@ -104,14 +116,14 @@ const handleSubmit = async (e: React.FormEvent) => {
 
         {inputField({ label: "Nom Prénom", name: "nom", value: formData.nom, onChange: handleChange, required: true })}
         {inputField({ label: "Adresse", name: "adresse", value: formData.adresse, onChange: handleChange, required: true })}
-        {inputField({ label: "Téléphone portable", name: "telephonePortable", value: formData.telephonePortable, onChange: handleChange, type: "tel", required: true })}
-        {inputField({ label: "Téléphone fixe", name: "telephoneFixe", value: formData.telephoneFixe, onChange: handleChange, type: "tel" })}
+        {inputField({ label: "Téléphone portable", name: "telephoneportable", value: formData.telephoneportable, onChange: handleChange, type: "tel", required: true })}
+        {inputField({ label: "Téléphone fixe", name: "telephonefixe", value: formData.telephonefixe, onChange: handleChange, type: "tel" })}
         {inputField({ label: "Email", name: "email", value: formData.email, onChange: handleChange, type: "email", required: true })}
 
         {selectField({
           label: "Taille du jardin souhaité",
-          name: "tailleJardin",
-          value: formData.tailleJardin,
+          name: "taillejardin",
+          value: formData.taillejardin,
           onChange: handleChange,
           options: [
             ["", "-- Sélectionnez --"],
@@ -122,12 +134,12 @@ const handleSubmit = async (e: React.FormEvent) => {
         })}
 
         {selectOuiNon({ label: "Avez vous déjà une expérience de jardinage (autre que terrasse et balcon) ?", name: "experience", value: formData.experience, onChange: handleChange })}
-        {selectOuiNon({ label: "Postuler pour un jardin nécessite un budget de départ d'environ 25O euros sans compter la reprise d'un cabanon de 300 euros maximum (si la parcelle en est dotée) le saviez-vous ?", name: "budgetConnu", value: formData.budgetConnu, onChange: handleChange })}
+        {selectOuiNon({ label: "Postuler pour un jardin nécessite un budget de départ d'environ 25O euros sans compter la reprise d'un cabanon de 300 euros maximum (si la parcelle en est dotée) le saviez-vous ?", name: "budgetconnu", value: formData.budgetconnu, onChange: handleChange })}
 
         {selectField({
           label: "De combien de temps disposez-vous pour jardiner ",
-          name: "tempsDisponible",
-          value: formData.tempsDisponible,
+          name: "tempsdisponible",
+          value: formData.tempsdisponible,
           onChange: handleChange,
           options: [
             ["", "-- Sélectionnez --"],
@@ -138,9 +150,9 @@ const handleSubmit = async (e: React.FormEvent) => {
           ]
         })}
 
-        {selectOuiNon({ label: "Savez-vous que les jardins sont inspectés tous les mois, si votre jardin n'est pas entretenu vous recevrez deux avertissements  avant d'être exclu ? Vous ne pourrez pas prétendre à récupérer la somme laissée pour votre cabanon.", name: "inspectionConnu", value: formData.inspectionConnu, onChange: handleChange })}
-        {selectOuiNon({ label: "Vous engagez-vous lors de la prise d'un jardin à signer la charte de l'association pour le respect de l'environnement (sol, ressource en eau et la biodiversité ) .", name: "engagementCharte", value: formData.engagementCharte, onChange: handleChange })}
-        {selectOuiNon({ label: "Vous engagez-vous lors de la prise d'un jardin à signer le règlement intérieur contenant entre autres le respect de la tranquillité.  ", name: "engagementReglement", value: formData.engagementReglement, onChange: handleChange })}
+        {selectOuiNon({ label: "Savez-vous que les jardins sont inspectés tous les mois, si votre jardin n'est pas entretenu vous recevrez deux avertissements  avant d'être exclu ? Vous ne pourrez pas prétendre à récupérer la somme laissée pour votre cabanon.", name: "inspectionconnu", value: formData.inspectionconnu, onChange: handleChange })}
+        {selectOuiNon({ label: "Vous engagez-vous lors de la prise d'un jardin à signer la charte de l'association pour le respect de l'environnement (sol, ressource en eau et la biodiversité ) .", name: "engagementcharte", value: formData.engagementcharte, onChange: handleChange })}
+        {selectOuiNon({ label: "Vous engagez-vous lors de la prise d'un jardin à signer le règlement intérieur contenant entre autres le respect de la tranquillité.  ", name: "engagementreglement", value: formData.engagementreglement, onChange: handleChange })}
 
         <div>
           <label className="block font-medium text-gray-700 mb-1">En quelques mots quelles sont vos motivations pour obtenir un jardin *</label>
@@ -197,22 +209,30 @@ type SelectFieldProps = {
   options: [string, string][];
   onChange: React.ChangeEventHandler<HTMLSelectElement>;
 };
-const selectField = ({ label, name, value, options, onChange }: SelectFieldProps) => (
-  <div>
-    <label className="block font-medium text-gray-700 mb-1">{label} *</label>
-    <select
-      name={name}
-      value={value}
-      onChange={onChange}
-      className="w-full border px-3 py-2 rounded"
-      required
-    >
-      {options.map(([val, label]) => (
-        <option key={val} value={val}>{label}</option>
-      ))}
-    </select>
-  </div>
-);
+const selectField = ({ label, name, value, options, onChange }: SelectFieldProps) => {
+  // Ajouter un log pour déboguer
+  console.log(`Rendu selectField ${name}, valeur actuelle: "${value}"`);
+  
+  return (
+    <div>
+      <label className="block font-medium text-gray-700 mb-1">{label} *</label>
+      <select
+        name={name}
+        value={value}
+        onChange={(e) => {
+          console.log(`${name} changé à: ${e.target.value}`);
+          onChange(e);
+        }}
+        className="w-full border px-3 py-2 rounded"
+        required
+      >
+        {options.map(([val, label]) => (
+          <option key={val} value={val}>{label}</option>
+        ))}
+      </select>
+    </div>
+  );
+};
 
 const selectOuiNon = ({
   label,
@@ -224,8 +244,11 @@ const selectOuiNon = ({
   name: string;
   value: string;
   onChange: React.ChangeEventHandler<HTMLSelectElement>;
-}) =>
-  selectField({
+}) => {
+  // Ajouter un log pour déboguer
+  console.log(`Rendu selectOuiNon ${name}, valeur actuelle: "${value}"`);
+  
+  return selectField({
     label,
     name,
     value,
@@ -236,3 +259,4 @@ const selectOuiNon = ({
       ['non', 'Non'],
     ],
   });
+};
