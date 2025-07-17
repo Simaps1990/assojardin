@@ -18,17 +18,18 @@ console.log(" blogPosts dans AdminBlogPage :", blogPosts);
   const [title, setTitle] = useState('');
   
   // Gestion de l'upload de l'image de couverture
+  const [error, setError] = useState<string>('');
   const [image, setImage] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>('');
+  const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('');
-  
+
   // Variable globale pour stocker l'URL de l'image uploadée (persiste entre les rendus)
   // Cette variable sera utilisée dans handleImageChange et handleSubmit
   if (typeof window !== 'undefined' && !(window as any).lastUploadedCoverImage) {
     (window as any).lastUploadedCoverImage = '';
   }
 
-  const [error, setError] = useState('');
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
   const [postToDelete, setPostToDelete] = useState<BlogPost | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -78,89 +79,169 @@ useEffect(() => {
     const newUrls = [...imagesannexesUrls];
     newUrls[index] = objectUrl;
     setImagesannexesUrls(newUrls);
+  };
+
+  // Fonction pour compresser une image avant upload
+  const compressImage = async (file: File, maxSizeMB: number = 0.5): Promise<File> => {
+    // Si l'image est déjà petite, ne pas la compresser
+    if (file.size / 1024 / 1024 < maxSizeMB) {
+      return file;
+    }
     
-    console.log(`Image annexe ${index+1} sélectionnée: ${file.name} (${(file.size/1024/1024).toFixed(2)}MB)`);
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        
+        img.onload = () => {
+          // Calculer les dimensions pour garder le ratio
+          let width = img.width;
+          let height = img.height;
+          const maxDimension = 1200; // Dimension maximale
+          
+          if (width > height && width > maxDimension) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          } else if (height > maxDimension) {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+          
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, width, height);
+          
+          // Qualité de compression (0.7 = 70%)
+          canvas.toBlob(
+            (blob) => {
+              if (!blob) {
+                reject(new Error('Échec de la compression'));
+                return;
+              }
+              
+              // Créer un nouveau fichier avec le même nom mais compressé
+              const newFile = new File([blob], file.name, {
+                type: 'image/jpeg',
+                lastModified: Date.now(),
+              });
+              
+              resolve(newFile);
+            },
+            'image/jpeg',
+            0.7
+          );
+        };
+        
+        img.onerror = () => {
+          reject(new Error("Erreur lors du chargement de l'image"));
+        };
+      };
+      
+      reader.onerror = () => {
+        reject(new Error('Erreur lors de la lecture du fichier'));
+      };
+    });
   };
 
   const uploadAnnexImages = async (): Promise<string[]> => {
-    console.log('Début de uploadAnnexImages avec fichiers:', imagesannexesFiles);
-    console.log('URLs actuelles:', imagesannexesUrls);
-  
+    setIsUploading(true); // Indiquer que l'upload est en cours
+    
     // Créer un tableau pour les nouvelles URLs
     const urls: (string | null)[] = [];
-    const maxRetries = 2; // Nombre de tentatives en cas d'échec
-  
-    // Parcourir tous les fichiers, même les null
-    for (let i = 0; i < imagesannexesFiles.length; i++) {
-      const file = imagesannexesFiles[i];
-      
-      // Si l'URL existe déjà et n'est pas un fichier nouvellement ajouté, la conserver
-      if (!file && imagesannexesUrls[i]) {
-        console.log(`Image ${i+1}: URL existante conservée ${imagesannexesUrls[i]}`);
-        urls[i] = imagesannexesUrls[i];
-        continue;
-      }
-      
-      // Si c'est null (supprimé) ou pas de fichier, mettre null
-      if (!file) {
-        console.log(`Image ${i+1}: Pas de fichier à uploader (null)`);
-        urls[i] = null;
-        continue;
-      }
-      
-      // Sinon, uploader le nouveau fichier
-      console.log(`Image ${i+1}: Nouveau fichier à uploader`);
-      let retryCount = 0;
-      let success = false;
-      
-      while (retryCount <= maxRetries && !success) {
+    const maxRetries = 1; // Réduire le nombre de tentatives
+    
+    try {
+      // Préparer les promesses d'upload pour chaque fichier
+      const uploadPromises = imagesannexesFiles.map(async (file, i) => {
+        // Si l'URL existe déjà et n'est pas un fichier nouvellement ajouté, la conserver
+        if (!file && imagesannexesUrls[i]) {
+          return { index: i, url: imagesannexesUrls[i] };
+        }
+        
+        // Si c'est null (supprimé) ou pas de fichier, mettre null
+        if (!file) {
+          return { index: i, url: null };
+        }
+        
+        // Compresser l'image avant upload
+        let compressedFile;
         try {
-          const formData = new FormData();
-          formData.append('file', file);
-          formData.append('upload_preset', 'site_global_uploads');
-          
-          console.log(`Tentative d'upload de l'image ${i+1}/${imagesannexesFiles.length} (essai ${retryCount+1}/${maxRetries+1})`);
-          
-          const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
-            method: 'POST',
-            body: formData,
-          });
-          
-          if (!res.ok) {
-            throw new Error(`Erreur HTTP: ${res.status}`);
-          }
-          
-          const data = await res.json();
-          if (data.secure_url) {
-            urls[i] = data.secure_url;
-            success = true;
-            console.log(`✅ Image ${i+1} uploadée avec succès: ${data.secure_url}`);
-          } else {
-            throw new Error('URL sécurisée non reçue de Cloudinary');
-          }
+          compressedFile = await compressImage(file);
         } catch (err) {
-          retryCount++;
-          console.error(`❌ Erreur upload image ${i+1} (tentative ${retryCount}/${maxRetries+1}):`, err);
-          
-          if (retryCount > maxRetries) {
-            console.error(`Abandon de l'upload pour l'image ${i+1} après ${maxRetries+1} tentatives`);
-            setError(`Erreur lors de l'upload de l'image ${i+1}. Veuillez réessayer.`);
-            // En cas d'échec, on met null pour cette image
-            urls[i] = null;
-          } else {
-            // Attendre avant de réessayer (backoff exponentiel)
-            await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+          // En cas d'échec de compression, utiliser le fichier original
+          compressedFile = file;
+        }
+        
+        // Uploader le fichier compressé
+        let retryCount = 0;
+        let success = false;
+        let resultUrl = null;
+        
+        while (retryCount <= maxRetries && !success) {
+          try {
+            const formData = new FormData();
+            formData.append('file', compressedFile);
+            formData.append('upload_preset', 'site_global_uploads');
+            
+            const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
+              method: 'POST',
+              body: formData,
+            });
+            
+            if (!res.ok) {
+              throw new Error(`Erreur HTTP: ${res.status}`);
+            }
+            
+            const data = await res.json();
+            if (data.secure_url) {
+              resultUrl = data.secure_url;
+              success = true;
+            } else {
+              throw new Error('URL sécurisée non reçue de Cloudinary');
+            }
+          } catch (err) {
+            retryCount++;
+            
+            if (retryCount > maxRetries) {
+              // Erreur silencieuse pour ne pas bloquer les autres uploads
+              resultUrl = null;
+            } else {
+              // Attendre avant de réessayer (backoff réduit)
+              await new Promise(resolve => setTimeout(resolve, 500));
+            }
           }
         }
+        
+        return { index: i, url: resultUrl };
+      });
+      
+      // Exécuter tous les uploads en parallèle
+      const results = await Promise.all(uploadPromises);
+      
+      // Traiter les résultats
+      results.forEach(result => {
+        urls[result.index] = result.url;
+      });
+      
+      // Vérifier s'il y a eu des erreurs
+      const failedUploads = results.filter(r => r.url === null && imagesannexesFiles[r.index] !== null);
+      if (failedUploads.length > 0) {
+        setError(`${failedUploads.length} image(s) n'ont pas pu être uploadées. Veuillez réessayer.`);
       }
+      
+      return urls as string[];
+    } catch (error) {
+      setError("Erreur lors de l'upload des images annexes");
+      return [];
+    } finally {
+      setIsUploading(false); // Indiquer que l'upload est terminé
     }
-    
-    console.log('Résultat final de uploadAnnexImages:', urls);
-    
-    // Filtrer les undefined pour avoir un tableau propre, mais garder les null
-    // car ils représentent des suppressions intentionnelles
-    return urls as string[];
-  };
+  };  
 
   useEffect(() => {
     if (image) {
@@ -234,7 +315,7 @@ const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setError("Erreur lors de l'upload de l'image de couverture. Veuillez réessayer.");
     // Réinitialiser l'état pour permettre une nouvelle tentative
     setImage(null);
-    setPreviewUrl(null);
+    setPreviewUrl('');
     setUploadedImageUrl('');
     (window as any).lastUploadedCoverImage = '';
     const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
@@ -398,7 +479,7 @@ const handleSubmit = async () => {
     // reset après succès
     setTitle('');
     setImage(null);
-    setPreviewUrl(null);
+    setPreviewUrl('');
     setUploadedImageUrl('');
     // Nettoyer aussi la variable globale sur window
     (window as any).lastUploadedCoverImage = '';
@@ -619,7 +700,7 @@ console.log("Posts en state :", posts);
         type="button"
         onClick={() => {
           setImage(null);
-          setPreviewUrl(null);
+          setPreviewUrl('');
           setUploadedImageUrl('');
           const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
           if (fileInput) fileInput.value = '';
@@ -691,9 +772,16 @@ className={`w-full ${imagesannexesUrls[index] ? 'text-transparent' : ''}`}
 <div className="flex flex-wrap gap-2 mt-4">
   <button
     onClick={handleSubmit}
-    className="bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700"
+    disabled={isUploading}
+    className={`${isUploading ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary-600 hover:bg-primary-700'} text-white px-4 py-2 rounded flex items-center`}
   >
-    {editingPost ? 'Mettre à jour' : 'Publier'}
+    {isUploading && (
+      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+    )}
+    {editingPost ? (isUploading ? 'Mise à jour...' : 'Mettre à jour') : (isUploading ? 'Publication...' : 'Publier')}
   </button>
 
   {editingPost && (
@@ -702,7 +790,7 @@ className={`w-full ${imagesannexesUrls[index] ? 'text-transparent' : ''}`}
         onClick={() => {
           setTitle('');
           setImage(null);
-          setPreviewUrl(null);
+          setPreviewUrl('');
           setUploadedImageUrl('');
           setImagesannexesFiles([null, null, null]);
           setImagesannexesUrls([null, null, null]);
@@ -755,7 +843,7 @@ onClick={async () => {
   if (isEditingDeleted) {
     setTitle('');
     setImage(null);
-    setPreviewUrl(null);
+    setPreviewUrl('');
     setUploadedImageUrl('');
     setImagesannexesFiles([null, null, null]);
     setImagesannexesUrls([null, null, null]);
