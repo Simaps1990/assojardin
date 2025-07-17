@@ -307,20 +307,25 @@ const handleSubmit = async () => {
   if (editingPost && editingPost.imagesannexes) {
     console.log("Mode édition - Images originales:", editingPost.imagesannexes);
     console.log("Images actuelles dans l'interface:", imagesannexesUrls);
+    console.log("Nouvelles images uploadées:", newUploadedUrls);
     
     // En mode édition, nous devons tenir compte des suppressions intentionnelles
     // Nous ne filtrons pas les null ici pour conserver l'information de suppression
     
     // Pour chaque image dans l'interface actuelle, si elle n'est pas null, l'ajouter
-    imagesannexesUrls.forEach((currentUrl) => {
+    imagesannexesUrls.forEach((currentUrl, idx) => {
       if (currentUrl !== null) {
+        console.log(`Image annexe ${idx+1} conservée: ${currentUrl}`);
         finalImagesAnnexes.push(currentUrl);
+      } else {
+        console.log(`Image annexe ${idx+1} supprimée`);
       }
     });
     
     // Ajouter les nouvelles images uploadées qui ne sont pas déjà incluses
     newUploadedUrls.forEach(url => {
       if (!finalImagesAnnexes.includes(url)) {
+        console.log(`Nouvelle image annexe ajoutée: ${url}`);
         finalImagesAnnexes.push(url);
       }
     });
@@ -362,8 +367,12 @@ const handleSubmit = async () => {
 
   try {
     if (editingPost) {
+      console.log("Envoi de la mise à jour avec payload:", payload);
       await updateBlogPost(editingPost.id, payload);
       console.log("✅ Article mis à jour avec succès:", payload.title);
+      
+      // Forcer la réinitialisation complète pour quitter le mode édition
+      setEditingPost(null);
     } else {
       await addBlogPost(payload);
       console.log("✅ Nouvel article créé avec succès:", payload.title);
@@ -398,7 +407,7 @@ const handleSubmit = async () => {
     setEditingPost(null);
     
     // Faire défiler vers le haut pour voir la liste mise à jour
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     
   } catch (err) {
     console.error('Erreur lors de la création ou mise à jour :', err);
@@ -642,15 +651,16 @@ className={`w-full ${imagesannexesUrls[index] ? 'text-transparent' : ''}`}
         />
         <button
           onClick={() => {
+            console.log(`Suppression de l'image annexe ${index+1}`);
             const newFiles = [...imagesannexesFiles];
             newFiles[index] = null;
             setImagesannexesFiles(newFiles);
             const newUrls = [...imagesannexesUrls];
             newUrls[index] = null;
             setImagesannexesUrls(newUrls);
+            console.log('Images annexes après suppression:', newUrls);
             const input = document.getElementById(`annex-image-${index}`) as HTMLInputElement | null;
-if (input) input.value = '';
-
+            if (input) input.value = '';
           }}
           className="absolute top-1 right-1 bg-red-600 text-white px-2 py-1 rounded text-xs"
           type="button"
