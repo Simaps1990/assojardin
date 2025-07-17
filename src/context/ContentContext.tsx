@@ -221,9 +221,20 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
       
       // S'assurer que imagesannexes est un tableau non-null si présent
       if (sanitizedPost.imagesannexes !== undefined) {
-        sanitizedPost.imagesannexes = Array.isArray(sanitizedPost.imagesannexes) 
-          ? sanitizedPost.imagesannexes.filter(url => url !== null && url !== undefined)
-          : [];
+        // Vérifier si le tableau contient des valeurs null
+        if (Array.isArray(sanitizedPost.imagesannexes)) {
+          // Si le tableau contient uniquement des valeurs null, le remplacer par un tableau vide
+          // car Supabase ne gère pas bien les tableaux avec uniquement des valeurs null
+          const hasNonNullValues = sanitizedPost.imagesannexes.some(url => url !== null && url !== undefined);
+          if (!hasNonNullValues) {
+            sanitizedPost.imagesannexes = [];
+          } else {
+            // Filtrer les valeurs null pour éviter les problèmes avec Supabase
+            sanitizedPost.imagesannexes = sanitizedPost.imagesannexes.filter(url => url !== null && url !== undefined);
+          }
+        } else {
+          sanitizedPost.imagesannexes = [];
+        }
       }
       
       console.log(`Mise à jour article ${id} avec données sanitisées:`, sanitizedPost);

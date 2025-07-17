@@ -305,19 +305,20 @@ const handleSubmit = async () => {
   let finalImagesAnnexes: string[] = [];
   
   if (editingPost && editingPost.imagesannexes) {
-    // En mode édition, nous devons tenir compte des suppressions intentionnelles
-    const originalImages = editingPost.imagesannexes.filter(url => url !== null) as string[];
+    console.log("Mode édition - Images originales:", editingPost.imagesannexes);
+    console.log("Images actuelles dans l'interface:", imagesannexesUrls);
     
-    // Pour chaque image originale, vérifier si elle a été conservée dans imagesannexesUrls
-    originalImages.forEach((originalUrl) => {
-      // Si l'image est toujours présente dans imagesannexesUrls, la conserver
-      if (imagesannexesUrls.includes(originalUrl)) {
-        finalImagesAnnexes.push(originalUrl);
+    // En mode édition, nous devons tenir compte des suppressions intentionnelles
+    // Nous ne filtrons pas les null ici pour conserver l'information de suppression
+    
+    // Pour chaque image dans l'interface actuelle, si elle n'est pas null, l'ajouter
+    imagesannexesUrls.forEach((currentUrl) => {
+      if (currentUrl !== null) {
+        finalImagesAnnexes.push(currentUrl);
       }
-      // Si elle n'est plus présente, c'est qu'elle a été supprimée intentionnellement
     });
     
-    // Ajouter les nouvelles images uploadées
+    // Ajouter les nouvelles images uploadées qui ne sont pas déjà incluses
     newUploadedUrls.forEach(url => {
       if (!finalImagesAnnexes.includes(url)) {
         finalImagesAnnexes.push(url);
@@ -333,6 +334,8 @@ const handleSubmit = async () => {
       self.indexOf(url) === index
     );
   }
+  
+  console.log("Images annexes finales à envoyer:", finalImagesAnnexes);
   
   console.log("URLs finales des images annexes:", finalImagesAnnexes);
 
@@ -454,10 +457,6 @@ if (post.image) {
 
 
 
-
-
-
-setImagesannexesUrls(urlsWithNulls);
 
 
 
