@@ -2,6 +2,7 @@ import React from 'react';
 import { useContent } from '../context/ContentContext';
 import BlogCard from '../components/ui/BlogCard';
 import { Link } from 'react-router-dom';
+import SEO from '../components/SEO';
 
 const BlogPage: React.FC = () => {
   const { blogPosts } = useContent();
@@ -13,6 +14,11 @@ const BlogPage: React.FC = () => {
 
   return (
 <div className="pb-16">
+      <SEO 
+        title="Blog Jardinage SJOV | Conseils de Plantation et Culture à Villeurbanne | Rhône-Alpes"
+        description="Découvrez notre blog avec des conseils de jardinage, plantation et culture pour votre potager par des bénévoles passionnés. La SJOV partage son expertise en matière de jardins partagés à Villeurbanne (69100) en région Rhône-Alpes depuis 1936."
+        keywords="blog jardinage, conseils plantation, culture potager, SJOV, Société des Jardins Ouvriers de Villeurbanne, jardins partagés, Villeurbanne, 69100, permaculture, légumes de saison, astuces jardinage, Rhône-Alpes, Lyon, Métropole de Lyon, Auvergne-Rhône-Alpes, bénévolat, articles jardinage, conseils potager, calendrier semis, calendrier récolte, fiches techniques jardinage, conseils saisonniers, entretien jardin, lutte biologique, compostage, semis, bouturage, taille, arrosage, rotation des cultures, associations de plantes, jardinage naturel, jardinage biologique, jardinage écologique, traitements naturels, recettes du jardin, conservation légumes, techniques de culture, sol vivant, biodiversité jardin"
+      />
 
       <div className="container-custom">
         <h1 className="font-heading font-bold text-4xl mb-2">Nos articles de blog</h1>

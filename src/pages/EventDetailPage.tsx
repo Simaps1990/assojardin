@@ -4,6 +4,7 @@ import { useContent } from '../context/ContentContext';
 import { Event } from '../types';
 import { formatDate } from '../utils/formatters';
 import { Calendar, MapPin, ChevronLeft, Clock } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const EventDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -34,8 +35,40 @@ if (!event) return (
 const annexesSansCover = event.imagesannexes?.filter(img => img && img !== event.image);
 
 
+  // Extraction des 150 premiers caractères de la description pour la meta description
+  const getMetaDescription = () => {
+    if (!event.description) return '';
+    // Limiter à 150 caractères
+    return event.description.substring(0, 150) + (event.description.length > 150 ? '...' : '');
+  };
+
+  // Génération de mots-clés à partir du titre de l'événement
+  const getMetaKeywords = () => {
+    const baseKeywords = "événements jardinage, SJOV, Société des Jardins Ouvriers de Villeurbanne, jardins partagés, Villeurbanne, 69100, Rhône-Alpes, Lyon, Métropole de Lyon, Auvergne-Rhône-Alpes, bénévolat";
+    
+    // Ajout de mots-clés spécifiques basés sur le titre de l'événement
+    const titleKeywords = event.title
+      .toLowerCase()
+      .replace(/[^a-zàâçéèêëîïôûùüÿñæœ0-9\s]/gi, '')
+      .split(' ')
+      .filter(word => word.length > 3) // Filtrer les mots courts
+      .join(', ');
+    
+    // Ajout de mots-clés spécifiques basés sur la date de l'événement
+    const date = new Date(event.date);
+    const month = date.toLocaleString('fr-FR', { month: 'long' });
+    const year = date.getFullYear();
+    
+    return `${baseKeywords}, ${titleKeywords}, ${month}, ${year}, atelier jardinage, animation jardin, événement associatif`;
+  };
+
   return (
     <div className="pb-16">
+      <SEO
+        title={`${event.title} | Événements SJOV | Jardinage à Villeurbanne | Rhône-Alpes`}
+        description={getMetaDescription()}
+        keywords={getMetaKeywords()}
+      />
       <div className="container-custom">
         <Link 
           to="/events" 

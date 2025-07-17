@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from './context/AuthContext';
 import { ContentProvider } from './context/ContentContext';
 import { NotificationsProvider } from './context/NotificationsContext';
@@ -59,11 +60,12 @@ const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
 function App() {
   return (
-    <AuthProvider>
-      <ContentProvider>
-        <NotificationsProvider>
-          <Router>
-          <ScrollToTop />
+    <HelmetProvider>
+      <AuthProvider>
+        <ContentProvider>
+          <NotificationsProvider>
+            <Router>
+            <ScrollToTop />
           <Routes>
 
             {/* Public Routes */}
@@ -99,10 +101,11 @@ function App() {
             {/* Catch-all */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-          </Router>
-        </NotificationsProvider>
-      </ContentProvider>
-    </AuthProvider>
+            </Router>
+          </NotificationsProvider>
+        </ContentProvider>
+      </AuthProvider>
+    </HelmetProvider>
   );
 }
 

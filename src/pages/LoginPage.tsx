@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Lock } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -42,6 +43,11 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="pt-24 pb-16 min-h-screen flex items-center">
+      <SEO
+        title="Connexion Admin | SJOV | Société des Jardins Ouvriers de Villeurbanne"
+        description="Page de connexion sécurisée pour les administrateurs de la Société des Jardins Ouvriers de Villeurbanne (SJOV)."
+        keywords="connexion SJOV, administration SJOV, Société des Jardins Ouvriers de Villeurbanne, accès administrateur, Villeurbanne, 69100"
+      />
       <div className="container-custom">
         <div className="max-w-md mx-auto">
           <div className="text-center mb-8">

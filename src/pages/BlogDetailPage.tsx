@@ -4,6 +4,7 @@ import { Calendar, User, ChevronLeft } from 'lucide-react';
 import { useContent } from '../context/ContentContext';
 import { BlogPost } from '../types';
 import { formatDate, sanitizeHtml } from '../utils/formatters';
+import SEO from '../components/SEO';
 
 const BlogDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -33,8 +34,37 @@ const [fullscreenImage, setFullscreenImage] = useState<{ current: string; next?:
     );
   }
 
+  // Extraction des 150 premiers caractères du contenu pour la meta description
+  const getMetaDescription = () => {
+    if (!post.content) return '';
+    // Suppression des balises HTML pour obtenir du texte brut
+    const textContent = post.content.replace(/<[^>]*>/g, '');
+    // Limiter à 150 caractères
+    return textContent.substring(0, 150) + (textContent.length > 150 ? '...' : '');
+  };
+
+  // Extraction de mots-clés à partir du titre et du contenu
+  const getMetaKeywords = () => {
+    const baseKeywords = "blog jardinage, SJOV, Société des Jardins Ouvriers de Villeurbanne, jardins partagés, Villeurbanne, 69100, Rhône-Alpes, Lyon, Métropole de Lyon, Auvergne-Rhône-Alpes, bénévolat";
+    
+    // Ajout de mots-clés spécifiques basés sur le titre de l'article
+    const titleKeywords = post.title
+      .toLowerCase()
+      .replace(/[^a-zàâçéèêëîïôûùüÿñæœ0-9\s]/gi, '')
+      .split(' ')
+      .filter(word => word.length > 3) // Filtrer les mots courts
+      .join(', ');
+    
+    return `${baseKeywords}, ${titleKeywords}, article jardinage, conseil potager`;
+  };
+
   return (
     <div className="pb-16">
+      <SEO
+        title={`${post.title} | Blog SJOV | Jardinage à Villeurbanne | Rhône-Alpes`}
+        description={getMetaDescription()}
+        keywords={getMetaKeywords()}
+      />
       <div className="container-custom">
         <Link 
           to="/blog" 

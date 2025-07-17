@@ -4,6 +4,7 @@ import { Calendar, MapPin } from 'lucide-react';
 import { useContent } from '../context/ContentContext';
 import { BlogPost, Event } from '../types';
 import { formatDate } from '../utils/formatters';
+import SEO from '../components/SEO';
 
 const SearchPage: React.FC = () => {
   const location = useLocation();
@@ -30,8 +31,8 @@ const SearchPage: React.FC = () => {
       // Search in events
       const matchedEvents = events.filter(event => 
         event.title.toLowerCase().includes(queryLower) || 
-        event.description.toLowerCase().includes(queryLower) ||
-        event.location.toLowerCase().includes(queryLower)
+        (event.description?.toLowerCase().includes(queryLower) ?? false) ||
+        (event.location?.toLowerCase().includes(queryLower) ?? false)
       );
       
       setResults({
@@ -47,6 +48,11 @@ const SearchPage: React.FC = () => {
 
   return (
     <div className="pt-24 pb-16">
+      <SEO
+        title={`Recherche${query ? ` : ${query}` : ''} | SJOV | Jardins Partagés à Villeurbanne | Rhône-Alpes`}
+        description={`Résultats de recherche${query ? ` pour "${query}"` : ''} sur le site de la Société des Jardins Ouvriers de Villeurbanne (SJOV). Trouvez des articles de blog et événements liés au jardinage à Villeurbanne (69100) en région Rhône-Alpes.`}
+        keywords={`recherche SJOV, Société des Jardins Ouvriers de Villeurbanne, jardins partagés, Villeurbanne, 69100, Rhône-Alpes, Lyon, Métropole de Lyon, Auvergne-Rhône-Alpes, bénévolat, ${query}, recherche jardinage, recherche événements, recherche blog, résultats recherche`}
+      />
       <div className="container-custom">
         <h1 className="font-heading font-bold text-4xl mb-2">Résultats de recherche</h1>
         <p className="text-neutral-600 text-lg mb-8">
@@ -130,7 +136,7 @@ const SearchPage: React.FC = () => {
                       {event.title}
                     </Link>
                   </h3>
-                  <p className="text-neutral-600 mb-3">{event.description.substring(0, 150)}...</p>
+                  <p className="text-neutral-600 mb-3">{event.description ? event.description.substring(0, 150) + '...' : 'Aucune description disponible'}</p>
                   <Link to={`/events/${event.id}`} className="text-primary-600 hover:text-primary-700 font-medium">
                     Voir l'événement
                   </Link>

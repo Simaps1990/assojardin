@@ -6,6 +6,7 @@ import EventCard from '../components/ui/EventCard';
 import React from 'react';
 import MeteoConseilsSection from '../components/ui/MeteoConseilsSection'; // adapte le chemin
 import { renderAnnonceType } from '../constants/annonceTypes'; // ajuste le chemin si besoin
+import SEO from '../components/SEO';
 
 const HomePage: React.FC = () => {
 
@@ -48,6 +49,11 @@ const pastEvents = events
 
 return (
 <div>
+    <SEO 
+      title="SJOV - Jardins Partagés à Villeurbanne | Société des Jardins Ouvriers de Villeurbanne | Rhône-Alpes"
+      description="La Société des Jardins Ouvriers de Villeurbanne (SJOV) propose des jardins partagés et familiaux à Villeurbanne (69100) en région Rhône-Alpes. Association de bénévoles passionnés depuis 1936. Découvrez nos conseils de jardinage, plantation et culture pour votre potager."
+      keywords="jardin, jardins partagés, plantation, Villeurbanne, SJOV, Société des Jardins Ouvriers de Villeurbanne, 69100, culture, potager, jardinage, maraîchage, permaculture, écologie, biodiversité, légumes, Rhône-Alpes, Lyon, Métropole de Lyon, Auvergne-Rhône-Alpes, bénévolat, association jardinage, jardins familiaux, jardins collectifs, jardins ouvriers, agriculture urbaine, compost, semis, récolte, fruits, légumes bio, horticulture, plantes aromatiques, fleurs, verger, agroécologie, développement durable, partage de savoirs, lien social, vie associative, animations jardinage, ateliers pédagogiques"
+    />
 
     {/* Hero Section */}
     {backgroundImageUrl && (

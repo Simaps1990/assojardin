@@ -1,5 +1,6 @@
 import React from 'react';
 import { useContent } from '../context/ContentContext';
+import SEO from '../components/SEO';
 
 const AssociationPage: React.FC = () => {
   const { associationContent } = useContent();
@@ -37,6 +38,11 @@ if (!titreAssociation && !contentAssociation && images.length === 0) {
 
   return (
     <div className="pb-16">
+      <SEO 
+        title="À propos de la SJOV | Société des Jardins Ouvriers de Villeurbanne | Association de Bénévoles Rhône-Alpes"
+        description="Découvrez l'histoire et les valeurs de la Société des Jardins Ouvriers de Villeurbanne (SJOV), association de bénévoles passionnés de jardins partagés à Villeurbanne (69100) en région Rhône-Alpes, engagée depuis 1936 pour la promotion du jardinage et de l'agriculture urbaine."
+        keywords="SJOV, Société des Jardins Ouvriers de Villeurbanne, jardins partagés, Villeurbanne, 69100, association jardinage, histoire jardins ouvriers, jardins familiaux, agriculture urbaine, Rhône-Alpes, Lyon, Métropole de Lyon, Auvergne-Rhône-Alpes, bénévolat, vie associative, engagement citoyen, histoire SJOV, valeurs association, jardinage collectif, jardinage social, jardinage écologique, partage de savoirs, transmission de connaissances, lien social, solidarité, engagement environnemental, patrimoine jardinier, histoire jardinage, tradition maraîchère, jardins historiques, parcelles de jardins, gestion associative, bénévoles jardinage"
+      />
       <div className="container-custom">
 <h1 className="font-heading font-bold text-4xl mb-2 text-black">
   {titreAssociation}

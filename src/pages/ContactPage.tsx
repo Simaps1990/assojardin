@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import emailjs from '@emailjs/browser';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import { useContent } from "../context/ContentContext";
+import SEO from '../components/SEO';
 
 //import type { AssociationContentType } from '../context/ContentContext';
 
@@ -74,6 +75,11 @@ const { associationContent } = useContent();
 
   return (
     <div className="pb-16">
+      <SEO 
+        title="Contact SJOV | Société des Jardins Ouvriers de Villeurbanne | Rhône-Alpes"
+        description="Contactez la Société des Jardins Ouvriers de Villeurbanne (SJOV), association de bénévoles passionnés depuis 1936, pour toute question sur nos jardins partagés, nos événements de jardinage ou pour postuler à un jardin à Villeurbanne (69100) en région Rhône-Alpes."
+        keywords="contact SJOV, Société des Jardins Ouvriers de Villeurbanne, jardins partagés, Villeurbanne, 69100, adresse SJOV, téléphone SJOV, email SJOV, permanence jardins, Rhône-Alpes, Lyon, Métropole de Lyon, Auvergne-Rhône-Alpes, bénévolat, coordonnées association, formulaire contact, horaires permanence, plan accès jardins, visites jardins, renseignements jardinage, demande information, adhésion association, rejoindre bénévoles, localisation jardins, siège social, bureau association, secrétariat SJOV, assistance jardinage, questions jardins, rendez-vous visite"
+      />
       <div className="container-custom">
         <h1 className="font-heading font-bold text-4xl mb-2">Contact</h1>
         <p className="text-neutral-600 text-lg mb-8">
