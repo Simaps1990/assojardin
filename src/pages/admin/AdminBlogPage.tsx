@@ -83,58 +83,83 @@ useEffect(() => {
   };
 
   const uploadAnnexImages = async (): Promise<string[]> => {
-    const urls: string[] = [];
+    console.log('Début de uploadAnnexImages avec fichiers:', imagesannexesFiles);
+    console.log('URLs actuelles:', imagesannexesUrls);
+  
+    // Créer un tableau pour les nouvelles URLs
+    const urls: (string | null)[] = [];
     const maxRetries = 2; // Nombre de tentatives en cas d'échec
-    
+  
+    // Parcourir tous les fichiers, même les null
     for (let i = 0; i < imagesannexesFiles.length; i++) {
       const file = imagesannexesFiles[i];
-      if (file) {
-        let retryCount = 0;
-        let success = false;
-        
-        while (retryCount <= maxRetries && !success) {
-          try {
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('upload_preset', 'site_global_uploads');
-            
-            console.log(`Tentative d'upload de l'image ${i+1}/${imagesannexesFiles.length} (essai ${retryCount+1}/${maxRetries+1})`);
-            
-            const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
-              method: 'POST',
-              body: formData,
-            });
-            
-            if (!res.ok) {
-              throw new Error(`Erreur HTTP: ${res.status}`);
-            }
-            
-            const data = await res.json();
-            if (data.secure_url) {
-              urls[i] = data.secure_url;
-              success = true;
-              console.log(`✅ Image ${i+1} uploadée avec succès: ${data.secure_url}`);
-            } else {
-              throw new Error('URL sécurisée non reçue de Cloudinary');
-            }
-          } catch (err) {
-            retryCount++;
-            console.error(`❌ Erreur upload image ${i+1} (tentative ${retryCount}/${maxRetries+1}):`, err);
-            
-            if (retryCount > maxRetries) {
-              console.error(`Abandon de l'upload pour l'image ${i+1} après ${maxRetries+1} tentatives`);
-              setError(`Erreur lors de l'upload de l'image ${i+1}. Veuillez réessayer.`);
-            } else {
-              // Attendre avant de réessayer (backoff exponentiel)
-              await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
-            }
+      
+      // Si l'URL existe déjà et n'est pas un fichier nouvellement ajouté, la conserver
+      if (!file && imagesannexesUrls[i]) {
+        console.log(`Image ${i+1}: URL existante conservée ${imagesannexesUrls[i]}`);
+        urls[i] = imagesannexesUrls[i];
+        continue;
+      }
+      
+      // Si c'est null (supprimé) ou pas de fichier, mettre null
+      if (!file) {
+        console.log(`Image ${i+1}: Pas de fichier à uploader (null)`);
+        urls[i] = null;
+        continue;
+      }
+      
+      // Sinon, uploader le nouveau fichier
+      console.log(`Image ${i+1}: Nouveau fichier à uploader`);
+      let retryCount = 0;
+      let success = false;
+      
+      while (retryCount <= maxRetries && !success) {
+        try {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('upload_preset', 'site_global_uploads');
+          
+          console.log(`Tentative d'upload de l'image ${i+1}/${imagesannexesFiles.length} (essai ${retryCount+1}/${maxRetries+1})`);
+          
+          const res = await fetch('https://api.cloudinary.com/v1_1/da2pceyci/image/upload', {
+            method: 'POST',
+            body: formData,
+          });
+          
+          if (!res.ok) {
+            throw new Error(`Erreur HTTP: ${res.status}`);
+          }
+          
+          const data = await res.json();
+          if (data.secure_url) {
+            urls[i] = data.secure_url;
+            success = true;
+            console.log(`✅ Image ${i+1} uploadée avec succès: ${data.secure_url}`);
+          } else {
+            throw new Error('URL sécurisée non reçue de Cloudinary');
+          }
+        } catch (err) {
+          retryCount++;
+          console.error(`❌ Erreur upload image ${i+1} (tentative ${retryCount}/${maxRetries+1}):`, err);
+          
+          if (retryCount > maxRetries) {
+            console.error(`Abandon de l'upload pour l'image ${i+1} après ${maxRetries+1} tentatives`);
+            setError(`Erreur lors de l'upload de l'image ${i+1}. Veuillez réessayer.`);
+            // En cas d'échec, on met null pour cette image
+            urls[i] = null;
+          } else {
+            // Attendre avant de réessayer (backoff exponentiel)
+            await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
           }
         }
       }
     }
     
-    // Filtrer les undefined pour avoir un tableau propre
-    return urls.filter(url => url !== undefined) as string[];
+    console.log('Résultat final de uploadAnnexImages:', urls);
+    
+    // Filtrer les undefined pour avoir un tableau propre, mais garder les null
+    // car ils représentent des suppressions intentionnelles
+    return urls as string[];
   };
 
   useEffect(() => {
@@ -298,41 +323,29 @@ const handleSubmit = async () => {
     return;
   }
 
-  // Approche améliorée pour la gestion des images annexes:
-  // 1. Si nous sommes en mode édition, nous devons comparer avec les images originales
-  // 2. Si une image a été supprimée, elle ne doit pas être réintroduite
+  // Approche complètement révisée pour la gestion des images annexes
+  // Nous allons utiliser directement le résultat de uploadAnnexImages qui contient déjà
+  // les bonnes URLs (existantes conservées + nouvelles uploadées) avec les null pour les suppressions
   
+  console.log("Résultat de l'upload des images annexes:", newUploadedUrls);
+  
+  // Filtrer les valeurs null pour le payload final
   let finalImagesAnnexes: string[] = [];
   
+  // Combiner les URLs existantes et les nouvelles URLs
   if (editingPost && editingPost.imagesannexes) {
     console.log("Mode édition - Images originales:", editingPost.imagesannexes);
-    console.log("Images actuelles dans l'interface:", imagesannexesUrls);
+    console.log("Images actuelles dans l'interface après modifications:", imagesannexesUrls);
     console.log("Nouvelles images uploadées:", newUploadedUrls);
     
-    // En mode édition, nous devons tenir compte des suppressions intentionnelles
-    // Nous ne filtrons pas les null ici pour conserver l'information de suppression
+    // Nous utilisons newUploadedUrls qui contient déjà les bonnes URLs
+    // et qui a géré les suppressions (null)
+    finalImagesAnnexes = newUploadedUrls.filter(url => url !== null) as string[];
     
-    // Pour chaque image dans l'interface actuelle, si elle n'est pas null, l'ajouter
-    imagesannexesUrls.forEach((currentUrl, idx) => {
-      if (currentUrl !== null) {
-        console.log(`Image annexe ${idx+1} conservée: ${currentUrl}`);
-        finalImagesAnnexes.push(currentUrl);
-      } else {
-        console.log(`Image annexe ${idx+1} supprimée`);
-      }
-    });
-    
-    // Ajouter les nouvelles images uploadées qui ne sont pas déjà incluses
-    newUploadedUrls.forEach(url => {
-      if (!finalImagesAnnexes.includes(url)) {
-        console.log(`Nouvelle image annexe ajoutée: ${url}`);
-        finalImagesAnnexes.push(url);
-      }
-    });
+    console.log("Images annexes finales après filtrage des null:", finalImagesAnnexes);
   } else {
-    // En mode création, simplement fusionner les images existantes et nouvelles
-    const existingUrls = imagesannexesUrls.filter(url => url !== null) as string[];
-    finalImagesAnnexes = [...existingUrls, ...newUploadedUrls];
+    // En mode création, simplement filtrer les null
+    finalImagesAnnexes = newUploadedUrls.filter(url => url !== null) as string[];
     
     // Éliminer les doublons tout en préservant l'ordre
     finalImagesAnnexes = finalImagesAnnexes.filter((url, index, self) => 

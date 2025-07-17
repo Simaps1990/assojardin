@@ -225,16 +225,21 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
         
         // Vérifier si le tableau contient des valeurs null
         if (Array.isArray(sanitizedPost.imagesannexes)) {
-          // Si le tableau contient uniquement des valeurs null, le remplacer par un tableau vide
+          // Si le tableau est vide ou contient uniquement des valeurs null, le remplacer par un tableau vide
           // car Supabase ne gère pas bien les tableaux avec uniquement des valeurs null
-          const hasNonNullValues = sanitizedPost.imagesannexes.some(url => url !== null && url !== undefined);
-          if (!hasNonNullValues) {
-            console.log('Aucune image annexe valide, envoi d\'un tableau vide');
+          if (sanitizedPost.imagesannexes.length === 0) {
+            console.log('Tableau d\'images annexes vide, on garde un tableau vide');
             sanitizedPost.imagesannexes = [];
           } else {
-            // Filtrer les valeurs null pour éviter les problèmes avec Supabase
-            sanitizedPost.imagesannexes = sanitizedPost.imagesannexes.filter(url => url !== null && url !== undefined);
-            console.log('Images annexes après filtrage des null:', sanitizedPost.imagesannexes);
+            const hasNonNullValues = sanitizedPost.imagesannexes.some(url => url !== null && url !== undefined);
+            if (!hasNonNullValues) {
+              console.log('Aucune image annexe valide, envoi d\'un tableau vide');
+              sanitizedPost.imagesannexes = [];
+            } else {
+              // Filtrer les valeurs null pour éviter les problèmes avec Supabase
+              sanitizedPost.imagesannexes = sanitizedPost.imagesannexes.filter(url => url !== null && url !== undefined);
+              console.log('Images annexes après filtrage des null:', sanitizedPost.imagesannexes);
+            }
           }
         } else {
           console.log('Format invalide pour imagesannexes, envoi d\'un tableau vide');
