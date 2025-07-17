@@ -298,23 +298,43 @@ const handleSubmit = async () => {
     return;
   }
 
-  // Nouvelle approche pour la fusion des URLs:
-  // 1. On crée un tableau avec les anciennes URLs non-null
-  // 2. On ajoute les nouvelles URLs uploadées
-  // 3. On filtre pour éliminer les doublons et les valeurs null
+  // Approche améliorée pour la gestion des images annexes:
+  // 1. Si nous sommes en mode édition, nous devons comparer avec les images originales
+  // 2. Si une image a été supprimée, elle ne doit pas être réintroduite
   
-  const existingUrls = imagesannexesUrls.filter(url => url !== null) as string[];
-  const allUrls = [...existingUrls, ...newUploadedUrls];
+  let finalImagesAnnexes: string[] = [];
   
-  // Éliminer les doublons tout en préservant l'ordre
-  const uniqueUrls: string[] = [];
-  allUrls.forEach(url => {
-    if (url && !uniqueUrls.includes(url)) {
-      uniqueUrls.push(url);
-    }
-  });
+  if (editingPost && editingPost.imagesannexes) {
+    // En mode édition, nous devons tenir compte des suppressions intentionnelles
+    const originalImages = editingPost.imagesannexes.filter(url => url !== null) as string[];
+    
+    // Pour chaque image originale, vérifier si elle a été conservée dans imagesannexesUrls
+    originalImages.forEach((originalUrl) => {
+      // Si l'image est toujours présente dans imagesannexesUrls, la conserver
+      if (imagesannexesUrls.includes(originalUrl)) {
+        finalImagesAnnexes.push(originalUrl);
+      }
+      // Si elle n'est plus présente, c'est qu'elle a été supprimée intentionnellement
+    });
+    
+    // Ajouter les nouvelles images uploadées
+    newUploadedUrls.forEach(url => {
+      if (!finalImagesAnnexes.includes(url)) {
+        finalImagesAnnexes.push(url);
+      }
+    });
+  } else {
+    // En mode création, simplement fusionner les images existantes et nouvelles
+    const existingUrls = imagesannexesUrls.filter(url => url !== null) as string[];
+    finalImagesAnnexes = [...existingUrls, ...newUploadedUrls];
+    
+    // Éliminer les doublons tout en préservant l'ordre
+    finalImagesAnnexes = finalImagesAnnexes.filter((url, index, self) => 
+      self.indexOf(url) === index
+    );
+  }
   
-  console.log("URLs finales des images annexes:", uniqueUrls);
+  console.log("URLs finales des images annexes:", finalImagesAnnexes);
 
   const fileInput = document.getElementById('blog-image') as HTMLInputElement | null;
   if (fileInput) {
@@ -328,7 +348,7 @@ const handleSubmit = async () => {
     title,
     content: contentRef.current?.innerHTML ?? '',
     image: finalImage,  // photo couverture avec l'URL garantie
-    imagesannexes: uniqueUrls, // tableau propre sans nulls
+    imagesannexes: finalImagesAnnexes, // tableau propre avec gestion des suppressions
     excerpt: '',
     author: 'Admin',
     date: new Date().toISOString(),

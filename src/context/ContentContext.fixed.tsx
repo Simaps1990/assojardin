@@ -220,9 +220,11 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const sanitizedPost = { ...post };
       
       // S'assurer que imagesannexes est un tableau non-null si présent
+      // IMPORTANT: Nous ne filtrons plus les valeurs null car cela pourrait être intentionnel
+      // pour indiquer qu'une image a été supprimée
       if (sanitizedPost.imagesannexes !== undefined) {
         sanitizedPost.imagesannexes = Array.isArray(sanitizedPost.imagesannexes) 
-          ? sanitizedPost.imagesannexes.filter(url => url !== null && url !== undefined)
+          ? sanitizedPost.imagesannexes
           : [];
       }
       
