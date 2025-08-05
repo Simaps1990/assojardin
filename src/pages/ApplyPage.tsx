@@ -127,7 +127,7 @@ const ApplyPage: React.FC = () => {
         <h1 className="text-2xl font-semibold text-green-800 mb-6">Postuler pour un jardin</h1>
         <form onSubmit={handleSubmit} className="space-y-5">
           {inputField({ label: "Nom Prénom", name: "nom", value: formData.nom, onChange: handleChange, required: true })}
-          {inputField({ label: "Adresse", name: "adresse", value: formData.adresse, onChange: handleChange, required: true })}
+          {inputField({ label: "Adresse complète: n°, rue, code postal, commune", name: "adresse", value: formData.adresse, onChange: handleChange, required: true })}
           {inputField({ label: "Téléphone portable", name: "telephoneportable", value: formData.telephoneportable, onChange: handleChange, type: "tel", required: true })}
           {inputField({ label: "Téléphone fixe", name: "telephonefixe", value: formData.telephonefixe, onChange: handleChange, type: "tel" })}
           {inputField({ label: "Email", name: "email", value: formData.email, onChange: handleChange, type: "email", required: true })}
