@@ -7,6 +7,7 @@ type Demande = {
   id: string;
   nom: string;
   adresse: string;
+  ville: string;
   telephoneportable: string;
   telephonefixe: string;
   email: string;
@@ -127,6 +128,7 @@ setDemandes((prev) => {
 <div className="text-sm text-neutral-700 space-y-1 mb-4">
   <p><strong>Email :</strong> {demande.email}</p>
   <p><strong>Adresse :</strong> {demande.adresse}</p>
+  <p><strong>Ville :</strong> {demande.ville || 'Non spécifiée'}</p>
   <p><strong>Téléphone portable :</strong> {demande.telephoneportable}</p>
   {demande.telephonefixe && (
     <p><strong>Téléphone fixe :</strong> {demande.telephonefixe}</p>
