@@ -50,10 +50,32 @@ const pastEvents = events
 return (
 <div>
     <SEO 
-      title="SJOV - Jardins Partagés à Villeurbanne | Société des Jardins Ouvriers de Villeurbanne | Rhône-Alpes"
-      description="La Société des Jardins Ouvriers de Villeurbanne (SJOV) propose des jardins partagés et familiaux à Villeurbanne (69100) en région Rhône-Alpes. Association de bénévoles passionnés depuis 1936. Découvrez nos conseils de jardinage, plantation et culture pour votre potager."
-      keywords="jardin, jardins partagés, plantation, Villeurbanne, SJOV, Société des Jardins Ouvriers de Villeurbanne, 69100, culture, potager, jardinage, maraîchage, permaculture, écologie, biodiversité, légumes, Rhône-Alpes, Lyon, Métropole de Lyon, Auvergne-Rhône-Alpes, bénévolat, association jardinage, jardins familiaux, jardins collectifs, jardins ouvriers, agriculture urbaine, compost, semis, récolte, fruits, légumes bio, horticulture, plantes aromatiques, fleurs, verger, agroécologie, développement durable, partage de savoirs, lien social, vie associative, animations jardinage, ateliers pédagogiques"
+      title="Jardins Partagés à Villeurbanne et Vaulx-en-Velin | SJOV | Association de Bénévoles"
+      description="Association de bénévoles proposant des jardins partagés à Villeurbanne et Vaulx-en-Velin depuis 1936. La SJOV (Société des Jardins Ouvriers) vous accompagne dans votre projet de jardinage urbain en Rhône-Alpes."
+      keywords="jardins partagés Villeurbanne, jardins Vaulx-en-Velin, association bénévole jardinage, SJOV, Société des Jardins Ouvriers, 69100, potager urbain, jardinage écologique, Rhône-Alpes, Lyon"
     />
+    
+    {/* Données structurées Schema.org pour améliorer le SEO */}
+    <script type="application/ld+json">
+      {JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "NGO",
+        "name": "Société des Jardins Ouvriers de Villeurbanne",
+        "alternateName": "SJOV",
+        "url": "https://sjov.fr",
+        "logo": "https://sjov.fr/images/sjov-logo.png",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Villeurbanne",
+          "addressRegion": "Rhône-Alpes",
+          "postalCode": "69100",
+          "addressCountry": "FR"
+        },
+        "description": "Association de bénévoles proposant des jardins partagés à Villeurbanne et Vaulx-en-Velin depuis 1936.",
+        "areaServed": ["Villeurbanne", "Vaulx-en-Velin", "Rhône-Alpes"],
+        "keywords": "jardins partagés, Villeurbanne, Vaulx-en-Velin, bénévole, association"
+      })}
+    </script>
 
     {/* Hero Section */}
     {backgroundImageUrl && (
@@ -65,8 +87,10 @@ return (
 <div className="container-custom relative z-10 text-white">
 <div className="max-w-6xl mt-6 md:mt-24 animate-fade-in">
 
-            {titreAccueil && (
+            {titreAccueil ? (
               <h1 className="text-4xl md:text-5xl font-bold mb-4">{titreAccueil}</h1>
+            ) : (
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">Jardins Partagés à Villeurbanne et Vaulx-en-Velin - Association de Bénévoles</h1>
             )}
             {texteIntro && (
               <p className="text-xl mb-8">{texteIntro}</p>
@@ -90,6 +114,33 @@ return (
 {/* Section Météo + Plantation */}
 <section className="pt-16 px-4 md:px-6 bg-neutral-50">
   <MeteoConseilsSection />
+</section>
+
+{/* Section Nos Jardins - Nouvelle section optimisée pour le SEO */}
+<section className="pt-16 px-4 md:px-6 bg-white">
+  <div className="container-custom">
+    <h2 className="text-3xl font-heading font-bold mb-6">Nos jardins à Villeurbanne et Vaulx-en-Velin</h2>
+    <p className="text-lg mb-6">
+      La SJOV propose des parcelles de jardins partagés dans plusieurs quartiers de Villeurbanne et Vaulx-en-Velin.
+      Notre association de bénévoles vous accompagne dans votre projet de jardinage urbain, que vous soyez débutant ou expérimenté.
+    </p>
+    <div className="grid md:grid-cols-2 gap-8 mb-8">
+      <div className="bg-neutral-50 p-6 rounded-lg shadow-sm">
+        <h3 className="text-xl font-semibold text-primary-700 mb-3">Jardins à Villeurbanne</h3>
+        <p className="mb-4">Découvrez nos espaces de jardinage au cœur de Villeurbanne, accessibles à tous les habitants souhaitant cultiver leur propre parcelle dans un esprit de partage et de convivialité.</p>
+        <Link to="/association" className="text-primary-600 hover:underline flex items-center">
+          En savoir plus <ChevronRight size={16} />
+        </Link>
+      </div>
+      <div className="bg-neutral-50 p-6 rounded-lg shadow-sm">
+        <h3 className="text-xl font-semibold text-primary-700 mb-3">Jardins à Vaulx-en-Velin</h3>
+        <p className="mb-4">Nos jardins partagés à Vaulx-en-Velin offrent un espace de nature en ville où vous pourrez cultiver fruits, légumes et plantes aromatiques tout en participant à une démarche écologique collective.</p>
+        <Link to="/association" className="text-primary-600 hover:underline flex items-center">
+          En savoir plus <ChevronRight size={16} />
+        </Link>
+      </div>
+    </div>
+  </div>
 </section>
 
 

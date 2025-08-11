@@ -39,19 +39,55 @@ if (!titreAssociation && !contentAssociation && images.length === 0) {
   return (
     <div className="pb-16">
       <SEO 
-        title="À propos de la SJOV | Société des Jardins Ouvriers de Villeurbanne | Association de Bénévoles Rhône-Alpes"
-        description="Découvrez l'histoire et les valeurs de la Société des Jardins Ouvriers de Villeurbanne (SJOV), association de bénévoles passionnés de jardins partagés à Villeurbanne (69100) en région Rhône-Alpes, engagée depuis 1936 pour la promotion du jardinage et de l'agriculture urbaine."
-        keywords="SJOV, Société des Jardins Ouvriers de Villeurbanne, jardins partagés, Villeurbanne, 69100, association jardinage, histoire jardins ouvriers, jardins familiaux, agriculture urbaine, Rhône-Alpes, Lyon, Métropole de Lyon, Auvergne-Rhône-Alpes, bénévolat, vie associative, engagement citoyen, histoire SJOV, valeurs association, jardinage collectif, jardinage social, jardinage écologique, partage de savoirs, transmission de connaissances, lien social, solidarité, engagement environnemental, patrimoine jardinier, histoire jardinage, tradition maraîchère, jardins historiques, parcelles de jardins, gestion associative, bénévoles jardinage"
+        title="Association de Bénévoles de Jardins à Villeurbanne et Vaulx-en-Velin | SJOV"
+        description="Association de bénévoles proposant des jardins partagés à Villeurbanne et Vaulx-en-Velin depuis 1936. La SJOV vous accompagne dans vos projets de jardinage urbain et écologique en Rhône-Alpes."
+        keywords="association bénévole jardinage, jardins partagés Villeurbanne, jardins Vaulx-en-Velin, SJOV, Société des Jardins Ouvriers, 69100, bénévolat, jardinage écologique, Rhône-Alpes"
       />
+      
+      {/* Données structurées Schema.org pour améliorer le SEO */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "Société des Jardins Ouvriers de Villeurbanne",
+          "alternateName": "SJOV",
+          "url": "https://sjov.fr/association",
+          "logo": "https://sjov.fr/images/sjov-logo.png",
+          "description": "Association de bénévoles proposant des jardins partagés à Villeurbanne et Vaulx-en-Velin depuis 1936.",
+          "foundingDate": "1936",
+          "areaServed": ["Villeurbanne", "Vaulx-en-Velin", "Rhône-Alpes"],
+          "keywords": "association bénévole, jardins partagés, Villeurbanne, Vaulx-en-Velin"
+        })}
+      </script>
       <div className="container-custom">
 <h1 className="font-heading font-bold text-4xl mb-2 text-black">
-  {titreAssociation}
+  {titreAssociation || "Association de Bénévoles de Jardins à Villeurbanne et Vaulx-en-Velin"}
 </h1>
 
-        <div
-          className="prose prose-lg max-w-none mb-10"
-          dangerouslySetInnerHTML={{ __html: contentAssociation || '' }}
-        />
+        <div className="mb-10">
+          {!contentAssociation && (
+            <div className="prose prose-lg max-w-none">
+              <h2 className="text-2xl font-semibold mb-4">Notre association de bénévoles à Villeurbanne et Vaulx-en-Velin</h2>
+              <p>
+                La SJOV (Société des Jardins Ouvriers de Villeurbanne) est une association de bénévoles engagés depuis 1936 dans la promotion du jardinage urbain et écologique. Nous proposons des jardins partagés à Villeurbanne et Vaulx-en-Velin pour permettre aux habitants de cultiver leur propre parcelle dans un esprit de partage et de convivialité.
+              </p>
+              <h2 className="text-2xl font-semibold mt-6 mb-4">Nos jardins à Villeurbanne</h2>
+              <p>
+                Nos jardins partagés à Villeurbanne offrent un espace de nature en ville où vous pourrez cultiver fruits, légumes et plantes aromatiques tout en participant à une démarche écologique collective.              
+              </p>
+              <h2 className="text-2xl font-semibold mt-6 mb-4">Nos jardins à Vaulx-en-Velin</h2>
+              <p>
+                Découvrez nos espaces de jardinage à Vaulx-en-Velin, accessibles à tous les habitants souhaitant cultiver leur propre parcelle dans un esprit de partage et de convivialité.
+              </p>
+            </div>
+          )}
+          {contentAssociation && (
+            <div
+              className="prose prose-lg max-w-none"
+              dangerouslySetInnerHTML={{ __html: contentAssociation }}
+            />
+          )}
+        </div>
         {images.length > 0 && (
           <div className={`grid gap-6 ${getImageGridClass()}`}>
             {images
@@ -60,7 +96,7 @@ if (!titreAssociation && !contentAssociation && images.length === 0) {
 <img
   key={idx}
   src={img}
-  alt={`illustration-${idx}`}
+  alt={`Jardins partagés de la SJOV à ${idx % 2 === 0 ? 'Villeurbanne' : 'Vaulx-en-Velin'} - Association de bénévoles`}
   className="h-[500px] w-auto mx-auto object-contain"
 />
 

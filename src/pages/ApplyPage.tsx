@@ -121,9 +121,9 @@ const ApplyPage: React.FC = () => {
   return (
     <>
       <SEO 
-        title="Postuler pour un Jardin SJOV | Jardins Partagés à Villeurbanne | Rhône-Alpes"
-        description="Postulez pour obtenir un jardin partagé à la SJOV (Société des Jardins Ouvriers de Villeurbanne), association de bénévoles passionnés depuis 1936. Formulaire de demande pour cultiver votre propre parcelle dans nos jardins familiaux à Villeurbanne (69100) en région Rhône-Alpes."
-        keywords="postuler jardin, demande jardin partagé, SJOV, Société des Jardins Ouvriers de Villeurbanne, jardins familiaux, Villeurbanne, 69100, parcelle jardinage, candidature jardin, Rhône-Alpes, Lyon, Métropole de Lyon, Auvergne-Rhône-Alpes, bénévolat, demande adhésion, formulaire candidature, obtenir parcelle, jardins ouvriers, devenir jardinier, attribution jardin, liste attente jardin, jardins collectifs, jardins urbains, cultiver potager, jardinage écologique, jardinage urbain, jardinage familial, parcelle cultivable, terrain jardinage, conditions attribution, engagement associatif, charte jardinier, règlement intérieur"
+        title="Postuler pour un Jardin à Villeurbanne et Vaulx-en-Velin | SJOV | Association de Bénévoles"
+        description="Devenez membre de notre association de bénévoles et obtenez un jardin partagé à Villeurbanne ou Vaulx-en-Velin. La SJOV vous accompagne depuis 1936 dans votre projet de jardinage urbain en Rhône-Alpes."
+        keywords="postuler jardin Villeurbanne, jardin partagé Vaulx-en-Velin, association bénévole jardinage, SJOV, Société des Jardins Ouvriers, 69100, parcelle jardinage, candidature jardin, Rhône-Alpes, Lyon, bénévolat, jardins familiaux, jardins collectifs, jardins urbains"
       />
       <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mb-10">
         <h1 className="text-2xl font-semibold text-green-800 mb-6">Postuler pour un jardin</h1>
