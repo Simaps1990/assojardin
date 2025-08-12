@@ -116,34 +116,6 @@ return (
   <MeteoConseilsSection />
 </section>
 
-{/* Section Nos Jardins - Nouvelle section optimisée pour le SEO */}
-<section className="pt-16 px-4 md:px-6 bg-white">
-  <div className="container-custom">
-    <h2 className="text-3xl font-heading font-bold mb-6">Nos jardins à Villeurbanne et Vaulx-en-Velin</h2>
-    <p className="text-lg mb-6">
-      La SJOV propose des parcelles de jardins partagés dans plusieurs quartiers de Villeurbanne et Vaulx-en-Velin.
-      Notre association de bénévoles vous accompagne dans votre projet de jardinage urbain, que vous soyez débutant ou expérimenté.
-    </p>
-    <div className="grid md:grid-cols-2 gap-8 mb-8">
-      <div className="bg-neutral-50 p-6 rounded-lg shadow-sm">
-        <h3 className="text-xl font-semibold text-primary-700 mb-3">Jardins à Villeurbanne</h3>
-        <p className="mb-4">Découvrez nos espaces de jardinage au cœur de Villeurbanne, accessibles à tous les habitants souhaitant cultiver leur propre parcelle dans un esprit de partage et de convivialité.</p>
-        <Link to="/association" className="text-primary-600 hover:underline flex items-center">
-          En savoir plus <ChevronRight size={16} />
-        </Link>
-      </div>
-      <div className="bg-neutral-50 p-6 rounded-lg shadow-sm">
-        <h3 className="text-xl font-semibold text-primary-700 mb-3">Jardins à Vaulx-en-Velin</h3>
-        <p className="mb-4">Nos jardins partagés à Vaulx-en-Velin offrent un espace de nature en ville où vous pourrez cultiver fruits, légumes et plantes aromatiques tout en participant à une démarche écologique collective.</p>
-        <Link to="/association" className="text-primary-600 hover:underline flex items-center">
-          En savoir plus <ChevronRight size={16} />
-        </Link>
-      </div>
-    </div>
-  </div>
-</section>
-
-
 
 
 
