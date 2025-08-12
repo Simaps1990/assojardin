@@ -243,7 +243,7 @@ return (
           ))}
       </div>
     ) : (
-      <p className="text-neutral-500">Aucune annonce n’a encore été validée.</p>
+      <p className="text-neutral-500">Il n'y a actuellement aucune petite annonce sur le site. Vous pouvez proposer quelque chose !</p>
     )}
   </div>
 </section>
