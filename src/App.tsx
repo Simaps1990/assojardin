@@ -23,6 +23,7 @@ import ContactPage from './pages/ContactPage';
 import SearchPage from './pages/SearchPage';
 import LoginPage from './pages/LoginPage';
 import AnnoncesPage from './pages/Annonces'; // ✅ Import correct
+import MentionsLegalesPage from './pages/MentionsLegalesPage';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -79,6 +80,7 @@ function App() {
             <Route path="/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
             <Route path="/search" element={<PublicLayout><SearchPage /></PublicLayout>} />
             <Route path="/annonces" element={<PublicLayout><AnnoncesPage /></PublicLayout>} />
+            <Route path="/mentions-legales" element={<PublicLayout><MentionsLegalesPage /></PublicLayout>} />
             <Route path="/login" element={<LoginPage />} />
 
             {/* Admin Routes */}
