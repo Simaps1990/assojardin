@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 import { BlogPost, Event, FormField, Annonce } from '../types';
-import { blogPosts as staticBlogPosts, events as staticEvents, formFields as staticFormFields, applications as staticApplications, annonces as staticAnnonces, associationContent as staticAssociationContent } from '../mockData';
+import { mockDataStore } from '../mockDataStore';
 
 export interface Application {
   id: string;
@@ -88,41 +88,41 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   });
 
   useEffect(() => {
-    // Utiliser les données statiques pour l'association
-    setAssociationContent(staticAssociationContent);
-    console.log("✅ Données association_content chargées depuis les données statiques");
+    // Utiliser les données statiques pour l'association depuis le store centralisé
+    setAssociationContent(mockDataStore.association_content[0]);
+    console.log("✅ Données association_content chargées depuis le store centralisé");
   }, []);
 
   useEffect(() => {
-    // Utiliser les données statiques pour les événements
-    setEvents(staticEvents);
-    console.log("✅ Événements chargés depuis les données statiques");
+    // Utiliser les données statiques pour les événements depuis le store centralisé
+    setEvents(mockDataStore.events);
+    console.log("✅ Événements chargés depuis le store centralisé");
   }, []);
 
   useEffect(() => {
-    // Utiliser les données statiques pour les champs du formulaire
-    setApplicationFormFields(staticFormFields);
-    console.log("✅ Champs du formulaire chargés depuis les données statiques");
+    // Utiliser les données statiques pour les champs du formulaire depuis le store centralisé
+    setApplicationFormFields(mockDataStore.form_fields);
+    console.log("✅ Champs du formulaire chargés depuis le store centralisé");
   }, []);
 
   useEffect(() => {
-    // Utiliser les données statiques pour les candidatures
-    setApplications(staticApplications);
-    const nonTraitees = staticApplications.filter((a) => !a.processed).length;
+    // Utiliser les données statiques pour les candidatures depuis le store centralisé
+    setApplications(mockDataStore.applications);
+    const nonTraitees = mockDataStore.applications.filter((a) => !a.processed).length;
     setNonTraiteesApplications(nonTraitees);
-    console.log("✅ Candidatures chargées depuis les données statiques");
+    console.log("✅ Candidatures chargées depuis le store centralisé");
   }, []);
 
   useEffect(() => {
-    // Utiliser les données statiques pour les articles de blog
-    setBlogPosts(staticBlogPosts);
-    console.log("✅ Articles de blog chargés depuis les données statiques");
+    // Utiliser les données statiques pour les articles de blog depuis le store centralisé
+    setBlogPosts(mockDataStore.blogPosts);
+    console.log("✅ Articles de blog chargés depuis le store centralisé");
   }, []);
 
   useEffect(() => {
-    // Utiliser les données statiques pour les annonces
-    setAnnonces(staticAnnonces);
-    console.log("✅ Annonces chargées depuis les données statiques");
+    // Utiliser les données statiques pour les annonces depuis le store centralisé
+    setAnnonces(mockDataStore.annonces);
+    console.log("✅ Annonces chargées depuis le store centralisé");
   }, []);
 
   // Fonction améliorée pour ajouter un article de blog
@@ -439,22 +439,22 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return mapped;
   };
 
-  // Fonction simplifiée pour récupérer les articles de blog (utilise les données statiques)
+  // Fonction pour récupérer les articles de blog depuis le store centralisé
   const fetchBlogPosts = async () => {
-    console.log('✅ Chargement des articles de blog depuis les données statiques');
-    setBlogPosts(staticBlogPosts);
+    console.log('✅ Chargement des articles de blog depuis le store centralisé');
+    setBlogPosts(mockDataStore.blogPosts);
   };
 
-  // Fonction simplifiée pour récupérer les événements (utilise les données statiques)
+  // Fonction pour récupérer les événements depuis le store centralisé
   const fetchEvents = async () => {
-    console.log('✅ Chargement des événements depuis les données statiques');
-    setEvents(staticEvents);
+    console.log('✅ Chargement des événements depuis le store centralisé');
+    setEvents(mockDataStore.events);
   };
 
-  // Fonction simplifiée pour récupérer les annonces (utilise les données statiques)
+  // Fonction pour récupérer les annonces depuis le store centralisé
   const fetchAnnonces = async () => {
-    console.log('✅ Chargement des annonces depuis les données statiques');
-    setAnnonces(staticAnnonces);
+    console.log('✅ Chargement des annonces depuis le store centralisé');
+    setAnnonces(mockDataStore.annonces);
   };
 
   const addAnnonce = async (a: Omit<Annonce, 'id' | 'date' | 'isValidated'>) => {

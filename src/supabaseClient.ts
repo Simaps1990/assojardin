@@ -1,6 +1,6 @@
 // Client mock pour remplacer Supabase
 // Ce fichier simule les fonctionnalités de Supabase avec des données statiques
-import { initMockData } from './mockData';
+import { mockDataStore, updateMockStore } from './mockDataStore';
 
 // Type pour les opérations de base de données simulées
 type MockQueryBuilder = {
@@ -19,8 +19,8 @@ type MockQueryBuilder = {
 
 // Fonction pour créer un client mock
 const createMockClient = () => {
-  // Stockage en mémoire pour les données simulées
-  const mockData: Record<string, any[]> = initMockData();
+  // Utiliser le store centralisé pour les données simulées
+  const mockData: Record<string, any[]> = mockDataStore;
   
   // Fonction pour créer un builder de requête
   const from = (table: string): any => {
@@ -44,6 +44,9 @@ const createMockClient = () => {
         if (!mockData[table]) mockData[table] = [];
         mockData[table] = [...mockData[table], ...newData];
         
+        // Mettre à jour le store centralisé
+        updateMockStore(table, mockData[table]);
+        
         return {
           select: () => ({
             execute: async () => ({ data: newData, error: null })
@@ -60,6 +63,9 @@ const createMockClient = () => {
                 item[column] === value ? { ...item, ...data } : item
               );
               mockData[table] = updatedData;
+              
+              // Mettre à jour le store centralisé
+              updateMockStore(table, mockData[table]);
             }
             
             return {
@@ -80,6 +86,9 @@ const createMockClient = () => {
             // Simuler la suppression de données
             if (mockData[table]) {
               mockData[table] = mockData[table].filter(item => item[column] !== value);
+              
+              // Mettre à jour le store centralisé
+              updateMockStore(table, mockData[table]);
             }
             
             return {
@@ -90,6 +99,9 @@ const createMockClient = () => {
             // Supprimer tous sauf ceux qui correspondent
             if (mockData[table]) {
               mockData[table] = mockData[table].filter(item => item[column] === value);
+              
+              // Mettre à jour le store centralisé
+              updateMockStore(table, mockData[table]);
             }
             
             return {
