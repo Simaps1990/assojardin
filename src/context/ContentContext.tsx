@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 import { BlogPost, Event, FormField, Annonce } from '../types';
+import { blogPosts as staticBlogPosts, events as staticEvents, formFields as staticFormFields, applications as staticApplications, annonces as staticAnnonces, associationContent as staticAssociationContent } from '../mockData';
 
 export interface Application {
   id: string;
@@ -87,89 +88,41 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   });
 
   useEffect(() => {
-    const fetchAssociationContent = async () => {
-      const { data, error } = await supabase
-        .from('association_content')
-        .select('*')
-        .limit(1)
-        .maybeSingle();
-
-      if (error) {
-        console.error('Erreur de chargement de l\'association :', error.message);
-        return;
-      }
-      console.log("✅ Données association_content chargées :", JSON.stringify(data, null, 2));
-
-      setAssociationContent({
-        id: data?.id || '',
-        titreAccueil: data?.titreaccueil || '',
-        texteIntro: data?.texteintro || '',
-        texteFooter: data?.textefooter || '',
-        adresse: data?.adresse || '',
-        telephone: data?.telephone || '',
-        email: data?.email || '',
-        horaires: data?.horaires || '',
-        imageAccueil: data?.imageaccueil || '',
-        headerIcon: data?.headericon || '',
-        titreAssociation: data?.titreassociation || '',
-        contentAssociation: data?.contentassociation || '',
-        imagesAssociation: data?.imagesassociation || [],
-        parcellesTotal: data?.parcellestotal ?? 0,
-        parcellesOccupees: data?.parcellesoccupees ?? 0,
-      });
-    };
-
-    fetchAssociationContent();
+    // Utiliser les données statiques pour l'association
+    setAssociationContent(staticAssociationContent);
+    console.log("✅ Données association_content chargées depuis les données statiques");
   }, []);
 
   useEffect(() => {
-    fetchEvents();
+    // Utiliser les données statiques pour les événements
+    setEvents(staticEvents);
+    console.log("✅ Événements chargés depuis les données statiques");
   }, []);
 
   useEffect(() => {
-    const fetchFormFields = async () => {
-      const { data, error } = await supabase
-        .from('form_fields')
-        .select('*')
-        .order('label', { ascending: true });
-
-      if (error) {
-        console.error('Erreur de chargement des champs du formulaire :', error.message);
-        return;
-      }
-
-      setApplicationFormFields(data || []);
-    };
-
-    fetchFormFields();
+    // Utiliser les données statiques pour les champs du formulaire
+    setApplicationFormFields(staticFormFields);
+    console.log("✅ Champs du formulaire chargés depuis les données statiques");
   }, []);
 
   useEffect(() => {
-    const fetchApplications = async () => {
-      const { data, error } = await supabase
-        .from('applications')
-        .select('*')
-        .order('id', { ascending: false });
-
-      if (error) {
-        console.error('Erreur de chargement des candidatures Supabase:', error.message);
-        return;
-      }
-
-      setApplications(data || []);
-      const nonTraitees = (data || []).filter((a) => !a.processed).length;
-      setNonTraiteesApplications(nonTraitees);
-    };
-
-    fetchApplications();
+    // Utiliser les données statiques pour les candidatures
+    setApplications(staticApplications);
+    const nonTraitees = staticApplications.filter((a) => !a.processed).length;
+    setNonTraiteesApplications(nonTraitees);
+    console.log("✅ Candidatures chargées depuis les données statiques");
   }, []);
 
   useEffect(() => {
-    fetchBlogPosts();
+    // Utiliser les données statiques pour les articles de blog
+    setBlogPosts(staticBlogPosts);
+    console.log("✅ Articles de blog chargés depuis les données statiques");
   }, []);
 
   useEffect(() => {
-    fetchAnnonces();
+    // Utiliser les données statiques pour les annonces
+    setAnnonces(staticAnnonces);
+    console.log("✅ Annonces chargées depuis les données statiques");
   }, []);
 
   // Fonction améliorée pour ajouter un article de blog
@@ -486,82 +439,22 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return mapped;
   };
 
-  // Fonction améliorée pour récupérer les articles de blog
+  // Fonction simplifiée pour récupérer les articles de blog (utilise les données statiques)
   const fetchBlogPosts = async () => {
-    const { data, error } = await supabase
-      .from('blogPosts')
-      .select('*')
-      .order('created_at', { ascending: false }); // ✅ ordre basé sur le champ "date"
-
-    if (error) {
-      console.error('❌ Erreur de chargement des articles Supabase:', error.message);
-      return;
-    }
-
-    if (!data || data.length === 0) {
-      console.warn('⚠️ Aucun article de blog reçu.');
-      setBlogPosts([]);
-      return;
-    }
-
-    // Afficher les données brutes pour déboguer
-    console.log('🔍 Données brutes des articles:', data);
-    
-    // Vérifier les champs d'image pour chaque article
-    data.forEach((post, index) => {
-      console.log(`🖼️ Article ${index + 1} - Titre: ${post.title}`);
-      console.log(`   Image principale: ${post.image || 'MANQUANTE'}`);
-      console.log(`   Images annexes: ${JSON.stringify(post.imagesannexes || [])}`);
-    });
-
-    // Normaliser les données pour s'assurer que tous les champs sont correctement formatés
-    const normalizedData = data.map(post => ({
-      ...post,
-      // S'assurer que l'image principale est une chaîne non vide
-      image: post.image || '',
-      // S'assurer que imagesannexes est toujours un tableau valide
-      imagesannexes: Array.isArray(post.imagesannexes) 
-        ? post.imagesannexes.filter((url: any) => url !== null && url !== undefined && url !== '') 
-        : []
-    }));
-
-    console.log('✅ Blog posts chargés et normalisés :', normalizedData);
-    setBlogPosts(normalizedData);
+    console.log('✅ Chargement des articles de blog depuis les données statiques');
+    setBlogPosts(staticBlogPosts);
   };
 
+  // Fonction simplifiée pour récupérer les événements (utilise les données statiques)
   const fetchEvents = async () => {
-    const { data, error } = await supabase
-      .from('events')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Erreur de chargement des événements Supabase:', error.message);
-      return;
-    }
-
-    const now = new Date();
-
-    const dataWithFlags = (data || []).map((event) => ({
-      ...event,
-      isPast: new Date(event.date) < now,
-    }));
-
-    setEvents(dataWithFlags);
+    console.log('✅ Chargement des événements depuis les données statiques');
+    setEvents(staticEvents);
   };
 
+  // Fonction simplifiée pour récupérer les annonces (utilise les données statiques)
   const fetchAnnonces = async () => {
-    const { data, error } = await supabase
-      .from('annonces')
-      .select('*')
-      .eq('statut', 'validé') // 🔥 On ne récupère que les annonces validées
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Erreur chargement annonces :', error.message);
-      return;
-    }
-    setAnnonces(data || []);
+    console.log('✅ Chargement des annonces depuis les données statiques');
+    setAnnonces(staticAnnonces);
   };
 
   const addAnnonce = async (a: Omit<Annonce, 'id' | 'date' | 'isValidated'>) => {

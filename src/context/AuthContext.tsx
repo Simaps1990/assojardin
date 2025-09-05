@@ -29,7 +29,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (username: string, password: string): Promise<boolean> => {
     // Authentification simple avec identifiants codés en dur
-    if (username === 'SJOV' && password === 'Jardins69100*') {
+    if (username === 'admin' && password === 'password') {
       setUser({ username });
       localStorage.setItem('username', username);
       return true;

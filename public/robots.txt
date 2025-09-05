@@ -1,5 +1,13 @@
+# Bloquer l'indexation pour tous les robots
 User-agent: *
-Allow: /
+Disallow: /
 
-# Sitemap
-Sitemap: https://sjov.fr/sitemap.xml
+# Bloquer spécifiquement Googlebot
+User-agent: Googlebot
+Disallow: /
+
+# Bloquer spécifiquement Bingbot
+User-agent: Bingbot
+Disallow: /
+
+# Site de démonstration - Ne pas indexer
