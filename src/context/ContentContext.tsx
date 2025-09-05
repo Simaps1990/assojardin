@@ -135,9 +135,12 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
           ? post.imagesannexes.filter(url => url !== null && url !== undefined) 
           : [],
         date: new Date().toISOString().split('T')[0],
+        // Utiliser les valeurs existantes ou des valeurs par défaut
+        category: 'Divers',
+        author: 'Admin',
       };
       
-      console.log('Ajout article avec données sanitisées:', sanitizedPost);
+      console.log('Ajout article avec données sanitizées:', sanitizedPost);
       
       const { data, error } = await supabase
         .from('blogPosts')
@@ -157,10 +160,14 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
       
       console.log('Article sauvegardé avec succès:', saved);
 
-      setBlogPosts((prev) => {
-        const filtered = prev.filter(p => p.id !== saved.id);
-        return [saved, ...filtered];
-      });
+      // Mettre à jour l'état local
+      const updatedPosts = [saved, ...blogPosts.filter(p => p.id !== saved.id)];
+      setBlogPosts(updatedPosts);
+      
+      // Rafraîchir les données depuis le store centralisé pour s'assurer que tout est synchronisé
+      setTimeout(() => {
+        fetchBlogPosts();
+      }, 100);
     } catch (err) {
       console.error('Erreur lors de l\'ajout de l\'article :', err);
     }
@@ -246,9 +253,16 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const addEvent = async (event: Omit<Event, 'id' | 'isPast'>) => {
     try {
+      // Créer un événement complet avec les valeurs par défaut
+      const completeEvent = {
+        ...event,
+        // Ces propriétés sont ajoutées ici mais seront gérées par le mock client
+        image: event.image || '/uploads/events/default-event.jpg', // Image par défaut
+      };
+
       const { data, error } = await supabase
         .from('events')
-        .insert([{ ...event }])
+        .insert([completeEvent])
         .select();
 
       if (error) throw error;
@@ -262,7 +276,14 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
         isPast: new Date(saved.date) < new Date(),
       };
 
-      setEvents((prev) => [newEvent, ...prev]);
+      // Mettre à jour l'état local
+      const updatedEvents = [newEvent, ...events.filter(e => e.id !== newEvent.id)];
+      setEvents(updatedEvents);
+      
+      // Rafraîchir les données depuis le store centralisé
+      setTimeout(() => {
+        fetchEvents();
+      }, 100);
     } catch (err) {
       console.error('Erreur lors de l\'ajout de l\'événement :', err);
     }
@@ -304,9 +325,15 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const addApplication = async (app: Omit<Application, 'id'>) => {
     try {
+      // S'assurer que tous les champs requis sont présents
+      const completeApp = {
+        ...app,
+        processed: false, // Par défaut, les nouvelles candidatures ne sont pas traitées
+      };
+
       const { data, error } = await supabase
         .from('applications')
-        .insert([app])
+        .insert([completeApp])
         .select();
 
       if (error) throw error;
@@ -314,7 +341,20 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const saved = data?.[0];
       if (!saved) return;
 
-      setApplications((prev) => [saved, ...prev]);
+      // Mettre à jour l'état local
+      const updatedApplications = [saved, ...applications.filter(a => a.id !== saved.id)];
+      setApplications(updatedApplications);
+      
+      // Mettre à jour le compteur de candidatures non traitées
+      setNonTraiteesApplications(prev => prev + 1);
+      
+      // Rafraîchir les données depuis le store centralisé
+      setTimeout(() => {
+        // Recharger les applications depuis le store
+        setApplications(mockDataStore.applications);
+        const nonTraitees = mockDataStore.applications.filter((a) => !a.processed).length;
+        setNonTraiteesApplications(nonTraitees);
+      }, 100);
     } catch (err) {
       console.error('Erreur lors de l\'ajout de la candidature :', err);
     }
@@ -458,13 +498,37 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const addAnnonce = async (a: Omit<Annonce, 'id' | 'date' | 'isValidated'>) => {
-    const { data, error } = await supabase
-      .from('annonces')
-      .insert([{ ...a, isValidated: false }])
-      .select();
+    try {
+      // S'assurer que tous les champs requis sont présents
+      const completeAnnonce = {
+        ...a,
+        date: new Date().toISOString().split('T')[0], // Date du jour
+        isValidated: false, // Par défaut, les nouvelles annonces ne sont pas validées
+      };
 
-    if (error) return console.error('Erreur ajout annonce :', error.message);
-    if (data?.[0]) setAnnonces((prev) => [data[0], ...prev]);
+      const { data, error } = await supabase
+        .from('annonces')
+        .insert([completeAnnonce])
+        .select();
+
+      if (error) {
+        console.error('Erreur ajout annonce :', error.message);
+        return;
+      }
+
+      if (data?.[0]) {
+        // Mettre à jour l'état local
+        const updatedAnnonces = [data[0], ...annonces.filter(an => an.id !== data[0].id)];
+        setAnnonces(updatedAnnonces);
+        
+        // Rafraîchir les données depuis le store centralisé
+        setTimeout(() => {
+          fetchAnnonces();
+        }, 100);
+      }
+    } catch (err) {
+      console.error('Erreur lors de l\'ajout de l\'annonce :', err);
+    }
   };
 
   const updateAnnonce = async (id: string, a: Partial<Annonce>) => {
