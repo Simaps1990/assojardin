@@ -45,6 +45,11 @@ const MultiSiteApp: React.FC = () => {
             <Route path="/site2/*" element={<SiteWrapper siteId="site2" />} />
             <Route path="/site3/*" element={<SiteWrapper siteId="site3" />} />
             
+            {/* Routes de login spécifiques à chaque site */}
+            <Route path="/site1/login" element={<SiteWrapper siteId="site1" />} />
+            <Route path="/site2/login" element={<SiteWrapper siteId="site2" />} />
+            <Route path="/site3/login" element={<SiteWrapper siteId="site3" />} />
+            
             {/* Redirection par défaut */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

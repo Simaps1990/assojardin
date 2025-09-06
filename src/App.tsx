@@ -74,7 +74,7 @@ const ProtectedAdminRoute: React.FC<{ children: React.ReactNode }> = ({ children
   
   if (!user) {
     // Rediriger vers la page de login du site actuel, pas vers la page de login générale
-    return <Navigate to="./login" state={{ from: location }} replace />;
+    return <Navigate to="login" state={{ from: location }} replace />;
   }
   
   return <>{children}</>;
@@ -95,7 +95,7 @@ function App({ siteId }: AppProps) {
             <Routes>
 
             {/* Page de login spécifique au site */}
-            <Route path="/login" element={<LoginPage siteId={siteId} />} />
+            <Route path="login" element={<LoginPage siteId={siteId} />} />
             
             {/* Public Routes */}
             <Route path="/" element={<PublicLayout><HomePage /></PublicLayout>} />
@@ -111,8 +111,8 @@ function App({ siteId }: AppProps) {
             <Route path="/mentions-legales" element={<PublicLayout><MentionsLegalesPage /></PublicLayout>} />
 
             {/* Admin Routes - Protégées par authentification */}
-            <Route path="/admin" element={<ProtectedAdminRoute><AdminLayout>{<AdminDashboard />}</AdminLayout></ProtectedAdminRoute>} />
-            <Route path="/admin/*" element={<ProtectedAdminRoute>{<AdminLayout />}</ProtectedAdminRoute>}>
+            <Route path="/admin" element={<ProtectedAdminRoute><AdminLayout><AdminDashboard /></AdminLayout></ProtectedAdminRoute>} />
+            <Route path="/admin/*" element={<ProtectedAdminRoute><AdminLayout /></ProtectedAdminRoute>}>
               <Route path="blog" element={<AdminBlogPage />} />
               <Route path="events" element={<AdminEventsPage />} />
               <Route path="applications" element={<AdminApplicationsPage />} />
