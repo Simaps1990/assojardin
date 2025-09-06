@@ -9,41 +9,34 @@ const MultiSiteLoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [selectedSite, setSelectedSite] = useState<string | null>(null);
 
   // Identifiants spécifiques pour chaque sous-site
   const siteCredentials = {
-    site1: { username: 'admin', password: 'password' },
-    site2: { username: 'admin', password: 'password' },
-    site3: { username: 'admin', password: 'password' }
+    site1: { username: 'admin1', password: 'password1' },
+    site2: { username: 'admin2', password: 'password2' },
+    site3: { username: 'admin3', password: 'password3' }
   };
 
-  const handleSiteSelection = (siteId: string) => {
-    setSelectedSite(siteId);
-    setError('');
-  };
-  
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!selectedSite) {
-      setError('Veuillez sélectionner un site');
-      return;
-    }
     
     if (!username || !password) {
       setError('Veuillez remplir tous les champs');
       return;
     }
     
-    const credentials = siteCredentials[selectedSite as keyof typeof siteCredentials];
-    
-    if (username === credentials.username && password === credentials.password) {
-      setCurrentSite(selectedSite);
-      navigate(`/${selectedSite}`);
-    } else {
-      setError('Identifiants incorrects');
+    // Vérifier les identifiants pour chaque site
+    for (const [siteId, credentials] of Object.entries(siteCredentials)) {
+      if (username === credentials.username && password === credentials.password) {
+        // Identifiants corrects, rediriger vers le site correspondant
+        setCurrentSite(siteId);
+        navigate(`/${siteId}`);
+        return;
+      }
     }
+    
+    // Si aucun identifiant ne correspond
+    setError('Identifiants incorrects');
   };
 
   return (
@@ -73,8 +66,8 @@ const MultiSiteLoginPage: React.FC = () => {
             </div>
             <h1 className="font-heading font-bold text-5xl mb-4">Jardins Partagés</h1>
             <p className="text-xl max-w-2xl mx-auto">
-              Bienvenue sur notre plateforme de démonstration des sites de jardins partagés.
-              Connectez-vous pour accéder à l'un de nos trois sites.
+              Bienvenue sur notre plateforme de jardinage communautaire.
+              Connectez-vous pour accéder à votre espace.
             </p>
           </div>
         </div>
@@ -84,9 +77,9 @@ const MultiSiteLoginPage: React.FC = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-green-800 mb-4">Connexion aux sites</h2>
+            <h2 className="text-3xl font-bold text-green-800 mb-4">Connexion</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Veuillez vous connecter pour accéder au site de votre choix.
+              Veuillez vous connecter pour accéder à votre espace.
             </p>
           </div>
 
@@ -108,41 +101,9 @@ const MultiSiteLoginPage: React.FC = () => {
               
               <form onSubmit={handleLogin}>
                 <div className="mb-6">
-                  <label className="block text-gray-700 font-medium mb-2">Sélectionnez un site</label>
-                  <div className="grid grid-cols-3 gap-3">
-                    <button 
-                      type="button"
-                      onClick={() => handleSiteSelection('site1')} 
-                      className={`p-3 rounded-lg border-2 transition-all ${selectedSite === 'site1' ? 'border-green-600 bg-green-50' : 'border-gray-200 hover:border-green-300'}`}
-                    >
-                      <div className="flex flex-col items-center">
-                        <Sprout size={24} className={`${selectedSite === 'site1' ? 'text-green-600' : 'text-gray-500'}`} />
-                        <span className={`mt-1 font-medium ${selectedSite === 'site1' ? 'text-green-600' : 'text-gray-700'}`}>Site 1</span>
-                      </div>
-                    </button>
-                    
-                    <button 
-                      type="button"
-                      onClick={() => handleSiteSelection('site2')} 
-                      className={`p-3 rounded-lg border-2 transition-all ${selectedSite === 'site2' ? 'border-blue-600 bg-blue-50' : 'border-gray-200 hover:border-blue-300'}`}
-                    >
-                      <div className="flex flex-col items-center">
-                        <Flower2 size={24} className={`${selectedSite === 'site2' ? 'text-blue-600' : 'text-gray-500'}`} />
-                        <span className={`mt-1 font-medium ${selectedSite === 'site2' ? 'text-blue-600' : 'text-gray-700'}`}>Site 2</span>
-                      </div>
-                    </button>
-                    
-                    <button 
-                      type="button"
-                      onClick={() => handleSiteSelection('site3')} 
-                      className={`p-3 rounded-lg border-2 transition-all ${selectedSite === 'site3' ? 'border-amber-600 bg-amber-50' : 'border-gray-200 hover:border-amber-300'}`}
-                    >
-                      <div className="flex flex-col items-center">
-                        <Sun size={24} className={`${selectedSite === 'site3' ? 'text-amber-600' : 'text-gray-500'}`} />
-                        <span className={`mt-1 font-medium ${selectedSite === 'site3' ? 'text-amber-600' : 'text-gray-700'}`}>Site 3</span>
-                      </div>
-                    </button>
-                  </div>
+                  <p className="text-center text-gray-600">
+                    Entrez vos identifiants pour vous connecter
+                  </p>
                 </div>
                 
                 <div className="mb-4">
@@ -178,42 +139,19 @@ const MultiSiteLoginPage: React.FC = () => {
               </form>
               
               <div className="mt-6 pt-4 border-t border-gray-200 text-center text-sm text-gray-500">
-                <p>Identifiants par défaut: admin / password</p>
+                <p>Veuillez contacter l'administrateur si vous avez oublié vos identifiants</p>
               </div>
             </div>
           </div>
 
-          {/* Informations sur les sites */}
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="font-bold text-xl mb-2 text-green-700">Jardins Partagés - Site 1</h3>
-              <p className="text-gray-600">
-                Premier site avec ses articles de blog, événements communautaires et annonces de partage entre jardiniers.
-              </p>
-            </div>
-            
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="font-bold text-xl mb-2 text-blue-700">Jardins Partagés - Site 2</h3>
-              <p className="text-gray-600">
-                Deuxième site axé sur l'agriculture urbaine et les pratiques écologiques innovantes en milieu urbain.
-              </p>
-            </div>
-            
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="font-bold text-xl mb-2 text-amber-700">Espace Vert Collectif - Site 3</h3>
-              <p className="text-gray-600">
-                Troisième site spécialisé dans le jardinage thérapeutique et les jardins pédagogiques adaptés à tous.
-              </p>
-            </div>
-          </div>
         </div>
       </div>
       
       {/* Footer */}
       <div className="mt-auto py-6 bg-gray-50 border-t border-gray-200">
         <div className="container mx-auto px-4 text-center text-gray-500 text-sm">
-          <p>© 2025 Jardins Partagés - Démonstration de sites multiples</p>
-          <p className="mt-2">Chaque site dispose de son propre contenu et de son propre espace d'administration.</p>
+          <p>© 2025 Jardins Partagés - Tous droits réservés</p>
+          <p className="mt-2">Association de jardinage urbain et communautaire</p>
         </div>
       </div>
     </div>

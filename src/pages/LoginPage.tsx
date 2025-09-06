@@ -58,6 +58,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ siteId }) => {
   
   const siteInfo = getSiteInfo();
 
+  // Identifiants spécifiques pour chaque site
+  const siteCredentials = {
+    site1: { username: 'admin1', password: 'password1' },
+    site2: { username: 'admin2', password: 'password2' },
+    site3: { username: 'admin3', password: 'password3' }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -68,8 +75,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ siteId }) => {
     }
 
     try {
-      // Utiliser toujours admin/password pour chaque site
-      if (username === 'admin' && password === 'password') {
+      // Vérifier les identifiants correspondant au site actuel
+      const credentials = siteCredentials[siteId as keyof typeof siteCredentials];
+      
+      if (username === credentials.username && password === credentials.password) {
         await login(username, password);
         navigate(from, { replace: true });
       } else {
@@ -139,7 +148,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ siteId }) => {
             </form>
             
             <div className="mt-6 pt-4 border-t border-gray-200 text-center text-sm text-gray-500">
-              <p>Identifiants par défaut: admin / password</p>
+              <p>Identifiants pour ce site: 
+                {siteId === 'site1' && <span className="font-mono bg-gray-100 px-1">admin1 / password1</span>}
+                {siteId === 'site2' && <span className="font-mono bg-gray-100 px-1">admin2 / password2</span>}
+                {siteId === 'site3' && <span className="font-mono bg-gray-100 px-1">admin3 / password3</span>}
+              </p>
             </div>
           </div>
         </div>
