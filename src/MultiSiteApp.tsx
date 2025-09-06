@@ -6,27 +6,12 @@ import { MultiSiteContentProvider } from './context/MultiSiteContentContext';
 import MultiSiteLoginPage from './pages/MultiSiteLoginPage';
 import App from './App';
 
-// Composant pour protéger les routes des sites
-const ProtectedSiteRoute: React.FC<{ 
+// Composant pour les routes des sites (sans protection)
+const SiteRoute: React.FC<{ 
   children: React.ReactNode; 
   siteId: string;
 }> = ({ children, siteId }) => {
-  const { user, loading, currentSite, setCurrentSite } = useMultiSiteAuth();
-  
-  // Si l'utilisateur est en cours de chargement, afficher un indicateur
-  if (loading) {
-    return <div>Chargement...</div>;
-  }
-  
-  // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
-  if (!user) {
-    return <Navigate to="/" replace />;
-  }
-  
-  // Si l'utilisateur est connecté mais essaie d'accéder à un site différent
-  if (user.siteId !== siteId) {
-    return <Navigate to={`/${user.siteId}`} replace />;
-  }
+  const { currentSite, setCurrentSite } = useMultiSiteAuth();
   
   // Mettre à jour le site actuel si nécessaire
   if (currentSite !== siteId) {
@@ -39,9 +24,9 @@ const ProtectedSiteRoute: React.FC<{
 // Composant pour chaque site
 const SiteWrapper: React.FC<{ siteId: string }> = ({ siteId }) => {
   return (
-    <ProtectedSiteRoute siteId={siteId}>
+    <SiteRoute siteId={siteId}>
       <App siteId={siteId} />
-    </ProtectedSiteRoute>
+    </SiteRoute>
   );
 };
 
@@ -52,7 +37,7 @@ const MultiSiteApp: React.FC = () => {
         <MultiSiteContentProvider>
           <Router>
             <Routes>
-            {/* Page d'accueil avec connexion */}
+            {/* Page d'accueil avec sélection de site */}
             <Route path="/" element={<MultiSiteLoginPage />} />
             
             {/* Routes pour chaque site */}

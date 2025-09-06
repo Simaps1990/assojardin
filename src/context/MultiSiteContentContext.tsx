@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { supabase } from '../supabaseClient';
 import { BlogPost, Event, FormField, Annonce } from '../types';
 import { getSiteStore, updateSiteStore } from '../multiSiteDataStore';
 import { useMultiSiteAuth } from './MultiSiteAuthContext';
@@ -136,41 +135,27 @@ export const MultiSiteContentProvider: React.FC<{ children: React.ReactNode }> =
           : [],
         date: new Date().toISOString().split('T')[0],
         // Utiliser les valeurs existantes ou des valeurs par défaut
-        category: 'Divers',
-        author: 'Admin',
+        category: post.category || 'Divers',
+        author: post.author || 'Admin',
+        id: Math.random().toString(36).substring(2, 15), // Générer un ID unique
       };
       
       console.log(`Ajout article avec données sanitizées pour ${siteId}:`, sanitizedPost);
       
-      const { data, error } = await supabase
-        .from('blogPosts')
-        .insert([sanitizedPost])
-        .select();
-
-      if (error) {
-        console.error('Erreur Supabase lors de l\'ajout de l\'article:', error);
-        throw error;
-      }
-
-      const saved = data?.[0];
-      if (!saved) {
-        console.warn('Aucune donnée retournée après insertion');
-        return;
-      }
-      
-      console.log('Article sauvegardé avec succès:', saved);
+      // Ajouter directement au store local
+      const newPost = {
+        ...sanitizedPost,
+        created_at: new Date().toISOString()
+      };
 
       // Mettre à jour l'état local
-      const updatedPosts = [saved, ...blogPosts.filter(p => p.id !== saved.id)];
+      const updatedPosts = [newPost, ...blogPosts.filter(p => p.id !== newPost.id)];
       setBlogPosts(updatedPosts);
       
       // Mettre à jour le store du site
       updateSiteStore(siteId, 'blogPosts', updatedPosts);
       
-      // Rafraîchir les données depuis le store centralisé
-      setTimeout(() => {
-        fetchBlogPosts();
-      }, 100);
+      console.log(`Article ajouté avec succès au site ${siteId}:`, newPost);
     } catch (err) {
       console.error('Erreur lors de l\'ajout de l\'article :', err);
     }
@@ -209,33 +194,30 @@ export const MultiSiteContentProvider: React.FC<{ children: React.ReactNode }> =
         }
       }
       
-      console.log(`Mise à jour article ${id} avec données sanitisées pour ${siteId}:`, sanitizedPost);
+      console.log(`Mise à jour article ${id} avec données sanitizées pour ${siteId}:`, sanitizedPost);
       
-      const { data, error } = await supabase
-        .from('blogPosts')
-        .update(sanitizedPost)
-        .eq('id', id)
-        .select();
-
-      if (error) {
-        console.error('Erreur Supabase lors de la mise à jour:', error);
-        throw error;
-      }
-
-      const updated = data?.[0];
-      if (!updated) {
-        console.warn('Aucune donnée retournée après mise à jour');
+      // Trouver l'article à mettre à jour dans le store local
+      const existingPost = blogPosts.find(p => p.id === id);
+      if (!existingPost) {
+        console.warn(`Article avec ID ${id} non trouvé dans le site ${siteId}`);
         return;
       }
       
-      console.log('Article mis à jour avec succès:', updated);
-
+      // Mettre à jour l'article
+      const updated = {
+        ...existingPost,
+        ...sanitizedPost,
+        updated_at: new Date().toISOString()
+      };
+      
       // Mettre à jour l'état local
       const updatedPosts = blogPosts.map((p) => (p.id === id ? updated : p));
       setBlogPosts(updatedPosts);
       
       // Mettre à jour le store du site
       updateSiteStore(siteId, 'blogPosts', updatedPosts);
+      
+      console.log(`Article mis à jour avec succès dans le site ${siteId}:`, updated);
     } catch (err) {
       console.error('Erreur lors de la mise à jour de l\'article :', err);
     }
@@ -244,19 +226,14 @@ export const MultiSiteContentProvider: React.FC<{ children: React.ReactNode }> =
   // Fonction pour supprimer un article de blog
   const deleteBlogPost = async (id: string) => {
     try {
-      const { error } = await supabase
-        .from('blogPosts')
-        .delete()
-        .eq('id', id);
-
-      if (error) throw error;
-
-      // Mettre à jour l'état local
+      // Mettre à jour l'état local en supprimant l'article
       const updatedPosts = blogPosts.filter((p) => p.id !== id);
       setBlogPosts(updatedPosts);
       
       // Mettre à jour le store du site
       updateSiteStore(siteId, 'blogPosts', updatedPosts);
+      
+      console.log(`Article avec ID ${id} supprimé du site ${siteId}`);
     } catch (err) {
       console.error('Erreur lors de la suppression de l\'article :', err);
     }
@@ -268,24 +245,16 @@ export const MultiSiteContentProvider: React.FC<{ children: React.ReactNode }> =
       // Créer un événement complet avec les valeurs par défaut
       const completeEvent = {
         ...event,
-        // Ces propriétés sont ajoutées ici mais seront gérées par le mock client
         image: event.image || '/uploads/events/default-event.jpg', // Image par défaut
+        id: Math.random().toString(36).substring(2, 15), // Générer un ID unique
+        date: event.date || new Date().toISOString().split('T')[0], // Date par défaut
       };
 
-      const { data, error } = await supabase
-        .from('events')
-        .insert([completeEvent])
-        .select();
-
-      if (error) throw error;
-
-      const saved = data?.[0];
-      if (!saved) return;
-
+      // Créer le nouvel événement
       const newEvent: Event = {
-        ...saved,
-        id: saved.id,
-        isPast: new Date(saved.date) < new Date(),
+        ...completeEvent,
+        isPast: new Date(completeEvent.date) < new Date(),
+        created_at: new Date().toISOString()
       };
 
       // Mettre à jour l'état local
@@ -295,10 +264,7 @@ export const MultiSiteContentProvider: React.FC<{ children: React.ReactNode }> =
       // Mettre à jour le store du site
       updateSiteStore(siteId, 'events', updatedEvents);
       
-      // Rafraîchir les données
-      setTimeout(() => {
-        fetchEvents();
-      }, 100);
+      console.log(`Événement ajouté avec succès au site ${siteId}:`, newEvent);
     } catch (err) {
       console.error('Erreur lors de l\'ajout de l\'événement :', err);
     }
@@ -307,12 +273,12 @@ export const MultiSiteContentProvider: React.FC<{ children: React.ReactNode }> =
   // Fonction pour mettre à jour un événement
   const updateEvent = async (id: string, event: Partial<Event>) => {
     try {
-      const { error } = await supabase
-        .from('events')
-        .update(event)
-        .eq('id', id);
-
-      if (error) throw error;
+      // Trouver l'événement à mettre à jour
+      const existingEvent = events.find(e => e.id === id);
+      if (!existingEvent) {
+        console.warn(`Événement avec ID ${id} non trouvé dans le site ${siteId}`);
+        return;
+      }
 
       // Mettre à jour l'état local
       const updatedEvents = events.map((e) =>
@@ -321,6 +287,7 @@ export const MultiSiteContentProvider: React.FC<{ children: React.ReactNode }> =
               ...e,
               ...event,
               isPast: event.date ? new Date(event.date) < new Date() : e.isPast,
+              updated_at: new Date().toISOString()
             }
           : e
       );
@@ -328,6 +295,8 @@ export const MultiSiteContentProvider: React.FC<{ children: React.ReactNode }> =
       
       // Mettre à jour le store du site
       updateSiteStore(siteId, 'events', updatedEvents);
+      
+      console.log(`Événement mis à jour avec succès dans le site ${siteId}`);
     } catch (err) {
       console.error('Erreur lors de la mise à jour de l\'événement :', err);
     }
@@ -335,18 +304,18 @@ export const MultiSiteContentProvider: React.FC<{ children: React.ReactNode }> =
 
   // Fonction pour supprimer un événement
   const deleteEvent = async (id: string) => {
-    const { error } = await supabase.from('events').delete().eq('id', id);
-    if (error) {
-      console.error('Erreur suppression événement Supabase :', error.message);
-      return;
+    try {
+      // Mettre à jour l'état local
+      const updatedEvents = events.filter((e) => e.id !== id);
+      setEvents(updatedEvents);
+      
+      // Mettre à jour le store du site
+      updateSiteStore(siteId, 'events', updatedEvents);
+      
+      console.log(`Événement avec ID ${id} supprimé du site ${siteId}`);
+    } catch (err) {
+      console.error('Erreur lors de la suppression de l\'\u00e9v\u00e9nement :', err);
     }
-    
-    // Mettre à jour l'état local
-    const updatedEvents = events.filter((e) => e.id !== id);
-    setEvents(updatedEvents);
-    
-    // Mettre à jour le store du site
-    updateSiteStore(siteId, 'events', updatedEvents);
   };
 
   // Fonction pour ajouter une candidature
@@ -355,21 +324,18 @@ export const MultiSiteContentProvider: React.FC<{ children: React.ReactNode }> =
       // S'assurer que tous les champs requis sont présents
       const completeApp = {
         ...app,
+        id: Math.random().toString(36).substring(2, 15), // Générer un ID unique
         processed: false, // Par défaut, les nouvelles candidatures ne sont pas traitées
       };
 
-      const { data, error } = await supabase
-        .from('applications')
-        .insert([completeApp])
-        .select();
-
-      if (error) throw error;
-
-      const saved = data?.[0];
-      if (!saved) return;
+      // Créer la nouvelle candidature
+      const newApplication = {
+        ...completeApp,
+        created_at: new Date().toISOString()
+      };
 
       // Mettre à jour l'état local
-      const updatedApplications = [saved, ...applications.filter(a => a.id !== saved.id)];
+      const updatedApplications = [newApplication, ...applications.filter(a => a.id !== newApplication.id)];
       setApplications(updatedApplications);
       
       // Mettre à jour le compteur de candidatures non traitées
@@ -377,6 +343,8 @@ export const MultiSiteContentProvider: React.FC<{ children: React.ReactNode }> =
       
       // Mettre à jour le store du site
       updateSiteStore(siteId, 'applications', updatedApplications);
+      
+      console.log(`Candidature ajoutée avec succès au site ${siteId}:`, newApplication);
     } catch (err) {
       console.error('Erreur lors de l\'ajout de la candidature :', err);
     }
@@ -385,15 +353,17 @@ export const MultiSiteContentProvider: React.FC<{ children: React.ReactNode }> =
   // Fonction pour mettre à jour une candidature
   const updateApplication = async (id: string, app: Partial<Application>) => {
     try {
-      const { error } = await supabase
-        .from('applications')
-        .update(app)
-        .eq('id', id);
-
-      if (error) throw error;
+      // Trouver la candidature à mettre à jour
+      const existingApp = applications.find(a => a.id === id);
+      if (!existingApp) {
+        console.warn(`Candidature avec ID ${id} non trouvée dans le site ${siteId}`);
+        return;
+      }
 
       // Mettre à jour l'état local
-      const updatedApplications = applications.map((a) => (a.id === id ? { ...a, ...app } : a));
+      const updatedApplications = applications.map((a) => (
+        a.id === id ? { ...a, ...app, updated_at: new Date().toISOString() } : a
+      ));
       setApplications(updatedApplications);
       
       // Mettre à jour le compteur de candidatures non traitées
@@ -402,6 +372,8 @@ export const MultiSiteContentProvider: React.FC<{ children: React.ReactNode }> =
       
       // Mettre à jour le store du site
       updateSiteStore(siteId, 'applications', updatedApplications);
+      
+      console.log(`Candidature mise à jour avec succès dans le site ${siteId}`);
     } catch (err) {
       console.error('Erreur lors de la mise à jour de la candidature :', err);
     }
@@ -410,13 +382,6 @@ export const MultiSiteContentProvider: React.FC<{ children: React.ReactNode }> =
   // Fonction pour supprimer une candidature
   const deleteApplication = async (id: string) => {
     try {
-      const { error } = await supabase
-        .from('applications')
-        .delete()
-        .eq('id', id);
-
-      if (error) throw error;
-
       // Mettre à jour l'état local
       const updatedApplications = applications.filter((a) => a.id !== id);
       setApplications(updatedApplications);
@@ -427,6 +392,8 @@ export const MultiSiteContentProvider: React.FC<{ children: React.ReactNode }> =
       
       // Mettre à jour le store du site
       updateSiteStore(siteId, 'applications', updatedApplications);
+      
+      console.log(`Candidature avec ID ${id} supprimée du site ${siteId}`);
     } catch (err) {
       console.error('Erreur lors de la suppression de la candidature :', err);
     }
@@ -435,101 +402,119 @@ export const MultiSiteContentProvider: React.FC<{ children: React.ReactNode }> =
   // Fonction pour mettre à jour les champs du formulaire
   const updateFormFields = async (fields: FormField[]) => {
     try {
-      // Supprimer les anciens champs
-      const { error: deleteError } = await supabase.from('form_fields').delete().neq('id', '');
-      if (deleteError) throw deleteError;
-
-      // Insérer les nouveaux
-      const { error: insertError } = await supabase.from('form_fields').insert(fields);
-      if (insertError) throw insertError;
-
-      // Mettre à jour l'état local
+      // Mettre à jour l'état local directement
       setApplicationFormFields(fields);
       
       // Mettre à jour le store du site
       updateSiteStore(siteId, 'form_fields', fields);
+      
+      console.log(`Champs du formulaire mis à jour avec succès dans le site ${siteId}`);
     } catch (err) {
       console.error('Erreur lors de la mise à jour des champs du formulaire :', err);
     }
   };
 
-  // Fonction pour mettre à jour le contenu de l'association
-  const updateAssociationContent = async (
-    updatedContent: Partial<AssociationContentType>
-  ): Promise<AssociationContentType | undefined> => {
+// Fonction pour mettre à jour les champs du formulaire
+const updateFormFields = async (fields: FormField[]) => {
+  try {
+    // Mettre à jour l'état local directement
+    setApplicationFormFields(fields);
+    
+    // Mettre à jour le store du site
+    updateSiteStore(siteId, 'form_fields', fields);
+    
+    console.log(`Champs du formulaire mis à jour avec succès dans le site ${siteId}`);
+  } catch (err) {
+    console.error('Erreur lors de la mise à jour des champs du formulaire :', err);
+  }
+};
+
+// Fonction pour mettre à jour le contenu de l'association
+const updateAssociationContent = async (
+  updatedContent: Partial<AssociationContentType>
+): Promise<AssociationContentType | undefined> => {
+  try {
     if (!updatedContent.id) {
       console.error('updateAssociationContent → aucun ID fourni.');
       return;
     }
 
-    const mappedContent: any = {
-      ...(updatedContent.titreAccueil !== undefined && { titreaccueil: updatedContent.titreAccueil }),
-      ...(updatedContent.texteIntro !== undefined && { texteintro: updatedContent.texteIntro }),
-      ...(updatedContent.texteFooter !== undefined && { textefooter: updatedContent.texteFooter }),
-      ...(updatedContent.titreAssociation !== undefined && { titreassociation: updatedContent.titreAssociation }),
-      ...(updatedContent.contentAssociation !== undefined && { contentassociation: updatedContent.contentAssociation }),
-      ...(updatedContent.parcellesOccupees !== undefined && { parcellesoccupees: updatedContent.parcellesOccupees }),
-      ...(updatedContent.parcellesTotal !== undefined && { parcellestotal: updatedContent.parcellesTotal }),
-      ...(updatedContent.imageAccueil !== undefined && { imageaccueil: updatedContent.imageAccueil }),
-      ...(updatedContent.headerIcon !== undefined && { headericon: updatedContent.headerIcon }),
-      ...(updatedContent.adresse !== undefined && { adresse: updatedContent.adresse }),
-      ...(updatedContent.telephone !== undefined && { telephone: updatedContent.telephone }),
-      ...(updatedContent.email !== undefined && { email: updatedContent.email }),
-      ...(updatedContent.horaires !== undefined && { horaires: updatedContent.horaires }),
-      ...(updatedContent.imagesAssociation !== undefined && { imagesassociation: updatedContent.imagesAssociation }),
-    };
-
-    console.log(`🟡 mappedContent envoyé à Supabase pour ${siteId}:`, JSON.stringify(mappedContent, null, 2));
-
-    const { error } = await supabase
-      .from('association_content')
-      .update(mappedContent)
-      .eq('id', updatedContent.id);
-
-    if (error) {
-      console.error('❌ Erreur lors de la mise à jour Supabase :', error.message);
+    // Trouver le contenu de l'association à mettre à jour
+    const existingContent = associationContent;
+    if (!existingContent) {
+      console.warn(`Contenu d'association non trouvé dans le site ${siteId}`);
       return;
     }
 
-    const { data: refreshed, error: fetchError } = await supabase
-      .from('association_content')
-      .select('*')
-      .eq('id', updatedContent.id)
-      .maybeSingle();
-
-    if (fetchError || !refreshed) {
-      console.error('❌ Erreur de relecture après mise à jour :', fetchError?.message);
-      return;
-    }
-
-    const mapped: AssociationContentType = {
-      id: refreshed.id,
-      titreAccueil: refreshed.titreaccueil,
-      texteIntro: refreshed.texteintro,
-      texteFooter: refreshed.textefooter,
-      adresse: refreshed.adresse,
-      telephone: refreshed.telephone,
-      email: refreshed.email,
-      horaires: refreshed.horaires,
-      imageAccueil: refreshed.imageaccueil,
-      headerIcon: refreshed.headericon,
-      titreAssociation: refreshed.titreassociation,
-      contentAssociation: refreshed.contentassociation,
-      imagesAssociation: refreshed.imagesassociation || [],
-      parcellesTotal: refreshed.parcellestotal ?? 0,
-      parcellesOccupees: refreshed.parcellesoccupees ?? 0,
+    // Préparer les données mises à jour
+    const updatedAssociationContent: AssociationContentType = {
+      ...existingContent,
+      ...updatedContent,
+      updated_at: new Date().toISOString()
     };
+
+    console.log(`Mise à jour du contenu d'association pour le site ${siteId}:`, updatedAssociationContent);
 
     // Mettre à jour l'état local
-    setAssociationContent(mapped);
+    setAssociationContent(updatedAssociationContent);
     
     // Mettre à jour le store du site
-    updateSiteStore(siteId, 'association_content', [mapped]);
+    updateSiteStore(siteId, 'association_content', [updatedAssociationContent]);
     
-    return mapped;
-  };
+    // Sauvegarder dans localStorage pour la persistance
+    localStorage.setItem(`${siteId}_associationContent`, JSON.stringify(updatedAssociationContent));
+    
+    console.log(`Contenu d'association mis à jour avec succès dans le site ${siteId}`);
+    
+    return updatedAssociationContent;
+  } catch (err) {
+    console.error('Erreur lors de la mise à jour du contenu d\'association :', err);
+    return undefined;
+  }
+};
 
-  // Fonction pour récupérer les articles de blog
+// Fonction pour récupérer les articles de blog
+const fetchBlogPosts = async () => {
+  console.log(`✅ Chargement des articles de blog pour ${siteId}`);
+  const siteStore = getSiteStore(siteId);
+  setBlogPosts(siteStore.blogPosts);
+};
+
+// Fonction pour récupérer les événements
+const fetchEvents = async () => {
+  console.log(`✅ Chargement des événements pour ${siteId}`);
+  const siteStore = getSiteStore(siteId);
+  setEvents(siteStore.events);
+};
+
+// Fonction pour récupérer les annonces
+const fetchAnnonces = async () => {
+  console.log(`✅ Chargement des annonces pour ${siteId}`);
+  const siteStore = getSiteStore(siteId);
+  setAnnonces(siteStore.annonces);
+};
+
+// Fonction pour ajouter une annonce
+const addAnnonce = async (a: Omit<Annonce, 'id' | 'date' | 'isValidated'>) => {
+  try {
+    // S'assurer que tous les champs requis sont présents
+    const completeAnnonce = {
+      ...a,
+      date: new Date().toISOString().split('T')[0], // Date du jour
+      isValidated: false, // Par défaut, les nouvelles annonces ne sont pas validées
+    };
+
+    const { data, error } = await supabase
+      .from('annonces')
+      .insert([completeAnnonce])
+      .select();
+
+    if (error) {
+      console.error('Erreur ajout annonce :', error.message);
+      return;
+    }
+
+    if (data?.[0]) {
   const fetchBlogPosts = async () => {
     console.log(`✅ Chargement des articles de blog pour ${siteId}`);
     const siteStore = getSiteStore(siteId);
@@ -585,35 +570,34 @@ export const MultiSiteContentProvider: React.FC<{ children: React.ReactNode }> =
 
   // Fonction pour mettre à jour une annonce
   const updateAnnonce = async (id: string, a: Partial<Annonce>) => {
-    const { data, error } = await supabase
-      .from('annonces')
-      .update(a)
-      .eq('id', id)
-      .select();
-
-    if (error) return console.error('Erreur maj annonce :', error.message);
-    
-    if (data?.[0]) {
+    try {
       // Mettre à jour l'état local
-      const updatedAnnonces = annonces.map((an) => (an.id === id ? data[0] : an));
+      const updatedAnnonces = annonces.map((an) => (an.id === id ? { ...an, ...a } : an));
       setAnnonces(updatedAnnonces);
       
       // Mettre à jour le store du site
       updateSiteStore(siteId, 'annonces', updatedAnnonces);
+      
+      console.log(`Annonce mise à jour avec succès au site ${siteId}`);
+    } catch (err) {
+      console.error('Erreur lors de la mise à jour de l\'annonce :', err);
     }
   };
 
   // Fonction pour supprimer une annonce
   const deleteAnnonce = async (id: string) => {
-    const { error } = await supabase.from('annonces').delete().eq('id', id);
-    if (error) return console.error('Erreur suppression annonce :', error.message);
-    
-    // Mettre à jour l'état local
-    const updatedAnnonces = annonces.filter((a) => a.id !== id);
-    setAnnonces(updatedAnnonces);
-    
-    // Mettre à jour le store du site
-    updateSiteStore(siteId, 'annonces', updatedAnnonces);
+    try {
+      // Mettre à jour l'état local
+      const updatedAnnonces = annonces.filter(a => a.id !== id);
+      setAnnonces(updatedAnnonces);
+      
+      // Mettre à jour le store du site
+      updateSiteStore(siteId, 'annonces', updatedAnnonces);
+      
+      console.log(`Annonce avec ID ${id} supprimée du site ${siteId}`);
+    } catch (err) {
+      console.error('Erreur lors de la suppression de l\'annonce :', err);
+    }
   };
 
   return (
