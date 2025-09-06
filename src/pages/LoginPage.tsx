@@ -1,27 +1,62 @@
 import React, { useState } from 'react';
-import { useNavigate, Navigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Lock } from 'lucide-react';
-import SEO from '../components/SEO';
+import { Sprout } from 'lucide-react';
 
-const LoginPage: React.FC = () => {
+interface LoginPageProps {
+  siteId: string;
+}
+
+const LoginPage: React.FC<LoginPageProps> = ({ siteId }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { user, loading, login } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  console.log('LoginPage - user:', user, 'loading:', loading);
-
-  // Affiche un message de chargement pendant la récupération du user
-  if (loading) {
-    return <div>Chargement...</div>;
-  }
-
-  // Redirection simple si user est déjà connecté
-  if (user) {
-    return <Navigate to="/admin" replace />;
-  }
+  // Récupérer l'URL de redirection si elle existe
+  const from = location.state?.from?.pathname || '/admin';
+  
+  // Définir les informations spécifiques au site
+  const getSiteInfo = () => {
+    switch(siteId) {
+      case 'site1':
+        return {
+          name: 'Site 1',
+          title: 'Jardins Partagés - Site 1',
+          color: 'bg-green-600',
+          textColor: 'text-green-600',
+          icon: <Sprout size={40} className="text-green-600" />
+        };
+      case 'site2':
+        return {
+          name: 'Site 2',
+          title: 'Jardins Partagés Communautaires',
+          color: 'bg-blue-600',
+          textColor: 'text-blue-600',
+          icon: <Sprout size={40} className="text-blue-600" />
+        };
+      case 'site3':
+        return {
+          name: 'Site 3',
+          title: 'Espace Vert Collectif',
+          color: 'bg-amber-600',
+          textColor: 'text-amber-600',
+          icon: <Sprout size={40} className="text-amber-600" />
+        };
+      default:
+        return {
+          name: 'Jardins Partagés',
+          title: 'Jardins Partagés',
+          color: 'bg-green-600',
+          textColor: 'text-green-600',
+          icon: <Sprout size={40} className="text-green-600" />
+        };
+    }
+  };
+  
+  const siteInfo = getSiteInfo();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,31 +67,31 @@ const LoginPage: React.FC = () => {
       return;
     }
 
-    const success = await login(username, password);
-
-    if (success) {
-      navigate('/admin');
-    } else {
-      setError('Identifiants incorrects');
+    try {
+      // Utiliser toujours admin/password pour chaque site
+      if (username === 'admin' && password === 'password') {
+        await login(username, password);
+        navigate(from, { replace: true });
+      } else {
+        setError('Identifiants incorrects');
+      }
+    } catch (err) {
+      setError('Une erreur est survenue lors de la connexion');
+      console.error('Erreur de connexion:', err);
     }
   };
 
   return (
-    <div className="pt-24 pb-16 min-h-screen flex items-center">
-      <SEO
-        title="Connexion Admin | SJOV | Société des Jardins Ouvriers de Villeurbanne"
-        description="Page de connexion sécurisée pour les administrateurs de la Société des Jardins Ouvriers de Villeurbanne (SJOV)."
-        keywords="connexion SJOV, administration SJOV, Société des Jardins Ouvriers de Villeurbanne, accès administrateur, Villeurbanne, 69100"
-      />
-      <div className="container-custom">
+    <div className={`min-h-screen flex items-center justify-center bg-gradient-to-b from-${siteInfo.color.replace('bg-', '')}-50 to-${siteInfo.color.replace('bg-', '')}-100`}>
+      <div className="container mx-auto px-4">
         <div className="max-w-md mx-auto">
           <div className="text-center mb-8">
-            <div className="h-20 w-20 mx-auto flex items-center justify-center rounded-full bg-primary-100 text-primary-700">
-              <Lock size={40} />
+            <div className={`h-20 w-20 mx-auto flex items-center justify-center rounded-full ${siteInfo.color.replace('bg-', 'bg-')}-100`}>
+              {siteInfo.icon}
             </div>
-            <h1 className="font-heading font-bold text-3xl mt-4 mb-2">Connexion à l'administration</h1>
+            <h1 className="font-heading font-bold text-3xl mt-4 mb-2">{siteInfo.title}</h1>
             <p className="text-neutral-600">
-              Accédez à l'espace administrateur pour gérer le contenu du site
+              Connectez-vous pour accéder à l'administration du {siteInfo.name}
             </p>
           </div>
 
@@ -79,6 +114,7 @@ const LoginPage: React.FC = () => {
                   onChange={(e) => setUsername(e.target.value)}
                   className="form-input"
                   autoComplete="username"
+                  placeholder="admin"
                 />
               </div>
 
@@ -93,18 +129,18 @@ const LoginPage: React.FC = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   className="form-input"
                   autoComplete="current-password"
+                  placeholder="password"
                 />
               </div>
 
-              <div className="flex justify-between gap-4">
-                <Link to="/" className="btn-secondary w-full text-center">
-                  Annuler
-                </Link>
-                <button type="submit" className="btn-primary w-full">
-                  Se connecter
-                </button>
-              </div>
+              <button type="submit" className={`w-full py-2 px-4 rounded-md font-medium text-white ${siteInfo.color} hover:opacity-90 transition-opacity`}>
+                Se connecter
+              </button>
             </form>
+            
+            <div className="mt-6 pt-4 border-t border-gray-200 text-center text-sm text-gray-500">
+              <p>Identifiants par défaut: admin / password</p>
+            </div>
           </div>
         </div>
       </div>
