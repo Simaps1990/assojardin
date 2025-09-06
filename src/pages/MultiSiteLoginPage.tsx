@@ -1,15 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMultiSiteAuth } from '../context/MultiSiteAuthContext';
-import { Sprout, Leaf, Flower2, Sun } from 'lucide-react';
+import { Sprout, Leaf, Flower2, Sun, Lock, AlertCircle } from 'lucide-react';
 
 const MultiSiteLoginPage: React.FC = () => {
   const navigate = useNavigate();
   const { setCurrentSite } = useMultiSiteAuth();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [selectedSite, setSelectedSite] = useState<string | null>(null);
+
+  // Identifiants spécifiques pour chaque sous-site
+  const siteCredentials = {
+    site1: { username: 'admin', password: 'password' },
+    site2: { username: 'admin', password: 'password' },
+    site3: { username: 'admin', password: 'password' }
+  };
 
   const handleSiteSelection = (siteId: string) => {
-    setCurrentSite(siteId);
-    navigate(`/${siteId}`);
+    setSelectedSite(siteId);
+    setError('');
+  };
+  
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!selectedSite) {
+      setError('Veuillez sélectionner un site');
+      return;
+    }
+    
+    if (!username || !password) {
+      setError('Veuillez remplir tous les champs');
+      return;
+    }
+    
+    const credentials = siteCredentials[selectedSite as keyof typeof siteCredentials];
+    
+    if (username === credentials.username && password === credentials.password) {
+      setCurrentSite(selectedSite);
+      navigate(`/${selectedSite}`);
+    } else {
+      setError('Identifiants incorrects');
+    }
   };
 
   return (
@@ -40,102 +74,136 @@ const MultiSiteLoginPage: React.FC = () => {
             <h1 className="font-heading font-bold text-5xl mb-4">Jardins Partagés</h1>
             <p className="text-xl max-w-2xl mx-auto">
               Bienvenue sur notre plateforme de démonstration des sites de jardins partagés.
-              Découvrez nos trois maquettes et explorez leurs fonctionnalités uniques.
+              Connectez-vous pour accéder à l'un de nos trois sites.
             </p>
           </div>
         </div>
       </div>
       
-      {/* Section principale */}
+      {/* Section principale avec formulaire de connexion */}
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-green-800 mb-4">Sélectionnez un site pour continuer</h2>
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-green-800 mb-4">Connexion aux sites</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Chaque site présente une approche différente de jardinage communautaire.
-              Explorez-les pour découvrir leurs spécificités et fonctionnalités.  
+              Veuillez vous connecter pour accéder au site de votre choix.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Site 1 */}
-            <div 
-              className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transform transition-all hover:scale-105 hover:shadow-xl"
-              onClick={() => handleSiteSelection('site1')}
-            >
-              <div className="h-48 bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center relative overflow-hidden">
-                <div className="absolute top-4 right-4 bg-white bg-opacity-20 rounded-full p-2">
-                  <Sprout size={24} className="text-white" />
+          {/* Formulaire de connexion */}
+          <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+            <div className="p-8">
+              <div className="flex justify-center mb-6">
+                <div className="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center">
+                  <Lock size={30} className="text-green-600" />
                 </div>
-                <h2 className="text-white text-3xl font-bold">Site 1</h2>
               </div>
-              <div className="p-6">
-                <h3 className="font-bold text-xl mb-2 text-green-700">Jardins Partagés - Site 1</h3>
-                <p className="text-gray-600 mb-6">
-                  Découvrez notre premier site avec ses articles de blog, événements communautaires et annonces de partage entre jardiniers.
-                </p>
-                <button className="w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors">
-                  Accéder au site
-                </button>
-              </div>
-            </div>
-
-            {/* Site 2 */}
-            <div 
-              className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transform transition-all hover:scale-105 hover:shadow-xl"
-              onClick={() => handleSiteSelection('site2')}
-            >
-              <div className="h-48 bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center relative overflow-hidden">
-                <div className="absolute top-4 right-4 bg-white bg-opacity-20 rounded-full p-2">
-                  <Flower2 size={24} className="text-white" />
+              
+              {error && (
+                <div className="mb-6 p-4 bg-red-50 rounded-lg flex items-center gap-3 text-red-700">
+                  <AlertCircle size={20} />
+                  <p>{error}</p>
                 </div>
-                <h2 className="text-white text-3xl font-bold">Site 2</h2>
-              </div>
-              <div className="p-6">
-                <h3 className="font-bold text-xl mb-2 text-blue-700">Jardins Partagés Communautaires</h3>
-                <p className="text-gray-600 mb-6">
-                  Explorez notre deuxième site axé sur l'agriculture urbaine et les pratiques écologiques innovantes en milieu urbain.
-                </p>
-                <button className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
-                  Accéder au site
-                </button>
-              </div>
-            </div>
-
-            {/* Site 3 */}
-            <div 
-              className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transform transition-all hover:scale-105 hover:shadow-xl"
-              onClick={() => handleSiteSelection('site3')}
-            >
-              <div className="h-48 bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center relative overflow-hidden">
-                <div className="absolute top-4 right-4 bg-white bg-opacity-20 rounded-full p-2">
-                  <Sun size={24} className="text-white" />
+              )}
+              
+              <form onSubmit={handleLogin}>
+                <div className="mb-6">
+                  <label className="block text-gray-700 font-medium mb-2">Sélectionnez un site</label>
+                  <div className="grid grid-cols-3 gap-3">
+                    <button 
+                      type="button"
+                      onClick={() => handleSiteSelection('site1')} 
+                      className={`p-3 rounded-lg border-2 transition-all ${selectedSite === 'site1' ? 'border-green-600 bg-green-50' : 'border-gray-200 hover:border-green-300'}`}
+                    >
+                      <div className="flex flex-col items-center">
+                        <Sprout size={24} className={`${selectedSite === 'site1' ? 'text-green-600' : 'text-gray-500'}`} />
+                        <span className={`mt-1 font-medium ${selectedSite === 'site1' ? 'text-green-600' : 'text-gray-700'}`}>Site 1</span>
+                      </div>
+                    </button>
+                    
+                    <button 
+                      type="button"
+                      onClick={() => handleSiteSelection('site2')} 
+                      className={`p-3 rounded-lg border-2 transition-all ${selectedSite === 'site2' ? 'border-blue-600 bg-blue-50' : 'border-gray-200 hover:border-blue-300'}`}
+                    >
+                      <div className="flex flex-col items-center">
+                        <Flower2 size={24} className={`${selectedSite === 'site2' ? 'text-blue-600' : 'text-gray-500'}`} />
+                        <span className={`mt-1 font-medium ${selectedSite === 'site2' ? 'text-blue-600' : 'text-gray-700'}`}>Site 2</span>
+                      </div>
+                    </button>
+                    
+                    <button 
+                      type="button"
+                      onClick={() => handleSiteSelection('site3')} 
+                      className={`p-3 rounded-lg border-2 transition-all ${selectedSite === 'site3' ? 'border-amber-600 bg-amber-50' : 'border-gray-200 hover:border-amber-300'}`}
+                    >
+                      <div className="flex flex-col items-center">
+                        <Sun size={24} className={`${selectedSite === 'site3' ? 'text-amber-600' : 'text-gray-500'}`} />
+                        <span className={`mt-1 font-medium ${selectedSite === 'site3' ? 'text-amber-600' : 'text-gray-700'}`}>Site 3</span>
+                      </div>
+                    </button>
+                  </div>
                 </div>
-                <h2 className="text-white text-3xl font-bold">Site 3</h2>
-              </div>
-              <div className="p-6">
-                <h3 className="font-bold text-xl mb-2 text-amber-700">Espace Vert Collectif</h3>
-                <p className="text-gray-600 mb-6">
-                  Découvrez notre troisième site spécialisé dans le jardinage thérapeutique et les jardins pédagogiques adaptés à tous.
-                </p>
-                <button className="w-full py-3 px-4 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition-colors">
-                  Accéder au site
+                
+                <div className="mb-4">
+                  <label htmlFor="username" className="block text-gray-700 font-medium mb-2">Identifiant</label>
+                  <input 
+                    type="text" 
+                    id="username" 
+                    value={username} 
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all"
+                    placeholder="admin"
+                  />
+                </div>
+                
+                <div className="mb-6">
+                  <label htmlFor="password" className="block text-gray-700 font-medium mb-2">Mot de passe</label>
+                  <input 
+                    type="password" 
+                    id="password" 
+                    value={password} 
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all"
+                    placeholder="password"
+                  />
+                </div>
+                
+                <button 
+                  type="submit" 
+                  className="w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
+                >
+                  Se connecter
                 </button>
+              </form>
+              
+              <div className="mt-6 pt-4 border-t border-gray-200 text-center text-sm text-gray-500">
+                <p>Identifiants par défaut: admin / password</p>
               </div>
             </div>
           </div>
 
-          <div className="mt-12 p-6 bg-white rounded-lg shadow-md text-center">
-            <h3 className="text-xl font-semibold text-gray-800 mb-3">Comment utiliser cette démo</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left max-w-3xl mx-auto">
-              <div className="p-4 border border-gray-100 rounded-lg">
-                <p className="font-medium text-gray-700 mb-2">Accès aux sites</p>
-                <p className="text-gray-600">Cliquez sur l'un des trois sites ci-dessus pour explorer son contenu public.</p>
-              </div>
-              <div className="p-4 border border-gray-100 rounded-lg">
-                <p className="font-medium text-gray-700 mb-2">Accès à l'administration</p>
-                <p className="text-gray-600">Dans chaque site, utilisez les identifiants <span className="font-mono bg-gray-100 px-1">admin</span> / <span className="font-mono bg-gray-100 px-1">password</span> pour accéder à l'espace d'administration.</p>
-              </div>
+          {/* Informations sur les sites */}
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="font-bold text-xl mb-2 text-green-700">Jardins Partagés - Site 1</h3>
+              <p className="text-gray-600">
+                Premier site avec ses articles de blog, événements communautaires et annonces de partage entre jardiniers.
+              </p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="font-bold text-xl mb-2 text-blue-700">Jardins Partagés - Site 2</h3>
+              <p className="text-gray-600">
+                Deuxième site axé sur l'agriculture urbaine et les pratiques écologiques innovantes en milieu urbain.
+              </p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="font-bold text-xl mb-2 text-amber-700">Espace Vert Collectif - Site 3</h3>
+              <p className="text-gray-600">
+                Troisième site spécialisé dans le jardinage thérapeutique et les jardins pédagogiques adaptés à tous.
+              </p>
             </div>
           </div>
         </div>
