@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
+import MultiSiteApp from './MultiSiteApp.tsx';
 import './index.css';
 
 // Fonction pour forcer le rechargement des ressources
@@ -36,6 +36,6 @@ if (typeof window !== 'undefined') {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <MultiSiteApp />
   </StrictMode>
 );

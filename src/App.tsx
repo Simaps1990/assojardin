@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { HelmetProvider } from 'react-helmet-async';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useMultiSiteContent } from './context/MultiSiteContentContext';
 import { AuthProvider } from './context/AuthContext';
 import { ContentProvider } from './context/ContentContext';
 import { NotificationsProvider } from './context/NotificationsContext';
@@ -59,15 +59,26 @@ const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   );
 };
 
-function App() {
+interface AppProps {
+  siteId: string;
+}
+
+function App({ siteId }: AppProps) {
+  // Utiliser le siteId pour personnaliser l'interface
+  const { currentSiteId } = useMultiSiteContent();
+  
+  // Vérifier que le siteId est correct
+  if (siteId !== currentSiteId) {
+    console.warn(`SiteId mismatch: props=${siteId}, context=${currentSiteId}`);
+  }
+  
   return (
-    <HelmetProvider>
-      <AuthProvider>
-        <ContentProvider>
-          <NotificationsProvider>
-            <Router>
-            <ScrollToTop />
-          <Routes>
+    <AuthProvider>
+      <ContentProvider>
+        <NotificationsProvider>
+          <ScrollToTop />
+          <div className="site-wrapper" data-site-id={siteId}>
+            <Routes>
 
             {/* Public Routes */}
             <Route path="/" element={<PublicLayout><HomePage /></PublicLayout>} />
@@ -103,11 +114,10 @@ function App() {
             {/* Catch-all */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-            </Router>
+          </div>
           </NotificationsProvider>
         </ContentProvider>
       </AuthProvider>
-    </HelmetProvider>
   );
 }
 
